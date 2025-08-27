@@ -1,2 +1,5 @@
-# macroecology-coinfection
-Analysis of coinfection in the PREDICT-2 data
+This repo contains code to generate results and figures for “The macroecology of viral coinfection” by Cecilia A. Sánchez, Colin J. Carlson, and Amy R. Sweeny. This paper is in preparation for Biology Letters. Please contact the corresponding author (ARS) at amyr.sweeny@gmail.com with any questions.
+
+This repo uses the `renv` R package for dependency management. Run `renv::restore` to install all packages from their recorded versions.
+
+The analyses described in our paper depend on data produced as part of the PREDICT project: specifically the `PREDICT_Animals_Sampled.csv` and the `PREDICT_PCR_Tests.csv` files. PREDICT data were formerly shared openly on the U.S. Agency for International Development (USAID) Development Data Library (DDL). The DDL is no longer accessible following the shutdown of USAID in July 2025. A link to access the needed data will be provided at the time of manuscript publication. Once you have these data, you can replicate the analysis workflow on your own computer by running `targets::tar_make()`.
