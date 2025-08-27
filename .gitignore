@@ -8,6 +8,8 @@
 
 # User-specific files
 .Ruserdata
+/data/PREDICT_Animals_Sampled.csv
+/data/PREDICT_PCR_Tests.csv.gz
 
 # Example code in package build process
 *-Ex.R

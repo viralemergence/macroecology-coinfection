@@ -1,0 +1,30 @@
+## core packages
+library(targets)
+library(tarchetypes)
+library(renv)
+library(conflicted)
+
+## packages necessary for startup script
+library(here)
+
+## main packages for analyses
+library(qs)
+library(qs2)
+library(vroom)
+library(tidyverse)
+library(janitor)
+library(reshape2)
+library(magrittr)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(countrycode)
+library(rworldmap)
+library(ggthemes)
+library(glmmTMB)
+library(ggeffects)
+library(igraph)
+library(tidygraph)
+library(ggraph)
+library(cowplot)
+library(patchwork)
+library(MetBrewer)
