@@ -124,7 +124,11 @@ data_processing_targets <- tar_plan(
   
   # prep data for map plotting
   map_data_all = prep_map_data_all(pcr),
-  map_data_pos = prep_map_data_pos(pos_final)
+  map_data_pos = prep_map_data_pos(pos_final),
+  # bizarrely, have to re-run every time or it throws an error
+  tar_target(map_data_pos_taxa, 
+             prep_map_data_pos_taxa(pos_final),
+             cue = tar_cue(mode = "always"))
   
 )
 
@@ -188,7 +192,10 @@ plot_targets <- tar_plan(
   fig_s1 = plot_map_all(map_data_all),
   
   # Figure S2
-  fig_s2 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds)
+  fig_s2 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds),
+  
+  # Figure X
+  fig_x = plot_map_pos_taxa(map_data_pos_taxa),
   
 )
 
@@ -212,6 +219,10 @@ outputs_targets <- tar_plan(
   
   fig_s2_file = ggsave("figures/fig_s2.tiff", fig_s2,
                        height = 3, width = 10, units = "in", dpi = 500,
+                       compression = "lzw"),
+  
+  fig_x_file = ggsave("figures/fig_x.tiff", fig_x,
+                       height = 5, width = 7, units = "in", dpi = 500,
                        compression = "lzw"),
   
 )
