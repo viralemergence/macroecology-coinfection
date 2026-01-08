@@ -19,7 +19,6 @@ sims_bats|stem|51fcccedd871ac52|3ca5acb710bcde77|072fe9af59396fbe|1135482600||t2
 sims_birds|stem|ccdaa914b689dadb|04b7f0bc27c81586|072fe9af59396fbe|1923032119||t20329.7903228211s|s1042b|1042|qs|local|vector|||17.56||
 pos_final|stem|3ff7b7d5a8d44cf1|e8f1707e67f13f26|e6cd020b379f11f7|714048063||t20329.7903248301s|s217984b|217984|qs|local|vector|||0.1||
 coinf_df|stem|0089943cdf1142d6|085af787a6a22b8a|fd9529415f89581b|-1832118059||t20329.7903279452s|s53977b|53977|qs|local|vector|||0.19||
-fig_s1|stem|f2852bf887bf70d9|254a42fcda826b0d|07196c7f55a8b426|-393416741||t20329.7903317783s|s3595914b|3595914|qs|local|vector|||0.14||
 fig_s2|stem|1074e93d81f4c10f|6f3cab8b5a922987|7925fe82dfdac1a9|403417487||t20329.7904988267s|s295850b|295850|qs|local|vector|||12.5||
 total_pos_rodents|stem|71ad2b7d131e6776|086d0cd021fca296|b708393b039ff65b|2088057794||t20329.7904998849s|s473b|473|qs|local|vector|||0||
 MV|stem|c70a3bac079362d6|1b65a254df518c37|086abee79a5929c4|1080735324||t20329.7905053853s|s2322b|2322|qs|local|vector|||0.41||
@@ -51,17 +50,18 @@ summary_calculations|stem|fd4bfcd272d67531|cdd51de12f7a26a6|e818c6b0445c4815|129
 vir_fam_network_panel|stem|c7a56c8abe112e21|faf1024e04356e8d|ab5b5648c5500399|855319731||t20329.7909199025s|s325388b|325388|qs|local|vector|||0.46||
 model_coefs_panel|stem|ec1716920a49cc06|aa569d3940d7389e|a995d1788d11bf3d|1667169840||t20329.7909468969s|s540794b|540794|qs|local|vector|||2.15||
 fig_2|stem|dfd035c272121823|2db284756422ba57|0507afa18acf0a56|1306091307||t20329.7909528837s|s941808b|941808|qs|local|vector|||0.03||
-fig_s1_file|stem|f2518304ce395add|076d5794d49fbeb0|666197d237f87db2|1310565760||t20336.9098852016s|s95b|95|qs|local|vector|||1.8|Removed 215 rows containing missing values or values outside the scale range (`geom_point()`).|
 fig_s2_file|stem|ac30ba89006239e7|9fc0f57e2ee6ffd4|b32d6a2f1da284b7|927500396||t20336.9099081541s|s95b|95|qs|local|vector|||0.42||
 fig_3_file|stem|ee796ac96ffafa0c|1a91531dd09cf301|21297b0c83cc8987|2124129444||t20336.9099184394s|s94b|94|qs|local|vector|||0.79||
 fig_1_file|stem|e3e4ab86f0763a11|22f4fae206df5b13|197bf2baa2bba9db|-489566961||t20336.9099915627s|s94b|94|qs|local|vector|||3.44||
 fig_2_file|stem|742536bc87d77900|f326a243c22ae231|7431f0493fd2985e|1017057728||t20336.9100196219s|s94b|94|qs|local|vector|||2.31||
 fig_x|stem|54e1d82342704a31|fed414c9aa27ebbe|ff504e99d70932be|-1218203977||t20461.7311007817s|s4840487b|4840487|qs|local|vector|||0.07||
+fig_x_file|stem|cc29eab1056061f4|8c45b886bea3a686|d2553fcee8191914|-175373574||t20461.7625661365s|s94b|94|qs|local|vector|||1.16|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_s1|stem|a4ab2682f2a5f67e|254a42fcda826b0d|9a83aef30fd77fa1|-393416741||t20461.7689307381s|s3597240b|3597240|qs|local|vector|||0.82||
 create_coinf_df|function|58448f4963217496
 plot_vir_fam_network|function|89e1ed33976bca06
 run_models|function|f181010668b6ddf5
-.Random.seed|object|ab8ccbfa9fa55ac4
-plot_map_all|function|f47ef9600acce161
+.Random.seed|object|7c6297aa479a7080
+plot_map_all|function|87b1167b288fca18
 plot_sim_coinf|function|cbfb2619d86aeec0
 prep_model_data_rodents|function|8ef39fc9a26569a8
 prep_matrix_data|function|88d37930d9afb7c1
@@ -86,5 +86,5 @@ prep_model_data_bats|function|6bb9979ada5cdb32
 plot_vir_fam_network_panel|function|8500b9ce34007586
 plot_sim_coinf_panel|function|bc2a84f55c8ce184
 plot_model_coefs_panel|function|eb4cfcb3c42086c2
-map_data_pos_taxa|stem|5ade7fc49483bd39|3b49581988778a7f|3944ef85c52788df|1880512033||t20461.7342775642s|s720869b|720869|qs|local|vector|||1.11|st_centroid assumes attributes are constant over geometries|
-fig_x_file|stem|31033732c342076a|14303f6dc1f24e06|d2553fcee8191914|-175373574||t20461.7343014829s|s93b|93|qs|local|vector|||1.95|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_s1_file|stem|c32a44b5f8ce7725|ff21dc200e7a30c4|0991488589693c5d|1310565760||t20461.7696248981s|s94b|94|qs|local|vector|||1.39||
+map_data_pos_taxa|stem|5ade7fc49483bd39|3b49581988778a7f|3944ef85c52788df|1880512033||t20461.7696347708s|s720869b|720869|qs|local|vector|||0.78|st_centroid assumes attributes are constant over geometries|
