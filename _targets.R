@@ -46,15 +46,19 @@ data_processing_targets <- tar_plan(
   
   # join all testing data with the animal data
   pcr_all = pcr %>% 
-    mutate(infection = case_when(confirmation_result == "Negative" ~ 0, 
-                                 confirmation_result == "Positive" ~ 1)) %>% 
+    mutate(infection = case_when(!is.na(virus) ~ 1, 
+                                 is.na(virus) ~ 0)) %>% 
     left_join(animals_raw, 
               by = c("predict_sample_id" = "predict_individual_id"), 
               suffix = c("", ".dup")) %>% 
-    dplyr::select(!ends_with(".dup")),
+    dplyr::select(!ends_with(".dup")) %>% 
+    # divide into broad regions
+    mutate(geo_region = if_else(longitude < 60, 
+                                "Africa and West Asia", 
+                                "South, East, Southeast Asia")),
   
-  # number of unique animals
-  n_unique_all = pcr_all$predict_sample_id %>% unique %>% length, #65663
+  # number of unique animals with testing data
+  n_unique_all = pcr_all$predict_sample_id %>% unique %>% length, #65662
   
   n_unique_bats = pcr_all %>% 
     dplyr::filter(taxa_group == "bats") %>% 
@@ -68,15 +72,9 @@ data_processing_targets <- tar_plan(
     unique %>% 
     length,
   
-  # join positive testing data with the animal data
-  pcr_pos = pcr %>% 
-    dplyr::filter(!is.na(virus)) %>% 
-    mutate(infection = case_when(!is.na(virus) ~ 1, 
-                                 is.na(virus) ~ 0)) %>% 
-    left_join(animals_raw, 
-              by = c("predict_sample_id" = "predict_individual_id"),
-              suffix = c("", ".dup")) %>%
-    dplyr::select(!ends_with(".dup")),
+  # filter the joined testing/animal data to just the positives
+  pcr_pos = pcr_all %>% 
+    dplyr::filter(infection == 1),
   
   # prep data for later GLMMs
   coinf_df = create_coinf_df(pcr_pos),
@@ -191,39 +189,45 @@ plot_targets <- tar_plan(
   # Figure S1
   fig_s1 = plot_map_all(map_data_all),
   
-  # Figure S2
-  fig_s2 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds),
-  
   # Figure X
-  fig_x = plot_map_pos_taxa(map_data_pos_taxa),
+  fig_s2 = plot_map_pos_taxa(map_data_pos_taxa),
+  
+  # Figure S3
+  fig_s3 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds),
   
 )
 
 outputs_targets <- tar_plan(
   
-  fig_1_file = ggsave("figures/fig_1.tiff", fig_1, 
-                      height = 11, width = 8.5, units = "in", dpi = 500, 
-                      compression = "lzw"),
+  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 11, width = 8.5, 
+                      units = "in", dpi = 500, compression = "lzw"),
+  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 11, width = 8.5, 
+                     units = "in", dpi = 500),
   
-  fig_2_file = ggsave("figures/fig_2.tiff", fig_2, 
-                      height = 18, width = 16, units = "in", dpi = 500,
-                      compression = "lzw"),
+  fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 19, width = 16, 
+                      units = "in", dpi = 500, compression = "lzw"),
+  fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 19, width = 16, 
+                     units = "in", dpi = 500),
   
-  fig_3_file = ggsave("figures/fig_3.tiff", fig_3, 
-                      height = 10, width = 12, units = "in", dpi = 500,
-                      compression = "lzw"),
+  fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 10, width = 12,
+                      units = "in", dpi = 500, compression = "lzw"),
+  fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 10, width = 12, 
+                     units = "in", dpi = 500),
   
-  fig_s1_file = ggsave("figures/fig_s1.tiff", fig_s1,
-                       height = 4, width = 7, units = "in", dpi = 500,
-                       compression = "lzw"),
+  fig_s1_tiff = ggsave("figures/fig_s1.tiff", fig_s1, height = 4, width = 7, 
+                       units = "in", dpi = 500, compression = "lzw"),
+  fig_s1_png = ggsave("figures/fig_s1.png", fig_s1, height = 4, width = 7, 
+                       units = "in", dpi = 500),
   
-  fig_s2_file = ggsave("figures/fig_s2.tiff", fig_s2,
-                       height = 3, width = 10, units = "in", dpi = 500,
-                       compression = "lzw"),
+  fig_s2_tiff = ggsave("figures/fig_s2.tiff", fig_s2, height = 5, width = 7, 
+                      units = "in", dpi = 500, compression = "lzw"),
+  fig_s2_png = ggsave("figures/fig_s2.png", fig_s2, height = 5, width = 7, 
+                     units = "in", dpi = 500),
   
-  fig_x_file = ggsave("figures/fig_x.tiff", fig_x,
-                       height = 5, width = 7, units = "in", dpi = 500,
-                       compression = "lzw"),
+  fig_s3_tiff = ggsave("figures/fig_s3.tiff", fig_s3, height = 3, width = 10, 
+                       units = "in", dpi = 500, compression = "lzw"),
+  fig_s3_png = ggsave("figures/fig_s3.png", fig_s3, height = 3, width = 10, 
+                      units = "in", dpi = 500),
   
 )
 

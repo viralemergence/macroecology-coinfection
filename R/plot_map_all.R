@@ -8,16 +8,11 @@
 #' @export
 plot_map_all <- function(map_data){
   
-  ymin <- min(map_data$latitude, na.rm = T) - 8
-  ymax <- max(map_data$latitude, na.rm = T) + 5
-  xmin <- min(map_data$longitude, na.rm = T) - 2
-  xmax <- max(map_data$longitude, na.rm = T) + 15
-  
   # plot number of specimens per country
   map_data %>%
     ggplot() +
     geom_sf(aes(fill = n_specimen), color = "white") +
-    coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax)) +
+    coord_sf(xlim = c(-18, 137), ylim = c(-12, 52)) +
     scale_fill_distiller(name = "Number of \nspecimens", type = "seq",
                          palette = "PuBuGn", direction = 1, trans = "log", 
                          breaks = c(100, 500, 1000, 5000, 10000, 20000),

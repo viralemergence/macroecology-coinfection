@@ -4,7 +4,7 @@
 #' @title plot_map_pos
 #'
 #' @param map_data
-#' @param pal 2 colors for infection status (single infection, coinfection)
+#' @param pal 2 colors for coinfection status (single infection, coinfection)
 #'
 #' @return 
 #' @export
@@ -26,7 +26,7 @@ plot_map_pos <- function(map_data, pal){
     geom_jitter(aes(y = latitude, x = longitude, color = coinfect_status),
                 width = 1.5, height = 1.5, size = 2, alpha = 0.8) +
     ggthemes::theme_map() + 
-    scale_color_manual(name = "Infection status",
+    scale_color_manual(name = "Coinfection status",
                       values = pal, 
                       na.translate = F) +
     theme(legend.position = "inside",

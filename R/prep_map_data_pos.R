@@ -19,7 +19,7 @@ prep_map_data_pos <- function(pos_final){
            coinfect_status) %>% 
     mutate(coinfect_status = factor(coinfect_status, 
                                     levels = c("single infection",
-                                               "co-infection"))) %>% 
+                                               "coinfection"))) %>% 
     mutate(iso3c = countrycode(country, "country.name", "iso3c")) 
   
   # some points in Tanzania were given coordinates of (0,0)

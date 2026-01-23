@@ -10,7 +10,7 @@ plot_model_coefs_panel <- function(model_list){
   
   p1 <- plot_model_coefs(model_output = model_list$all, 
                          model_type = "glm", 
-                         pretty_labels = c("intercept", "Asia", "birds", 
+                         pretty_labels = c("intercept", "SES Asia", "birds", 
                                            "rodents", "shrews", "male", 
                                            "subadult", "juvenile", 
                                            "owned\ndomesticated", 
@@ -19,7 +19,7 @@ plot_model_coefs_panel <- function(model_list){
   
   p2 <- plot_model_coefs(model_output = model_list$bats, 
                          model_type = "glmm", 
-                         pretty_labels = c("intercept", "Asia", "male", 
+                         pretty_labels = c("intercept", "SES Asia", "male", 
                                            "subadult",  "juvenile",
                                            "cave-\nroosting"),
                          show_x_label = FALSE)

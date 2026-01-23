@@ -18,7 +18,6 @@ prep_vir_graph <- function(MV, pos_final, pal, sparse = TRUE){
   
   g <- graph_from_adjacency_matrix(MV, weighted = TRUE, mode = 'undirected')
   # set labels and degrees of vertices
-  #E(g)$weight <- edge.betweenness(g)
   V(g)$label <- V(g)$name
   V(g)$degree <- degree(g)
   V(g)$size_orig <- total_pos$n[match(V(g)$name, total_pos$virus)]

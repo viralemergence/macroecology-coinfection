@@ -11,15 +11,6 @@ prep_model_data_all <- function(coinf_df){
       age_class %in% c("adult (reproductive age)",
                        "subadult (immature, independent)", 
                        "juvenile (dependent on dam)")) %>% 
-    # divide into broad regions
-    mutate(geo_region = case_when(
-      country %in% c("Cameroon", "Cote d'Ivoire", "DR Congo", "Egypt",
-                     "Ethiopia", "Ghana", "Guinea", "Kenya", "Liberia", 
-                     "Republic of Congo", "Rwanda", "Senegal", "Sierra Leone",
-                     "Tanzania", "Uganda") ~ "Africa",
-      country %in% c("Bangladesh", "Cambodia", "Indonesia", "Jordan", "Lao PDR",
-                     "Malaysia, Peninsular", "Malaysia, Sabah", "Mongolia", 
-                     "Myanmar", "Nepal", "Thailand", "Vietnam") ~ "Asia")) %>% 
     mutate(age_class = forcats::fct_recode(
       age_class,
       adult = "adult (reproductive age)",

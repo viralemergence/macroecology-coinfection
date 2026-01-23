@@ -15,7 +15,8 @@ prep_map_data_all <- function(pcr){
   
   specimens_per_country <- unique_specimens %>% 
     group_by(iso3c) %>% 
-    count
+    count %>% 
+    rename(n_specimen = n)
   
   map_data <- ne_countries(scale = "medium", returnclass = "sf") %>% 
     select(iso_a3, geometry) %>% 

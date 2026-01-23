@@ -35,7 +35,7 @@ create_pos_final <- function(pcr_pos){
     mutate(virus_animal = paste(predict_sample_id, virus, sep = "-")) %>%
     dplyr::filter(!duplicated(virus_animal)) %>% #3506 
     mutate(coinfect_status = case_when(
-      predict_sample_id %in% coinfects ~ "co-infection",
+      predict_sample_id %in% coinfects ~ "coinfection",
       !predict_sample_id %in% coinfects ~ "single infection")) 
   
   return(pos_final)

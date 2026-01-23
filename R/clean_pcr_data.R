@@ -80,17 +80,14 @@ clean_pcr_data <- function(pcr_raw) {
                   ~ str_replace_all(.x, "/", "_") %>%
                     str_remove_all("[.]"))) %>% 
     
-    # fix virus families
+    # fix virus families (Bunyaviridae no longer exists as a family)
     mutate(
-      viral_family = forcats::fct_collapse(
-        viral_family, Hantaviridae = c("Hantaviridae", "Bunyaviridae")),
+      viral_family = case_when(
+        virus == "Thottapalayam virus" ~ "Hantaviridae",
+        TRUE ~ viral_family),
       viral_family = forcats::fct_relevel(
         viral_family, "Hantaviridae", after = 4)
       )
-
-  # pcr %>% group_by(predict_sample_id) %>% 
-  #   summarise(nTested = length(unique(viral_family_tested))) %>% 
-  #   summary(nTested) # median 4 viral families tested 
   
   return(pcr)
   

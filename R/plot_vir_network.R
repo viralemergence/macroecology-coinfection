@@ -28,7 +28,7 @@ plot_vir_network <- function(g){
   
   net_out <- ggraph(g_tbl, layout = "kk") +
     geom_edge_link(aes(width = edge_list$weight), color = "gray70") +
-    scale_edge_width(name = "Number of \nco-infections") + 
+    scale_edge_width(name = "Number of \ncoinfections") + 
     geom_node_point(aes(size = size_trans,
                         fill = factor(viral_family)), 
                     pch = 21) +

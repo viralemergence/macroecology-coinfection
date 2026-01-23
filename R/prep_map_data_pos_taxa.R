@@ -17,7 +17,7 @@ prep_map_data_pos_taxa <- function(pos_final){
     # round latitude and longitude a bit further to create fewer but larger points
     mutate(latitude = round(latitude, 0),
            longitude = round(longitude, 0)) %>%
-    # to avoid having multiple colors for taxa with only a few specimens
+    # to avoid having multiple colors for taxa with only a few animals
     mutate(
       taxa_group = forcats::fct_collapse(
         taxa_group,
@@ -29,8 +29,8 @@ prep_map_data_pos_taxa <- function(pos_final){
     mutate(iso3c = countrycode(country, "country.name", "iso3c")) %>%
     # calculate sample sizes
     group_by(country, iso3c, taxa_group, latitude, longitude) %>% 
-    summarise(n_specimen = n()) %>% 
-    mutate(size = sqrt(n_specimen))
+    summarise(n_animals = n()) %>% 
+    mutate(size = sqrt(n_animals))
   
   # some points in Tanzania were given coordinates of (0,0)
   # re-assign those to the centroid of the country for plotting purposes

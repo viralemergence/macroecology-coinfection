@@ -12,6 +12,7 @@ tar_load(pcr_pos)
 tar_load(coinf_df)
 tar_load(pos_final)
 tar_load(model_data_all)
+tar_load(model_list)
 
 tar_load(binom_tests_vir_fam)
 tar_load(binom_tests_vir_fam_bats)
@@ -119,7 +120,7 @@ coinf_within_inf <- xtabs(~coinf_df$taxa_group + coinf_df$virus_coinf) %>%
   mutate(n_tot = single_inf + coinf,
          prev = round(coinf/n_tot*100, 2))
 
-# prevalence by taxa group (within unique animals)
+# prevalence by taxa group (within unique animals) for taxa groups with at least one infected animal
 taxa_prev <- table(coinf_df$taxa_group) %>% 
   data.frame() %>% 
   rename(taxa_group = Var1, n_inf = Freq) %>% 
@@ -138,18 +139,18 @@ model_coinf_within_inf <- xtabs(~taxa_group + virus_coinf, model_data_all) %>%
 
 ```
 
-### Methods (Data overview)
-Data from the PREDICT-2 project (the second half of the decade-long initiative) was openly shared on the USAID Development Data Library prior to the takedown of the USAID website. Specimen collection (n = `r n_unique_specimens` unique specimens from `r n_unique_animals` unique animals) was concentrated in West and Central Africa as well as South and Southeast Asia, with > 10,000 specimens collected in `r countries_10k[1, 1]`, `r countries_10k[2, 1]`, and `r countries_10k[3, 1]` each (Fig. S1). Most specimens were collected from bats (n = `r spec_by_taxa[1,2]`, `r spec_by_taxa[1,3]`%) and rodents (n = `r spec_by_taxa[2,2]`, `r spec_by_taxa[2,3]`%). Some taxonomic groups, such as birds and carnivores, are mostly represented in the dataset by farm and companion animals. Virus screening was conducted using consensus polymerase chain reaction (PCR) assays (`r n_tests`) total tests), mostly targeting viral families of significance to human health (e.g., coronaviruses, filoviruses, and paramyxoviruses), but in some cases testing for specific viruses of interest (e.g., influenza viruses and ebolaviruses).
+### Methods (PREDICT-2 data overview)
+Data from the PREDICT-2 project (2015-2019; the second half of the decade-long initiative) were openly shared on the USAID Development Data Library prior to the takedown of the USAID website. Specimen collection (n = `r n_unique_specimens` unique specimens from `r n_unique_animals` unique animals) was concentrated in countries in West and Central Africa as well as South and Southeast Asia, with > 10,000 specimens collected in `r countries_10k[1, 1]`, `r countries_10k[2, 1]`, and `r countries_10k[3, 1]` each (Fig. S1). Most specimens were collected from bats (n = `r spec_by_taxa[1,2]`, `r spec_by_taxa[1,3]`%) and rodents (n = `r spec_by_taxa[2,2]`, `r spec_by_taxa[2,3]`%). The dataset included some farm and companion animals, including poultry, dogs, and swine. Virus screening was conducted using consensus polymerase chain reaction (PCR) assays (`r n_tests`) total tests), mostly targeting viral families of significance to human health (e.g., coronaviruses, filoviruses, and paramyxoviruses), but in some cases testing for specific viruses of interest (e.g., influenza viruses and ebolaviruses). Further details on PREDICT can be found in the PREDICT Legacy Book (https://ohi.vetmed.ucdavis.edu/programs-projects/predict-project/reports).
 
 ### Results (overview)
-We found that both infection and coinfection were rare overall. Out of `r n_unique_animals` unique animals, `r n_inf_animals` (`r overall_prev`%) were infected with one or more viruses (Fig. 1A); viral prevalence in birds (`r taxa_prev[2,2]`/`r taxa_prev[2,3]`; `r taxa_prev[2,4]`%) and bats (`r taxa_prev[1,2]`/`r taxa_prev[1,3]`; `r taxa_prev[1,4]`%) was somewhat higher than average, while prevalence in rodents (`r taxa_prev[8,2]`/`r taxa_prev[8,3]`; `r taxa_prev[8,4]`%) was slightly lower than average.
+We found that both infection and coinfection were rare overall. Out of `r n_unique_animals` unique animals, `r n_inf_animals` (`r overall_prev`%) were infected with one or more viruses (Fig. 1A); viral prevalence in birds (`r taxa_prev[2,2]`/`r taxa_prev[2,3]`; `r taxa_prev[2,4]`%) and bats (`r taxa_prev[1,2]`/`r taxa_prev[1,3]`; `r taxa_prev[1,4]`%) was somewhat higher than average, while prevalence in rodents (`r taxa_prev[8,2]`/`r taxa_prev[8,3]`; `r taxa_prev[8,4]`%) was slightly lower than average (Table S1).
 
 A single virus was detected in most infected animals (n = `r coinf_freq[1]`, `r coinf_perc[1]`%); coinfections of two (n = `r coinf_freq[2]`, `r coinf_perc[2]`%) or three (n = `r coinf_freq[3]`, `r coinf_perc[3]`%) viruses in the same animal were infrequent. Of the `r n_coinf_animals` animals in which virus coinfection was detected, over half were bats (n = `r coinf_taxa_summary[1,2]`, `r coinf_taxa_summary[1,3]`%) with the remainder being `r coinf_taxa_summary[3,2]` rodents, `r coinf_taxa_summary[2,2]` birds, `r coinf_taxa_summary[5,2]` swine, and `r coinf_taxa_summary[4,2]` shrew. Within infected animals, virus coinfection rates were highest in rodents (`r coinf_within_inf[8, 2]`/`r coinf_within_inf[8, 3]`, `r coinf_within_inf[8, 4]`%), birds (`r coinf_within_inf[2, 2]`/`r coinf_within_inf[2, 3]`, `r coinf_within_inf[2, 4]`%), and bats (`r coinf_within_inf[1, 2]`/`r coinf_within_inf[1, 3]`, `r coinf_within_inf[1, 4]`%). 
 
-### Triple co-infected animals
+### Triple infected animals
 ```{r triples}
 pos_final %>% 
-  dplyr::filter(coinfect_status == "co-infection") %>% 
+  dplyr::filter(coinfect_status == "coinfection") %>% 
   group_by(predict_sample_id) %>% 
   dplyr::filter(n()>2) %>% 
   dplyr::select(predict_sample_id, country, taxa_group, 
@@ -159,6 +160,26 @@ pos_final %>%
   kableExtra::kable_material()
 ```
 
+### GLM results-all
+```{r model results all}
+summary(model_list[[1]])
+
+sjPlot::tab_model(model_list[[1]])
+```
+
+### GLM results-bats
+```{r model results bats}
+summary(model_list[[2]])
+
+sjPlot::tab_model(model_list[[2]])
+```
+
+### GLM results-rodents
+```{r model results rodents}
+summary(model_list[[3]])
+
+sjPlot::tab_model(model_list[[3]])
+```
 
 ### Binomial tests-all
 ```{r binomial tests-all}
@@ -195,3 +216,33 @@ binom_tests_vir_fam_rodents %>%
   kableExtra::kable_material()
 ```
 
+### Pteropus and Rattus
+```{r pteropus and rattus, echo = T}
+# within the model data, look at coinfection by host genus and geographic region
+# most of the genera with high numbers of coinfected animals are in SES Asia
+model_data_all %>% 
+  group_by(host_genus, geo_region, virus_coinf, .drop = F) %>% 
+  count() %>% 
+  arrange(desc(virus_coinf), desc(n)) 
+
+# what was the geographic distribution of pteropus and rattus overall?
+pcr_all %>% 
+  dplyr::filter(host_genus %in% c("Pteropus", "Rattus")) %>%   
+  distinct(predict_sample_id, .keep_all = T) %>% 
+  group_by(host_genus, geo_region) %>% 
+  count()
+
+# look at coinfection rates for pteropus and rattus by region
+model_data_all %>% 
+  dplyr::filter(host_genus %in% c("Pteropus", "Rattus")) %>% 
+  group_by(host_genus, geo_region, virus_coinf) %>% 
+  count()
+```
+
+### Wild animals in captivity
+```{r wild captive, echo = T}
+model_data_all %>% 
+  dplyr::filter(captivity_status == "wild animal in captivity") %>% 
+  group_by(host_sci_name) %>% 
+  count()
+```

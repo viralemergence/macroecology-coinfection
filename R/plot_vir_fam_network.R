@@ -30,7 +30,7 @@ plot_vir_fam_network <- function(g,
     geom_edge_loop(aes(width = edge_list$weight,
                        direction = (from-2) * -360 / length(g)), 
                    color = "gray70") +
-    scale_edge_width(name = "Number of \nco-infections",
+    scale_edge_width(name = "Number of \ncoinfections",
                     limits = edge_width_lims,
                     breaks = c(10, 50, 100),
                     labels = c(10, 50, 100)) + 

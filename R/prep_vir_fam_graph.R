@@ -14,11 +14,9 @@ prep_vir_fam_graph <- function(M, total_pos, viral_fams, pal){
   g <- graph_from_adjacency_matrix(M, weighted = TRUE, diag = T,
                                    mode = 'undirected')
   # set labels and degrees of vertices
-  #E(g)$weight <- edge.betweenness(g)
   V(g)$label <- V(g)$name
   V(g)$degree <- degree(g)
   V(g)$size_orig <- total_pos$n[match(V(g)$name, total_pos$viral_family)]
-  # V(g)$size_trans <- log(V(g)$size_orig + 1) * 5
   V(g)$size_trans <- sqrt(V(g)$size_orig)
   V(g)$viral_family = as.character(
     total_pos$viral_family[match(V(g)$name, total_pos$viral_family)]) 
