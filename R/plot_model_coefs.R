@@ -21,8 +21,8 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
   }else if(model_type == "glmm"){
     model_coefs = data.frame(
       beta = summary(model_output)$coefficients$cond[, 1],
-      ci.lb = CIs[1:6, 1],
-      ci.ub = CIs[1:6, 2])
+      ci.lb = CIs[1:7, 1],
+      ci.ub = CIs[1:7, 2])
   }
   
   # exponentiate to get ORs
@@ -72,7 +72,7 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
           axis.text = element_text(color = "black"),
           axis.line = element_line(),
           legend.position = "blank") + 
-    scale_y_continuous(limits = c(0.01, 4.5))
+    scale_y_continuous(limits = c(0, 5))
   
   # helps for later plotting
   if(show_x_label == FALSE){

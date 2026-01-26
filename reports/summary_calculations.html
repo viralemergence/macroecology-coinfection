@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2026-01-23" />
+<meta name="date" content="2026-01-26" />
 
 <title>Useful summary calculations</title>
 
@@ -574,7 +574,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">Useful summary calculations</h1>
-<h4 class="date">2026-01-23</h4>
+<h4 class="date">2026-01-26</h4>
 
 </div>
 
@@ -1554,41 +1554,267 @@ Avian Paramyxovirus 6
 <pre><code>## 
 ## Call:
 ## glm(formula = virus_coinf ~ geo_region + taxa_group + sex + age_class + 
-##     captivity_status, family = binomial(), data = model_data_all)
+##     captivity_status + n_viral_families_tested, family = binomial(), 
+##     data = model_data_all)
 ## 
 ## Coefficients:
 ##                                            Estimate Std. Error z value Pr(&gt;|z|)
-## (Intercept)                                -2.98175    0.17276 -17.260  &lt; 2e-16
-## geo_regionSouth, East, Southeast Asia       0.95614    0.19823   4.823 1.41e-06
-## taxa_groupbirds                            -1.35575    0.44858  -3.022  0.00251
-## taxa_grouprodents                          -0.45343    0.23950  -1.893  0.05832
-## taxa_groupshrews                           -0.94752    1.02635  -0.923  0.35590
-## sexmale                                    -0.06912    0.16200  -0.427  0.66962
-## age_classsubadult                           0.11156    0.20384   0.547  0.58418
-## age_classjuvenile                          -1.19578    0.52486  -2.278  0.02271
-## captivity_statusowned domesticated species  0.14216    0.60077   0.237  0.81294
-## captivity_statuswild animal in captivity    0.77635    0.30046   2.584  0.00977
+## (Intercept)                                -3.51239    0.31360 -11.200  &lt; 2e-16
+## geo_regionSouth, East, Southeast Asia       0.88230    0.20285   4.350 1.36e-05
+## taxa_groupbirds                            -1.42123    0.44656  -3.183  0.00146
+## taxa_grouprodents                          -0.59695    0.25273  -2.362  0.01818
+## taxa_groupshrews                           -0.89764    1.02642  -0.875  0.38183
+## sexmale                                    -0.06317    0.16197  -0.390  0.69651
+## age_classsubadult                           0.11833    0.20443   0.579  0.56271
+## age_classjuvenile                          -1.13860    0.52597  -2.165  0.03041
+## captivity_statusowned domesticated species  0.26733    0.60321   0.443  0.65764
+## captivity_statuswild animal in captivity    0.75125    0.30288   2.480  0.01313
+## n_viral_families_tested                     0.10799    0.05302   2.037  0.04169
 ##                                               
 ## (Intercept)                                ***
 ## geo_regionSouth, East, Southeast Asia      ***
 ## taxa_groupbirds                            ** 
-## taxa_grouprodents                          .  
+## taxa_grouprodents                          *  
 ## taxa_groupshrews                              
 ## sexmale                                       
 ## age_classsubadult                             
 ## age_classjuvenile                          *  
 ## captivity_statusowned domesticated species    
-## captivity_statuswild animal in captivity   ** 
+## captivity_statuswild animal in captivity   *  
+## n_viral_families_tested                    *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 1242.0  on 2461  degrees of freedom
-## Residual deviance: 1197.3  on 2452  degrees of freedom
-## AIC: 1217.3
+## Residual deviance: 1193.2  on 2451  degrees of freedom
+## AIC: 1215.2
 ## 
 ## Number of Fisher Scoring iterations: 6</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+virus coinf
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Odds Ratios
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02 – 0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+geo region [South, East,<br>Southeast Asia]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.42
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.63 – 3.61
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+taxa group [birds]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.09 – 0.54
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+taxa group [rodents]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.55
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.33 – 0.89
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.018</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+taxa group [shrews]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.41
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02 – 1.96
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.382
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+sex [male]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.94
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.68 – 1.29
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.697
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+age class [subadult]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.13
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.74 – 1.66
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.563
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+age class [juvenile]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.32
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10 – 0.80
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.030</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+captivity status [owned<br>domesticated species]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.39 – 4.38
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.658
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+captivity status [wild<br>animal in captivity]
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.16 – 3.82
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.013</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n viral families tested
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.00 – 1.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.042</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+2462
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> Tjur
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.020
+</td>
+</tr>
+</table>
+</div>
+<div id="glm-results-bats" class="section level3">
+<h3>GLM results-bats</h3>
+<pre><code>##  Family: binomial  ( logit )
+## Formula:          virus_coinf ~ geo_region + sex + age_class + cave_roosting +  
+##     n_viral_families_tested + (1 | host_family)
+## Data: model_data_bats
+## 
+##       AIC       BIC    logLik -2*log(L)  df.resid 
+##     747.2     789.8    -365.6     731.2      1511 
+## 
+## Random effects:
+## 
+## Conditional model:
+##  Groups      Name        Variance Std.Dev.
+##  host_family (Intercept) 0.1402   0.3744  
+## Number of obs: 1519, groups:  host_family, 10
+## 
+## Conditional model:
+##                                       Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                           -2.96980    0.64477  -4.606 4.11e-06 ***
+## geo_regionSouth, East, Southeast Asia  1.02693    0.23106   4.444 8.82e-06 ***
+## sexmale                               -0.08322    0.20618  -0.404  0.68649    
+## age_classsubadult                     -0.52551    0.32092  -1.638  0.10152    
+## age_classjuvenile                     -2.02531    0.73192  -2.767  0.00566 ** 
+## cave_roostingyes                      -0.07388    0.28555  -0.259  0.79584    
+## n_viral_families_tested               -0.02972    0.08983  -0.331  0.74080    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1620,215 +1846,7 @@ p
 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04 – 0.07
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-geo region [South, East,<br>Southeast Asia]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.60
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.77 – 3.85
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [birds]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.26
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10 – 0.58
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.003</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [rodents]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.64
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.39 – 1.01
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.058
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [shrews]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.39
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 1.86
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.356
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-sex [male]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.93
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.68 – 1.28
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.670
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-age class [subadult]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.12
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.74 – 1.65
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.584
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-age class [juvenile]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.30
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09 – 0.75
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.023</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-captivity status [owned<br>domesticated species]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.15
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.35 – 3.85
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.813
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-captivity status [wild<br>animal in captivity]
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.17
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.19 – 3.90
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.010</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-2462
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-R<sup>2</sup> Tjur
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.018
-</td>
-</tr>
-</table>
-</div>
-<div id="glm-results-bats" class="section level3">
-<h3>GLM results-bats</h3>
-<pre><code>##  Family: binomial  ( logit )
-## Formula:          virus_coinf ~ geo_region + sex + age_class + cave_roosting +  
-##     (1 | host_family)
-## Data: model_data_bats
-## 
-##       AIC       BIC    logLik -2*log(L)  df.resid 
-##     745.3     782.5    -365.6     731.3      1512 
-## 
-## Random effects:
-## 
-## Conditional model:
-##  Groups      Name        Variance Std.Dev.
-##  host_family (Intercept) 0.1434   0.3787  
-## Number of obs: 1519, groups:  host_family, 10
-## 
-## Conditional model:
-##                                       Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                           -3.12679    0.44497  -7.027 2.11e-12 ***
-## geo_regionSouth, East, Southeast Asia  1.02574    0.23214   4.419 9.93e-06 ***
-## sexmale                               -0.08387    0.20613  -0.407  0.68409    
-## age_classsubadult                     -0.52323    0.32099  -1.630  0.10309    
-## age_classjuvenile                     -2.02483    0.73205  -2.766  0.00568 ** 
-## cave_roostingyes                      -0.07219    0.28597  -0.252  0.80071    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-virus coinf
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Predictors
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Odds Ratios
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-(Intercept)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.04
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.10
+0.01 – 0.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -1842,7 +1860,7 @@ geo region [South, East,<br>Southeast Asia]
 2.79
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.77 – 4.40
+1.78 – 4.39
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -1859,7 +1877,7 @@ sex [male]
 0.61 – 1.38
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.684
+0.686
 </td>
 </tr>
 <tr>
@@ -1873,7 +1891,7 @@ age class [subadult]
 0.32 – 1.11
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.103
+0.102
 </td>
 </tr>
 <tr>
@@ -1901,7 +1919,21 @@ cave roosting [yes]
 0.53 – 1.63
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.801
+0.796
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n viral families tested
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.97
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.81 – 1.16
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.741
 </td>
 </tr>
 <tr>
@@ -1951,7 +1983,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.105 / 0.143
+0.104 / 0.141
 </td>
 </tr>
 </table>
@@ -1960,24 +1992,25 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <h3>GLM results-rodents</h3>
 <pre><code>## 
 ## Call:
-## glm(formula = virus_coinf ~ sex + age_class, family = binomial(), 
-##     data = model_data_rodents)
+## glm(formula = virus_coinf ~ sex + age_class + n_viral_families_tested, 
+##     family = binomial(), data = model_data_rodents)
 ## 
 ## Coefficients:
 ##                               Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                   -2.47754    0.26246  -9.440   &lt;2e-16 ***
-## sexmale                       -0.03435    0.31309  -0.110   0.9126    
-## age_classsubadult or juvenile  0.76116    0.32264   2.359   0.0183 *  
+## (Intercept)                    -5.7876     0.8568  -6.755 1.43e-11 ***
+## sexmale                         0.1348     0.3223   0.418    0.676    
+## age_classsubadult or juvenile   0.6109     0.3322   1.839    0.066 .  
+## n_viral_families_tested         0.4486     0.1028   4.364 1.28e-05 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 304.79  on 487  degrees of freedom
-## Residual deviance: 299.50  on 485  degrees of freedom
-## AIC: 305.5
+## Residual deviance: 276.13  on 484  degrees of freedom
+## AIC: 284.13
 ## 
-## Number of Fisher Scoring iterations: 5</code></pre>
+## Number of Fisher Scoring iterations: 6</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -2006,10 +2039,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08
+0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05 – 0.14
+0.00 – 0.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -2020,13 +2053,13 @@ p
 sex [male]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.97
+1.14
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.52 – 1.80
+0.61 – 2.17
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.913
+0.676
 </td>
 </tr>
 <tr>
@@ -2034,13 +2067,27 @@ sex [male]
 age class [subadult or<br>juvenile]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.14
+1.84
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.12 – 4.00
+0.95 – 3.51
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.018</strong>
+0.066
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n viral families tested
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.57
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.29 – 1.94
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
 </td>
 </tr>
 <tr>
@@ -2056,7 +2103,7 @@ Observations
 R<sup>2</sup> Tjur
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.012
+0.059
 </td>
 </tr>
 </table>

@@ -14,28 +14,23 @@ run_models <- function(model_data_all, model_data_bats, model_data_rodents){
   
   ## all animals
   model_list[[1]] <- glm(virus_coinf ~ geo_region + taxa_group + sex + 
-                           age_class + captivity_status, family = binomial(), 
-                         data = model_data_all)
-  # summary(model_list[[1]])
-  # drop1(model_list[[1]], test = "Chisq")
+                           age_class + captivity_status + 
+                           n_viral_families_tested, 
+                         family = binomial(), data = model_data_all)
     
-
   ## bats
   model_list[[2]] <- glmmTMB(virus_coinf ~ geo_region + sex + age_class + 
-                               cave_roosting + (1|host_family),
+                               cave_roosting + n_viral_families_tested + 
+                               (1|host_family),
                              family = binomial(), data = model_data_bats)
-  # summary(model_list[[2]])
-  # drop1(model_list[[2]], test = "Chisq")
-  
   
   ## rodents
-  model_list[[3]] <- glm(virus_coinf ~ sex + age_class, 
+  model_list[[3]] <- glm(virus_coinf ~ sex + age_class + 
+                           n_viral_families_tested, 
                          family = binomial(), data = model_data_rodents)
-  # summary(model_list[[3]])
-  # drop1(model_list[[3]], test = "Chisq")
+
   
   names(model_list) <- c("all", "bats", "rodents")
   
   return(model_list)
-  
 }

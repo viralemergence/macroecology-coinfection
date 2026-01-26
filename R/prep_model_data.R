@@ -17,7 +17,7 @@ prep_model_data_all <- function(coinf_df){
       subadult = "subadult (immature, independent)",
       juvenile = "juvenile (dependent on dam)")) %>% 
     mutate(across(c(taxa_group, sex, age_class, captivity_status), factor)) %>% 
-    mutate(age_class = forcats::fct_relevel(age_class, "adult", "subadult")) 
+    mutate(age_class = forcats::fct_relevel(age_class, "adult", "subadult"))
     
   return(model_data_all)
   

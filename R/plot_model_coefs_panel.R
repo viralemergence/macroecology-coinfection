@@ -14,20 +14,23 @@ plot_model_coefs_panel <- function(model_list){
                                            "rodents", "shrews", "male", 
                                            "subadult", "juvenile", 
                                            "owned\ndomesticated", 
-                                           "wild in\ncaptivity"),
+                                           "wild in captivity", 
+                                           "number of virus\nfamilies tested"),
                          show_x_label = FALSE)
   
   p2 <- plot_model_coefs(model_output = model_list$bats, 
                          model_type = "glmm", 
                          pretty_labels = c("intercept", "SES Asia", "male", 
                                            "subadult",  "juvenile",
-                                           "cave-\nroosting"),
+                                           "cave-\nroosting",
+                                           "number of virus\nfamilies tested"),
                          show_x_label = FALSE)
   
   p3 <- plot_model_coefs(model_output = model_list$rodents, 
                          model_type = "glm", 
                          pretty_labels = c("intercept", "male", 
-                                           "subadult/\njuvenile"),
+                                           "subadult/\njuvenile",
+                                           "number of virus\nfamilies tested"),
                          show_x_label = TRUE)
   
   coefs_panel <- (p1 / p2 / p3) #+

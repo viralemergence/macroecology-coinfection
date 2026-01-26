@@ -57,6 +57,12 @@ data_processing_targets <- tar_plan(
                                 "Africa and West Asia", 
                                 "South, East, Southeast Asia")),
   
+  # calculate number of virus families tested, for each animal
+  family_testing = pcr_all %>% 
+    distinct(predict_sample_id, viral_family_tested) %>% 
+    group_by(predict_sample_id) %>% 
+    dplyr::summarise(n_viral_families_tested = n()),
+  
   # number of unique animals with testing data
   n_unique_all = pcr_all$predict_sample_id %>% unique %>% length, #65662
   
@@ -77,7 +83,7 @@ data_processing_targets <- tar_plan(
     dplyr::filter(infection == 1),
   
   # prep data for later GLMMs
-  coinf_df = create_coinf_df(pcr_pos),
+  coinf_df = create_coinf_df(pcr_pos, family_testing),
   model_data_all = prep_model_data_all(coinf_df),
   model_data_bats = prep_model_data_bats(model_data_all, roosting),
   model_data_rodents = prep_model_data_rodents(model_data_all),
