@@ -30,7 +30,7 @@ plot_map_pos <- function(map_data, pal){
                       values = pal, 
                       na.translate = F) +
     theme(legend.position = "inside",
-          legend.position.inside = c(0.55, 0.05),
+          legend.position.inside = c(0.5, 0),
           legend.background = element_blank(),
           legend.title = element_text(color = "black", size = 14),
           legend.text = element_text(color = "black", size = 12),

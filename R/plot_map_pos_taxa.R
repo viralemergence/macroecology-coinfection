@@ -31,8 +31,9 @@ plot_map_pos_taxa <- function(map_data){
     scale_size_continuous(name = "Number of animals",
                           breaks = limits, labels = labels,
                           range = c(2, 8)) +
-    scale_color_brewer(name = "Taxonomic group", type = "qual", 
-                       palette = "Dark2", na.translate = F) +
+    scale_color_manual(name = "Taxonomic group",
+                       values = RColorBrewer::brewer.pal(8, "Dark2")[c(1,2,4,5,6,8)],
+                       na.translate = F) +
     theme(legend.position = "bottom",
           legend.background = element_blank(),
           legend.box = "vertical",

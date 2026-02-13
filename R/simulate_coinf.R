@@ -1,4 +1,4 @@
-#' simulate coinfection based on true virus prevalence in a taxa group
+#' simulate coinfection based on observed virus prevalence in a taxa group
 #'
 #' @title simulate_coinf
 #'

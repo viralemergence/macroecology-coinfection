@@ -180,8 +180,8 @@ plot_targets <- tar_plan(
   # Figure 1 (2 panels)
   fig_coinf_per_taxa = plot_coinf_per_taxa(pos_final, 
                                            pal = c("#9e9ac8", "#54278f")),
-  fig_map_pos = plot_map_pos(map_data_pos, pal = c("#9e9ac8", "#54278f")),
-  fig_1 = plot_fig_1(fig_coinf_per_taxa, fig_map_pos),
+  fig_map_pos_taxa = plot_map_pos_taxa(map_data_pos_taxa),
+  fig_1 = plot_fig_1(fig_coinf_per_taxa, fig_map_pos_taxa),
   
   # Figure 2 (2 panels)
   vir_fam_network_panel = plot_vir_fam_network_panel(g, g_bats, g_rodents,
@@ -195,8 +195,8 @@ plot_targets <- tar_plan(
   # Figure S1
   fig_s1 = plot_map_all(map_data_all),
   
-  # Figure X
-  fig_s2 = plot_map_pos_taxa(map_data_pos_taxa),
+  # Figure S2
+  fig_s2 = plot_map_pos(map_data_pos, pal = c("#9e9ac8", "#54278f")),
   
   # Figure S3
   fig_s3 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds),
