@@ -59,11 +59,11 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
     geom_hline(yintercept = 1, linetype = "dashed", colour = "black") + 
     geom_errorbar(aes(x = coef, ymin = ci.lb, ymax = ci.ub, 
                       color = ci_crosses_one), 
-                  width = 0, linewidth = 2.5) + 
+                  width = 0, linewidth = 1.5) + 
     scale_color_manual(values = c("#5e4fa2", "darkgray"), guide = "none") + 
-    geom_point(aes(x = coef, y = beta, color = ci_crosses_one), size = 5) + 
+    geom_point(aes(x = coef, y = beta, color = ci_crosses_one), size = 3) + 
     coord_flip() + 
-    theme_bw(base_size = 22) + 
+    theme_bw(base_size = 12) + 
     labs(x = NULL) + 
     ylab("Odds ratios and 95% CIs") + 
     theme(panel.grid.major = element_blank(),

@@ -47,7 +47,7 @@ plot_vir_fam_network <- function(g,
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +
     theme_graph(plot_margin = margin(b = 0, l = 0, t = 0, r = 0)) +
-    guides(fill = guide_legend(override.aes = list(size = 10)))
+    guides(fill = guide_legend(override.aes = list(size = 6)))
   
   # helps for later plotting
   if(show_fill_legend == FALSE){

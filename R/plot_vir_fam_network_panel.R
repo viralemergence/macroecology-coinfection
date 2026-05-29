@@ -23,14 +23,14 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
   p1 <- plot_vir_fam_network(
     g,
     edge_width_lims = edge_width_lims,
-    node_size_range = c(4, 30),
+    node_size_range = c(2, 9),
     node_size_lims = node_size_lims,
     show_fill_legend = TRUE)
   
   p2 <- plot_vir_fam_network(
     g_bats,
     edge_width_lims = edge_width_lims,
-    node_size_range = c(4, 30),
+    node_size_range = c(2, 9),
     node_size_lims = node_size_lims,
     show_fill_legend = FALSE) +
     labs(tag = "C")
@@ -38,14 +38,14 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
   p3 <- plot_vir_fam_network(
     g_rodents,
     edge_width_lims = edge_width_lims,
-    node_size_range = c(4, 30),
+    node_size_range = c(2, 9),
     node_size_lims = node_size_lims,
     show_fill_legend = FALSE) +
     labs(tag = "E")
   
   if(add_stars){
     
-    star_size = 20
+    star_size = 10
     
     p1 <- p1 +     
       geom_text(x = -0.75, y = 0.7, label = "*", size = star_size) +
@@ -69,8 +69,8 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
   network_panel <- network_panel + 
     plot_layout(guides = "collect") & 
     theme(legend.position = "right",
-          legend.text = element_text(size = 18),
-          legend.title = element_text(size = 20),
+          legend.text = element_text(size = 8),
+          legend.title = element_text(size = 10),
           legend.background = element_blank())
   
   return(network_panel)

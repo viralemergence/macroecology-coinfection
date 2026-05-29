@@ -13,11 +13,11 @@ plot_fig_2 <- function(ggraph_network_panel, model_coefs_panel){
   
   rm(ggraph_network_panel, model_coefs_panel)
   
-  fig_2 <- fig_2 + plot_layout(widths = c(1, 0.1, 1.2))
+  fig_2 <- fig_2 + plot_layout(widths = c(1, 0.05, 1.2))
   
   fig_2 <- fig_2 + plot_layout(tag_level = "new") +
     plot_annotation(tag_levels = list(c("A", "C", "E", "B", "D", "F"))) & 
-    theme(plot.tag = element_text(size = 24),
+    theme(plot.tag = element_text(size = 14),
           plot.tag.position = "topleft")
   
   return(fig_2)
