@@ -28,7 +28,7 @@ plot_vir_network <- function(g){
   
   net_out <- ggraph(g_tbl, layout = "kk") +
     geom_edge_link(aes(width = edge_list$weight), color = "gray70") +
-    scale_edge_width(name = "Number of \ncoinfections") + 
+    scale_edge_width(name = "Number of \ncoinfections", range = c(0.5, 3)) + 
     geom_node_point(aes(size = size_trans,
                         fill = factor(viral_family)), 
                     pch = 21) +
@@ -37,7 +37,7 @@ plot_vir_network <- function(g){
                     family = "sansserif",
                     alpha = 0.7, vjust = 0.8, hjust = 0.8) +
     scale_size(name = "Number of \ninfections", 
-               range = c(2, 18), 
+               range = c(2, 12), 
                breaks = c(5, 10, 15, 20),
                labels = c(5^2, 10^2, 15^2, 20^2)) +
     scale_fill_manual(name = "Viral family", values = pal) +
@@ -45,7 +45,7 @@ plot_vir_network <- function(g){
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +
     theme_graph(plot_margin = margin(b = 0, l = 0, t = 0, r = 0)) +
-    guides(fill = guide_legend(override.aes = list(size = 10)))
+    guides(fill = guide_legend(override.aes = list(size = 6)))
   
   return(net_out)
 }
