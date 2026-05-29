@@ -69,8 +69,8 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
   network_panel <- network_panel + 
     plot_layout(guides = "collect") & 
     theme(legend.position = "right",
-          legend.text = element_text(size = 8),
-          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 10),
+          legend.title = element_text(size = 12),
           legend.background = element_blank())
   
   return(network_panel)
