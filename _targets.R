@@ -14,7 +14,9 @@ tar_option_set(
 
 data_input_targets <- tar_plan(
   
-  ## read in PREDICT data 
+  ## read in PREDICT data. can download directly from
+  ## https://doi.org/10.5281/zenodo.20277016 and
+  ## https://doi.org/10.5281/zenodo.20287530)
   tar_file(pcr_tests_gz, "data/PREDICT_PCR_Tests.csv.gz"),
   tar_file(animals_csv, "data/PREDICT_Animals_Sampled.csv"),
   
