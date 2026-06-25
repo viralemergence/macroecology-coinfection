@@ -205,35 +205,35 @@ plot_targets <- tar_plan(
 
 outputs_targets <- tar_plan(
   
-  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 11, width = 8.5, 
-                      units = "in", dpi = 500, compression = "lzw"),
-  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 11, width = 8.5, 
-                     units = "in", dpi = 500),
+  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 22, width = 18, 
+                      units = "cm", dpi = 600, bg = "white", compression = "lzw"),
+  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 22, width = 18, 
+                     units = "cm", bg = "white", dpi = 600),
   
-  fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 19, width = 16, 
-                      units = "in", dpi = 500, compression = "lzw"),
-  fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 19, width = 16, 
-                     units = "in", dpi = 500),
+  fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 21, width = 18, 
+                      units = "cm", dpi = 600, compression = "lzw"),
+  fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 21, width = 18, 
+                     units = "cm", dpi = 600),
   
-  fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 10, width = 12,
-                      units = "in", dpi = 500, compression = "lzw"),
-  fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 10, width = 12, 
-                     units = "in", dpi = 500),
+  fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 15, width = 18,
+                      units = "cm", dpi = 600, compression = "lzw"),
+  fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 15, width = 18, 
+                     units = "cm", dpi = 600),
   
   fig_s1_tiff = ggsave("figures/fig_s1.tiff", fig_s1, height = 4, width = 7, 
-                       units = "in", dpi = 500, compression = "lzw"),
+                       units = "in", dpi = 600, compression = "lzw"),
   fig_s1_png = ggsave("figures/fig_s1.png", fig_s1, height = 4, width = 7, 
-                       units = "in", dpi = 500),
+                       units = "in", dpi = 600),
   
   fig_s2_tiff = ggsave("figures/fig_s2.tiff", fig_s2, height = 5, width = 7, 
-                      units = "in", dpi = 500, compression = "lzw"),
+                      units = "in", dpi = 600, compression = "lzw"),
   fig_s2_png = ggsave("figures/fig_s2.png", fig_s2, height = 5, width = 7, 
-                     units = "in", dpi = 500),
+                     units = "in", dpi = 600),
   
   fig_s3_tiff = ggsave("figures/fig_s3.tiff", fig_s3, height = 3, width = 10, 
-                       units = "in", dpi = 500, compression = "lzw"),
+                       units = "in", dpi = 600, compression = "lzw"),
   fig_s3_png = ggsave("figures/fig_s3.png", fig_s3, height = 3, width = 10, 
-                      units = "in", dpi = 500),
+                      units = "in", dpi = 600),
   
 )
 
