@@ -1,0 +1,32 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+This repo contains code to generate results and figures for the manuscript, "The macroecology of viral coinfection" by Cecilia A. Sánchez, Colin J. Carlson, and Amy R. Sweeny. This manuscript is currently in revision but available as a bioRxiv preprint [here](https://doi.org/10.1101/2025.09.08.674542).
+
+To run this code base, you must have [R](https://www.r-project.org/) installed on your computer. Next, clone or download this github repository to your computer. To ensure that other users can replicate our analyses using the same packages (and versions), we use [renv](https://rstudio.github.io/renv/articles/renv.html) for dependency management. Run `renv::restore` to install all packages from their recorded versions. To further facilitate reproducibility, we use [targets](https://books.ropensci.org/targets/) to orchestrate an overall data cleaning and analysis pipeline (contained in  `_targets.R`). To rerun this pipeline on your own computer, run `targets::tar_make()`. Key results are highlighted in the R Markdown notebook found at `reports/summary_calculations.Rmd`.
+
+The analyses described in our paper depend on data produced as part of the PREDICT project: specifically the `PREDICT_Animals_Sampled.csv` and the `PREDICT_PCR_Tests.csv` files in the `data` folder. PREDICT data were formerly shared openly on the U.S. Agency for International Development (USAID) Development Data Library (DDL). The DDL is no longer accessible following the shutdown of USAID in July 2025. The two files above are now deposited on Zenodo, under their original [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/) license.
+
+Animals sampled:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20287530.svg)](https://doi.org/10.5281/zenodo.20287530)
+
+PCR tests:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20277016.svg)](https://doi.org/10.5281/zenodo.20277016)
+
+
+Repo structure overview:
+
+```
+├── _targets = folder containing targets pipeline artifacts
+├── _targets.R = main targets pipeline file
+├── data = local storage location for data
+├── figures = storage location for figures
+├── packages.R = R script that lists all R packages used in the analysis
+├── R = folder that contains functions used in the targets pipeline
+├── renv = storage location for renv artifacts
+├── renv.lock = file that describes package versions and other software dependencies for this project. 
+└── reports = storage location for rmarkdown documents and rendered html documents
+```
