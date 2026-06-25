@@ -22,15 +22,11 @@ fig_s1|stem|1429e999b91a9c0f|254a42fcda826b0d|b21e3b12b4d5c6ee|-393416741||t2047
 pos_final|stem|57e5efc3639a5252|e8f1707e67f13f26|4310fc1d6c2a20b6|714048063||t20479.8757045168s|s217973b|217973|qs|local|vector|||0.05||
 fig_s3|stem|495a76a896bc01df|6f3cab8b5a922987|b1684d13a367d51f|132719626||t20479.875789873s|s449598b|449598|qs|local|vector|||6.38||
 coinf_df|stem|b3e0563e6dcc20ef|1c7feb97133a3d3d|b5442144d51105b5|-1832118059||t20479.8757913301s|s50255b|50255|qs|local|vector|||0.09||
-fig_s1_tiff|stem|f2518304ce395add|076d5794d49fbeb0|09edc3c54502117e|-2061835915||t20479.8758003879s|s95b|95|qs|local|vector|||0.74||
-fig_s1_png|stem|c32a44b5f8ce7725|ff21dc200e7a30c4|09edc3c54502117e|1610818086||t20479.8758080985s|s94b|94|qs|local|vector|||0.63||
 total_pos_rodents|stem|71ad2b7d131e6776|086d0cd021fca296|4e38f95c25f388c5|2088057794||t20479.8758085751s|s473b|473|qs|local|vector|||0||
 total_pos|stem|f31cd860fbe138c8|60ed662ad3e017b0|4e38f95c25f388c5|-579875268||t20479.8758105095s|s491b|491|qs|local|vector|||0||
 total_pos_bats|stem|241c78bbf6b12689|761edb80747de7d2|4e38f95c25f388c5|296573524||t20479.8758109626s|s479b|479|qs|local|vector|||0.02||
 MV|stem|c70a3bac079362d6|1b65a254df518c37|e57b5258883f171b|1080735324||t20479.8758170779s|s2322b|2322|qs|local|vector|||0.22||
 map_data_pos|stem|b1464c794aee04a4|17d9712dcd2cff9b|b602dfc5ff501397|2027048673||t20479.8758196627s|s1087358b|1087358|qs|local|vector|||0.13|st_centroid assumes attributes are constant over geometries|
-fig_s3_png|stem|36155eb8e0495d7b|0e52ea8178a3d143|f096529f87dd70a6|-1482272946||t20479.8758293248s|s94b|94|qs|local|vector|||0.71||
-fig_s3_tiff|stem|5f2ead5540f88c5e|8fdf94316c61ed73|f096529f87dd70a6|611376963||t20479.875845603s|s95b|95|qs|local|vector|||1.15||
 model_data_all|stem|b16ddc92d5bb34b1|307cdf0fa7030662|5e9633db40778a61|-1875047108||t20479.8758461277s|s37520b|37520|qs|local|vector|||0.02||
 viral_fams_rodents|stem|bd71be8d1ed03a4a|a8287a55d159850d|845df3649100ea62|395879943||t20479.8758463608s|s211b|211|qs|local|vector|||0||
 M_rodents|stem|e413cb57405d2fa5|25a3cdd73faaab73|66cf1339a0e0eefa|-1412216640||t20479.8758472447s|s193b|193|qs|local|vector|||0.04||
@@ -48,40 +44,40 @@ binom_tests_vir_fam|stem|6616085d1e971e64|87a6d942b2d10704|4cb2a2731486b1e1|-420
 g|stem|4f975858c5acf7cc|5de0612a94af9e3f|280fc6b4c285ab25|299528266||t20479.8758788533s|s711b|711|qs|local|vector|||0||
 binom_tests_vir_fam_bats|stem|bb1d8c7dc186a2e9|0c00ce3d3cba3dc8|da00e6417aa3c55a|-664724313||t20479.8758834058s|s949b|949|qs|local|vector|||0.36||
 g_bats|stem|18844b4779102cdc|09d8b563051f3e32|3c5f2be0378ecdc2|1334477206||t20479.8758836945s|s660b|660|qs|local|vector|||0||
-fig_3|stem|f014922e34ab369b|4baa11126ed2bb10|5c3fd18a4f49c6d6|-1271217868||t20479.8759092405s|s461611b|461611|qs|local|vector|||0.17||
 model_list|stem|6393b3a3dee5e48b|65a3270fb3ed8020|a40e537f1625908e|1900002282||t20479.8759557441s|s300713b|300713|qs|local|vector|||0.26||
-vir_fam_network_panel|stem|194e6f2ec2a8134d|faf1024e04356e8d|6e78aaa6126acd89|855319731||t20479.8759699385s|s1256755b|1256755|qs|local|vector|||0.44||
-fig_3_png|stem|a666f8c8e5bf0da6|82a0139dd2a41f3b|3ee533237488a006|324378692||t20479.87598688s|s93b|93|qs|local|vector|||1.35||
-fig_3_tiff|stem|ee796ac96ffafa0c|1a91531dd09cf301|3ee533237488a006|-1869009282||t20479.8760068634s|s94b|94|qs|local|vector|||1.63||
 summary_calculations|stem|84ab0176d99b587e|7b7c5541f04d5b16|59be8fedcaa6a2f8|1299905945|reports/summary_calculations.html*reports/summary_calculations.Rmd|t20479.876286398s|s709627b|709627|file|local|vector|||5.53||
-model_coefs_panel|stem|5ce0acd1bf437a0c|aa569d3940d7389e|1d68e7880e97b055|1667169840||t20479.8898851116s|s737665b|737665|qs|local|vector|||1.67||
-fig_2|stem|be972ffd2b8f4081|2db284756422ba57|1ac864c587c96254|1306091307||t20479.8899305357s|s2019674b|2019674|qs|local|vector|||0.13||
-fig_2_png|stem|84e01d9c1259477f|987595f8f7a6d15d|efe0130e9c98f1ba|557142439||t20479.8900515343s|s93b|93|qs|local|vector|||7.98||
-fig_2_tiff|stem|742536bc87d77900|c0983b2d75c74319|efe0130e9c98f1ba|266203387||t20479.8900935009s|s94b|94|qs|local|vector|||2.07||
-fig_coinf_per_taxa|stem|a1e276021b6b2219|ae32cf01edfa0ae9|6b60b06bc8b42a89|337353715||t20495.6680621347s|s195751b|195751|qs|local|vector|||0.11||
-fig_map_pos_taxa|stem|2f40d47b46306592|fed414c9aa27ebbe|20c305cde7592779|1850315735||t20495.6899598177s|s8153789b|8153789|qs|local|vector|||0.08||
-fig_1|stem|f6ed59a74bd5b26a|e21a0023b30af797|17182c6e4dfcc6fd|374042142||t20495.6899801839s|s16666427b|16666427|qs|local|vector|||0.5|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
-fig_1_png|stem|21abd5d4c79b859f|2cf6127d9c0be983|9e889d0d1173a15b|-1394290957||t20495.6900100908s|s93b|93|qs|local|vector|||1.82||
-fig_1_tiff|stem|e3e4ab86f0763a11|22f4fae206df5b13|9e889d0d1173a15b|2090535427||t20495.6900272773s|s94b|94|qs|local|vector|||1.25||
 fig_s2|stem|796108337a1f7558|f8fbc628bfe011d8|98464dff94a88c45|403417487||t20495.6943317538s|s12093242b|12093242|qs|local|vector|||0.09||
-fig_s2_png|stem|ece6bacdb044e151|27ffb14ad1463b75|f0a3a17c791185d6|1951874345||t20495.6944295884s|s94b|94|qs|local|vector|||5.13|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
-fig_s2_tiff|stem|ac30ba89006239e7|69f664f53d6f226e|f0a3a17c791185d6|-1912388606||t20495.6944992425s|s95b|95|qs|local|vector|||4.72|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_s1_tiff|stem|f2518304ce395add|a1512d1cbefce2cf|09edc3c54502117e|-2061835915||t20602.8313816862s|s95b|95|qs|local|vector|||2.39||
+fig_s1_png|stem|c32a44b5f8ce7725|2d855905fa397244|09edc3c54502117e|1610818086||t20602.8313907337s|s94b|94|qs|local|vector|||0.68||
+fig_s3_png|stem|36155eb8e0495d7b|363437574ea81125|f096529f87dd70a6|-1482272946||t20602.8314187038s|s94b|94|qs|local|vector|||0.67||
+fig_s3_tiff|stem|5f2ead5540f88c5e|f53314ad42172441|f096529f87dd70a6|611376963||t20602.831437616s|s95b|95|qs|local|vector|||0.42||
+fig_s2_png|stem|ece6bacdb044e151|6bf50092802639c0|f0a3a17c791185d6|1951874345||t20602.8315361442s|s94b|94|qs|local|vector|||5.68|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_s2_tiff|stem|ac30ba89006239e7|eaabce66d824b65c|f0a3a17c791185d6|-1912388606||t20602.8316091461s|s95b|95|qs|local|vector|||4.84|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_coinf_per_taxa|stem|e55d9a3ba12f6362|ae32cf01edfa0ae9|2ff83bcace9e1d9f|337353715||t20602.8347918765s|s196050b|196050|qs|local|vector|||0.18||
+fig_map_pos_taxa|stem|9c378b22281a3ede|fed414c9aa27ebbe|20c305cde7592779|1850315735||t20602.842563732s|s8153761b|8153761|qs|local|vector|||0.11||
+fig_1|stem|53c38820908fbea9|e21a0023b30af797|efc712feb5f801e9|374042142||t20602.8618303361s|s16666892b|16666892|qs|local|vector|||1.93|Removed 216 rows containing missing values or values outside the scale range (`geom_point()`).|
+fig_1_png|stem|21abd5d4c79b859f|77e37286e2ceb4c4|da5cfbf702aa12dc|-1394290957||t20602.8618720839s|s93b|93|qs|local|vector|||3.1||
+fig_1_tiff|stem|e3e4ab86f0763a11|b4366376a6f36934|da5cfbf702aa12dc|2090535427||t20602.8618937724s|s94b|94|qs|local|vector|||1.44||
+model_coefs_panel|stem|bc8e20e6065f833b|aa569d3940d7389e|37496ef9f3edb26c|1667169840||t20602.8767886918s|s737739b|737739|qs|local|vector|||0.89||
+fig_3|stem|85bec0a367276cbd|4baa11126ed2bb10|73485a5f3b14f528|-1271217868||t20602.9092169073s|s451343b|451343|qs|local|vector|||0.16||
+fig_3_png|stem|a666f8c8e5bf0da6|6864bb4140f8dcfe|1ae46c46c4a310d4|324378692||t20602.9092365059s|s93b|93|qs|local|vector|||1.59||
+fig_3_tiff|stem|ee796ac96ffafa0c|ee744adb7f8c292c|1ae46c46c4a310d4|-1869009282||t20602.9092451949s|s94b|94|qs|local|vector|||0.64||
 create_coinf_df|function|377d2f6b59082153
-plot_vir_fam_network|function|740c79b60a3fb5dd
+plot_vir_fam_network|function|6e4705e67a690934
 run_models|function|a0c4b0d28b6a2504
-.Random.seed|object|b462dbea6e826e44
+.Random.seed|object|e2914c2e7638f311
 plot_map_all|function|e87387e6cd6cb2ee
 plot_sim_coinf|function|cbfb2619d86aeec0
 prep_model_data_rodents|function|8ef39fc9a26569a8
 prep_matrix_data|function|88d37930d9afb7c1
 prep_map_data_pos|function|1dae8a71ea527d9e
 plot_map_pos_taxa|function|e944c9376178af23
-plot_coinf_per_taxa|function|4834ca90c607154d
-plot_vir_network|function|4dcc22b5ed6c02a5
-plot_model_coefs|function|46c18cae78fc1d24
+plot_coinf_per_taxa|function|06c563fa76ce52ba
+plot_vir_network|function|9bf5ed88b793a63d
+plot_model_coefs|function|fa10a1d4dfeb48c3
 simulate_coinf|function|2b97393c40f42dc8
-plot_fig_1|function|e35985490a175a7a
-plot_fig_2|function|56e0907acd624e4a
+plot_fig_1|function|bad9426741c5f130
+plot_fig_2|function|1e4fc463160524ac
 prep_map_data_pos_taxa|function|092252a9373759d3
 clean_pcr_data|function|527618a2e553d702
 prep_model_data_all|function|d4e6bee23d42aeaa
@@ -92,7 +88,11 @@ prep_map_data_all|function|34386db0cc983a11
 run_binom_tests|function|67e5a16aaf9b522c
 prep_vir_graph|function|4458a6e612a247bd
 prep_model_data_bats|function|6bb9979ada5cdb32
-plot_vir_fam_network_panel|function|a9831c7e3cd71b03
+plot_vir_fam_network_panel|function|24e949f8466a6e43
 plot_sim_coinf_panel|function|bc2a84f55c8ce184
-plot_model_coefs_panel|function|2e993425b27f777c
-map_data_pos_taxa|stem|5aa409001ea1745c|3b49581988778a7f|08a017926301dc75|1880512033||t20497.6367617368s|s720869b|720869|qs|local|vector|||1.42|st_centroid assumes attributes are constant over geometries|
+plot_model_coefs_panel|function|4dbdc2073e260932
+map_data_pos_taxa|stem|5aa409001ea1745c|3b49581988778a7f|08a017926301dc75|1880512033||t20602.9255567536s|s720869b|720869|qs|local|vector|||1.19|st_centroid assumes attributes are constant over geometries|
+vir_fam_network_panel|stem|fa8131c7e141fc90|faf1024e04356e8d|b7b844cb3b89dba1|855319731||t20602.925575558s|s1249408b|1249408|qs|local|vector|||0.42||
+fig_2|stem|56564188e28f3014|2db284756422ba57|72b9e61cf37b41b6|1306091307||t20602.9256123808s|s2017053b|2017053|qs|local|vector|||0.08||
+fig_2_png|stem|84e01d9c1259477f|f2831944cdf90e9d|38ddcde625740841|557142439||t20602.9256586984s|s93b|93|qs|local|vector|||2.21||
+fig_2_tiff|stem|742536bc87d77900|721f80a570d704d5|38ddcde625740841|266203387||t20602.9256964648s|s94b|94|qs|local|vector|||1.51||
