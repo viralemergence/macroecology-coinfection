@@ -31,11 +31,11 @@ plot_vir_fam_network <- function(g,
                        direction = (from-2) * -360 / length(g)), 
                    color = "gray70") +
     scale_edge_width(name = "Number of \ncoinfections",
-                    limits = edge_width_lims,
-                    breaks = c(10, 50, 100),
-                    labels = c(10, 50, 100)) + 
-    geom_node_point(aes(size = size_trans, 
-                        fill = factor(viral_family)), 
+                     range = c(1, 4),
+                     limits = edge_width_lims,
+                     breaks = c(10, 50, 100),
+                     labels = c(10, 50, 100)) + 
+    geom_node_point(aes(size = size_trans, fill = factor(viral_family)), 
                     pch = 21) +
     scale_size(name = "Number of \ninfections", 
                range = node_size_range, 
@@ -47,7 +47,7 @@ plot_vir_fam_network <- function(g,
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +
     theme_graph(plot_margin = margin(b = 0, l = 0, t = 0, r = 0)) +
-    guides(fill = guide_legend(override.aes = list(size = 10)))
+    guides(fill = guide_legend(override.aes = list(size = 6)))
   
   # helps for later plotting
   if(show_fill_legend == FALSE){

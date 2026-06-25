@@ -38,7 +38,7 @@ plot_coinf_per_taxa <- function(pos_final, pal){
     theme_bw(base_size = 16) + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "inside",
-          legend.position.inside = c(0.8, 0.84),
+          legend.position.inside = c(0.8, 0.8),
           panel.grid.major.x = element_blank(),
           panel.grid.minor.y = element_blank()) + 
     scale_fill_manual(name = "Coinfection status", values = pal) +
