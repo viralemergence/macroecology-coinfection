@@ -21,8 +21,8 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
   }else if(model_type == "glmm"){
     model_coefs = data.frame(
       beta = summary(model_output)$coefficients$cond[, 1],
-      ci.lb = CIs[1:7, 1],
-      ci.ub = CIs[1:7, 2])
+      ci.lb = CIs[1:(nrow(CIs)-1), 1],
+      ci.ub = CIs[1:(nrow(CIs)-1), 2])
   }
   
   # exponentiate to get ORs
@@ -55,12 +55,14 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
   model_coefs$ci_crosses_one <- list
   model_coefs$ci_crosses_one <- as.factor(model_coefs$ci_crosses_one)
   
+  mycols <- c("yes" = "darkgray", "no" = "#5e4fa2")
+  
   coef_plot <- ggplot(model_coefs) + 
     geom_hline(yintercept = 1, linetype = "dashed", colour = "black") + 
     geom_errorbar(aes(x = coef, ymin = ci.lb, ymax = ci.ub, 
                       color = ci_crosses_one), 
                   width = 0, linewidth = 1.5) + 
-    scale_color_manual(values = c("#5e4fa2", "darkgray"), guide = "none") + 
+    scale_color_manual(values = mycols, guide = "none") + 
     geom_point(aes(x = coef, y = beta, color = ci_crosses_one), size = 3) + 
     coord_flip() + 
     theme_bw(base_size = 12) + 
@@ -72,7 +74,7 @@ plot_model_coefs <- function(model_output, model_type, pretty_labels,
           axis.text = element_text(color = "black"),
           axis.line = element_line(),
           legend.position = "blank") + 
-    scale_y_continuous(limits = c(0, 5))
+    scale_y_continuous(limits = c(0, 7.5))
   
   # helps for later plotting
   if(show_x_label == FALSE){

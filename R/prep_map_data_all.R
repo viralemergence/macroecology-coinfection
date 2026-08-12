@@ -10,7 +10,7 @@ prep_map_data_all <- function(pcr){
   
   unique_specimens <- pcr %>% 
     dplyr::filter(!duplicated(specimen_id)) %>% 
-    select(specimen_id, country, taxa_group, latitude, longitude) %>% 
+    select(specimen_id, country, host_order, latitude, longitude) %>% 
     mutate(iso3c = countrycode(country, "country.name", "iso3c")) 
   
   specimens_per_country <- unique_specimens %>% 

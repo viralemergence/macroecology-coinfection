@@ -1,34 +1,25 @@
-#' prep map data to show distribution of infected animals by taxonomic group
+#' prep map data to show distribution of infected animals by host order
 #'
-#' @title prep_map_data_pos_taxa
+#' @title prep_map_data_pos_order
 #'
 #' @param pos_final
 #'
 #' @return 
 #' @export
-prep_map_data_pos_taxa <- function(pos_final){
+prep_map_data_pos_order <- function(pos_final){
   
   map_data <- ne_countries(scale = "medium", returnclass = "sf") %>% 
     select(iso_a3, geometry)
   
   inf_animals <- pos_final %>% 
     dplyr::filter(!duplicated(predict_sample_id)) %>% 
-    select(predict_sample_id, country, taxa_group, latitude, longitude) %>% 
+    select(predict_sample_id, country, host_order, latitude, longitude) %>% 
     # round latitude and longitude a bit further to create fewer but larger points
     mutate(latitude = round(latitude, 0),
            longitude = round(longitude, 0)) %>%
-    # to avoid having multiple colors for taxa with only a few animals
-    mutate(
-      taxa_group = forcats::fct_collapse(
-        taxa_group,
-        other = c("carnivores", "cattle/buffalo", "dogs", "goats/sheep",
-                  "other")),
-      taxa_group = forcats::fct_relevel(
-        taxa_group, "other", after = Inf)
-    ) %>% 
     mutate(iso3c = countrycode(country, "country.name", "iso3c")) %>%
     # calculate sample sizes
-    group_by(country, iso3c, taxa_group, latitude, longitude) %>% 
+    group_by(country, iso3c, host_order, latitude, longitude) %>% 
     summarise(n_animals = n()) %>% 
     mutate(size = sqrt(n_animals))
   

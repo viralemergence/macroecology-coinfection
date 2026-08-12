@@ -1,17 +1,17 @@
-#' plot simulated vs true coinfection for a taxa group
+#' plot simulated vs true coinfection for a host order
 #'
 #' @title plot_sim_coinf
 #'
 #' @param pcr_all
-#' @param focal_taxa which taxa_group to examine
-#' @param sims simulated coinfection data for the taxa group
+#' @param focal_order which host order to examine
+#' @param sims simulated coinfection data for the order
 #'
 #' @return 
 #' @export
-plot_sim_coinf <- function(pcr_all, focal_taxa, sims){
+plot_sim_coinf <- function(pcr_all, focal_order, sims){
   
   pcr_subset <- pcr_all %>% 
-    dplyr::filter(taxa_group == focal_taxa)
+    dplyr::filter(host_order == focal_order)
   
   # make a full grid for all animals and infection status for all viruses
   sq <- pcr_subset %>%

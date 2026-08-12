@@ -8,7 +8,7 @@
 #'
 #' @return 
 #' @export
-plot_map_pos <- function(map_data, pal){
+plot_map_pos <- function(map_data, pal = c("#9e9ac8", "#54278f")){
   
   ymin <- min(map_data$latitude, na.rm = T) - 5
   ymax <- max(map_data$latitude, na.rm = T) + 5

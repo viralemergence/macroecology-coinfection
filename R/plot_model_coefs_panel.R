@@ -10,29 +10,34 @@ plot_model_coefs_panel <- function(model_list){
   
   p1 <- plot_model_coefs(model_output = model_list$all, 
                          model_type = "glm", 
-                         pretty_labels = c("intercept", "SES Asia", "birds", 
-                                           "rodents", "shrews", "male", 
-                                           "subadult", "juvenile", 
-                                           "owned\ndomesticated", 
-                                           "wild in captivity", 
-                                           "number of virus\nfamilies tested"),
+                         pretty_labels = c("intercept", "SES Asia", 
+                                           "Anseriformes", "Eulipotyphla", 
+                                           "Rodentia", "male", "subadult",
+                                           "juvenile", 
+                                           "# virus families tested",
+                                           "# tests performed",
+                                           "# specimen types"),
                          show_x_label = FALSE)
   
   p2 <- plot_model_coefs(model_output = model_list$bats, 
                          model_type = "glmm", 
                          pretty_labels = c("intercept", "SES Asia", "male", 
                                            "subadult",  "juvenile",
-                                           "cave-\nroosting",
-                                           "number of virus\nfamilies tested"),
+                                           "cave-roosting",
+                                           "# virus families tested",
+                                           "# tests performed",
+                                           "# specimen types"),
                          show_x_label = FALSE)
   
   p3 <- plot_model_coefs(model_output = model_list$rodents, 
                          model_type = "glm", 
                          pretty_labels = c("intercept", "male", 
-                                           "subadult/\njuvenile",
-                                           "number of virus\nfamilies tested"),
+                                           "subadult/juvenile",
+                                           "# virus families tested",
+                                           "# tests performed",
+                                           "# specimen types"),
                          show_x_label = TRUE)
-  
+
   coefs_panel <- (p1 / p2 / p3) #+
     #plot_layout(axes = "collect")
   

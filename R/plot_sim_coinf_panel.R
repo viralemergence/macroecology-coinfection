@@ -11,14 +11,14 @@
 #' @export
 plot_sim_coinf_panel <- function(pcr_all, sims_bats, sims_rodents, sims_birds){
   
-  p1 <- plot_sim_coinf(pcr_all, "bats", sims_bats) +
-    ggtitle("Bats")
+  p1 <- plot_sim_coinf(pcr_all, "Chiroptera", sims_bats) +
+    ggtitle("Chiroptera")
   
-  p2 <- plot_sim_coinf(pcr_all, "rodents", sims_rodents) +
-    ggtitle("Rodents")
+  p2 <- plot_sim_coinf(pcr_all, "Rodentia", sims_rodents) +
+    ggtitle("Rodentia")
   
-  p3 <- plot_sim_coinf(pcr_all, "bats", sims_birds) +
-    ggtitle("Birds")
+  p3 <- plot_sim_coinf(pcr_all, "Anseriformes", sims_birds) +
+    ggtitle("Anseriformes")
   
   sims_panel <- p1 + p2 + p3
   

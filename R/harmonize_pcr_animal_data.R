@@ -72,46 +72,58 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
     
     mutate(host_genus = str_replace_all(
       host_genus, 
-      c("Cercopithecidae|Columbidae|Gliridae|Molossidae|Nycteridae|Rhinopomatidae|Sciuridae|Soricidae|Vespertilionidae|Viverridae|Rodentia|Chiroptera"),
+      c("Cercopithecidae|Gliridae|Molossidae|Nycteridae|Rhinopomatidae|Sciuridae|Soricidae|Vespertilionidae|Viverridae|Chiroptera|Rodentia"),
       NA_character_)) %>% 
     
-    # rodents/shrews was previously one group--disaggregating here
     mutate(
-      taxa_group = case_when(
-        host_genus %in% 
-          c("Acomys", "Aethomys", "Apodemus", "Arvicanthis", "Atherurus", 
-            "Bandicota", "Belomys", "Berylmys", "Bunomys", "Callosciurus",
-            "Chiropodomys", "Cricetomys", "Dasymys", "Delanymys", "Dephomys", 
-            "Dremomys", "Echiothrix", "Gerbilliscus", "Grammomys", "Graphiurus", 
-            "Heimyscus", "Hybomys", "Hylomyscus", "Hylopetes", "Hystrix", 
-            "Lemniscomys", "Lenomys", "Leopoldamys", "Lophuromys", "Malacomys", 
-            "Mastomys", "Maxomys", "Menetes", "Mus", "Myomyscus", "Niviventer", 
-            "Oenomys", "Paruromys", "Pelomys", "Petaurillus", "Petaurista", 
-            "Praomys", "Prionomys", "Protoxerus", "Rattus", "Ratufa", 
-            "Rhinosciurus", "Rhizomys", "Saccostomus", "Steatomys", "Stochomys", 
-            "Sundamys", "Sundasciurus", "Taeromys", "Tamiops", "Taterillus", 
-            "Thryonomys", "Trichys", "Uranomys", "Vandeleuria") ~ "rodents",
-        host_sci_name %in% c("Gliridae", "Sciuridae", "Rodentia") ~ "rodents",
+      host_order = case_when(
         
-        # "true insectivores" here includes true shrews and moonrats 
-        # (all genera are in the order Eulipotyphla)
-        host_genus %in% 
-          c("Crocidura", "Echinosorex", "Hylomys", "Paracrocidura", "Suncus",
-            "Sylvisorex") ~ "true insectivores", 
-        host_sci_name == "Soricidae" ~ "true insectivores",
+        taxa_group == "ungulates" ~ "Artiodactyla",
+        taxa_group == "carnivores" ~ "Carnivora",
+        taxa_group == "bats" ~ "Chiroptera",
+        host_genus == "Dendrohyrax" ~ "Hyracoidae",
+        host_genus == "Lepus" ~ "Lagomorpha",
+        host_genus == "Elephantulus" ~ "Macroscelidea",
+        taxa_group == "pangolins" ~ "Pholidota",
+        taxa_group == "non-human primates" ~ "Primates",
         
-        # tree shrews (order Scandentia)
-        host_genus %in% c("Dendrogale", "Tupaia") ~ "tree shrews",
+        # rodents/shrews was previously one group--disaggregating here
+        host_genus %in% c("Crocidura", "Echinosorex", "Hylomys", 
+                          "Paracrocidura", "Suncus", "Sylvisorex") ~ "Eulipotyphla", 
+        host_sci_name == "Soricidae" ~ "Eulipotyphla",
+        host_genus %in% c("Acomys", "Aethomys", "Apodemus", "Arvicanthis", 
+                          "Atherurus", "Bandicota", "Belomys", "Berylmys", 
+                          "Bunomys", "Callosciurus", "Chiropodomys", 
+                          "Cricetomys", "Dasymys", "Delanymys", "Dephomys",
+                          "Dremomys", "Echiothrix", "Gerbilliscus", "Grammomys", 
+                          "Graphiurus", "Heimyscus", "Hybomys", "Hylomyscus", 
+                          "Hylopetes", "Hystrix", "Lemniscomys", "Lenomys", 
+                          "Leopoldamys", "Lophuromys", "Malacomys", "Mastomys", 
+                          "Maxomys", "Menetes", "Mus", "Myomyscus", 
+                          "Niviventer", "Oenomys", "Paruromys", "Pelomys",
+                          "Petaurillus", "Petaurista", "Praomys", "Prionomys", 
+                          "Protoxerus", "Rattus", "Ratufa", "Rhinosciurus",
+                          "Rhizomys", "Saccostomus", "Steatomys", "Stochomys", 
+                          "Sundamys", "Sundasciurus", "Taeromys", "Tamiops", 
+                          "Taterillus", "Thryonomys", "Trichys", "Uranomys", 
+                          "Vandeleuria") ~ "Rodentia",
+        host_sci_name %in% c("Gliridae", "Sciuridae", "Rodentia") ~ "Rodentia",
+        host_genus %in% c("Dendrogale", "Tupaia") ~ "Scandentia",
         
-        # other includes tree hyrax, elephant shrews, and hares
-        host_genus %in% c("Dendrohyrax", "Elephantulus", "Lepus") ~ "other",
-        
-        TRUE ~ taxa_group)) %>% 
+        # birds also comprises many orders
+        host_genus %in% c("Aegypius", "Aquila", "Gyps") ~ "Accipitriformes",
+        host_genus %in% c("Anas", "Anser", "Cygnus", "Tadorna") ~ "Anseriformes",
+        host_genus %in% c("Hydroprogne", "Larus", "Tringa") ~ "Charadriiformes",
+        host_genus == "Spilopelia" ~ "Columbiformes",
+        host_genus == "Coturnix" ~ "Galliformes",
+        host_genus == "Grus" ~ "Gruiformes",
+        host_genus %in% c("Acridotheres", "Corvus", "Gracupica", 
+                          "Pycnonotus", "Rhipidura") ~ "Passeriformes",
+        host_genus == "Phalacrocorax" ~ "Suliformes")) %>% 
     
     # lightly format host name--a very disparate column
     # some animals were only identified to order, family, or genus, 
     # while others were identified to species
-    # not super relevant for these analyses bc we used taxa_group for comparisons
     mutate(across("host_sci_name", 
                   ~ str_replace_all(.x, "/", "_") %>%
                     str_remove_all("[.]"))) %>% 

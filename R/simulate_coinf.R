@@ -3,18 +3,18 @@
 #' @title simulate_coinf
 #'
 #' @param pcr_all
-#' @param focal_taxa which taxa_group to examine
+#' @param focal_order which host order to examine
 #' @param nsim number of simulations to run
 #' @param seed random seed to ensure simulations are reproducible 
 #'
 #' @return 
 #' @export
-simulate_coinf <- function(pcr_all, focal_taxa, nsim = 1000, seed = 25624){
+simulate_coinf <- function(pcr_all, focal_order, nsim = 1000, seed = 25624){
   
   set.seed(seed)
   
   pcr_subset <- pcr_all %>% 
-    dplyr::filter(taxa_group == focal_taxa)
+    dplyr::filter(host_order == focal_order)
   
   # make a full grid for all animals and infection status for all viruses
   sq <- pcr_subset %>%
