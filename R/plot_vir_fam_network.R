@@ -35,14 +35,14 @@ plot_vir_fam_network <- function(g,
                      limits = edge_width_lims,
                      breaks = c(10, 50, 100),
                      labels = c(10, 50, 100)) + 
-    geom_node_point(aes(size = size_trans, fill = factor(viral_family)), 
+    geom_node_point(aes(size = size_trans, fill = factor(virus_target_tested)), 
                     pch = 21) +
-    scale_size(name = "Number of \ninfections", 
+    scale_size(name = "Number of\ninfections", 
                range = node_size_range, 
                limits = node_size_lims, 
                breaks = c(10, 30, 50),
                labels = c(10^2, 30^2, 50^2)) +
-    scale_fill_manual(name = "Viral family", values = V(g)$color) +
+    scale_fill_manual(name = "Virus target", values = V(g)$color) +
     scale_y_continuous(expand = expansion(mult = 0.1)) +
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +

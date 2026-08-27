@@ -25,17 +25,18 @@ prep_vir_graph <- function(MV, pos_final, pal, sparse = TRUE){
   V(g)$virus = as.character(
     total_pos$virus[match(V(g)$name, total_pos$virus)]) 
   
-  # add viral family for colors
-  vir_fams <- pos_final[, c("virus", "viral_family")] %>% distinct()
+  # add virus targets for colors
+  vir_targets <- pos_final[, c("virus", "virus_target_tested")] %>% 
+    distinct()
  
-  V(g)$viral_family = V(g)$virus %>% 
+  V(g)$virus_target_tested = V(g)$virus %>% 
     as_tibble() %>% 
     rename(virus = value) %>% 
-    left_join(vir_fams) %>% 
-    dplyr::select(viral_family) %>% 
+    left_join(vir_targets) %>% 
+    dplyr::select(virus_target_tested) %>% 
     unlist()
   
-  V(g)$viral_family <- as.character(V(g)$viral_family)
+  V(g)$virus_target_tested <- as.character(V(g)$virus_target_tested)
   
   # only show labels of more central nodes
   for(i in 1:length(V(g))){
@@ -50,15 +51,14 @@ prep_vir_graph <- function(MV, pos_final, pal, sparse = TRUE){
     g = igraph::delete_vertices(g, isolated)
   }
   
-  # so that each viral family will have a consistent color across panels
+  # so that each virus family will have a consistent color across panels
   node_colors <- data.frame(
-    fams = c("Arenaviridae", "Coronaviridae", "Filoviridae", "Flaviviridae",
-             "Hantaviridae", "Orthomyxoviridae", "Paramyxoviridae", 
-             "Rhabdoviridae"),
+    targets = c("Arenaviruses", "Coronaviruses", "Filoviruses", "Flaviviruses", 
+                "Hantaviruses", "Influenzas", "Paramyxoviruses", "Rhabdoviruses"),
     colors = pal)
-  V(g)$color = V(g)$viral_family
+  V(g)$color = V(g)$virus_target_tested
   for (i in 1:length(V(g))){
-    V(g)$color[i] <- node_colors$colors[which(node_colors$fams==V(g)$color[i])]
+    V(g)$color[i] <- node_colors$colors[which(node_colors$targets==V(g)$color[i])]
   }
   
   return(g)

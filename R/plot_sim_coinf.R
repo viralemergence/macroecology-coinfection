@@ -4,34 +4,20 @@
 #'
 #' @param pcr_all
 #' @param focal_order which host order to examine
-#' @param sims simulated coinfection data for the order
+#' @param sims_output simulated coinfection data for the order
 #'
 #' @return 
 #' @export
-plot_sim_coinf <- function(pcr_all, focal_order, sims){
-  
-  pcr_subset <- pcr_all %>% 
-    dplyr::filter(host_order == focal_order)
-  
-  # make a full grid for all animals and infection status for all viruses
-  sq <- pcr_subset %>%
-    distinct(predict_sample_id, virus) %>%
-    mutate(infection = 1) %>%
-    complete(predict_sample_id, virus, fill = list(infection = 0)) %>%
-    dplyr::filter(!is.na(virus)) %>%
-    pivot_wider(names_from = virus, values_from = infection) %>% 
-    data.frame()
-  
+plot_sim_coinf <- function(pcr_all, focal_order, sims_output){
+
   # calculate the true number of coinfected animals
-  true_coinfecteds <- data.frame(table(rowSums(sq[, -1]))) %>% 
+  true_coinfecteds <- data.frame(table(rowSums(sims_output$sq[, -1]))) %>% 
     dplyr::filter(!Var1 %in% c("0", "1")) %>%
     pull(Freq) %>% 
     sum()
-  
-  rm(pcr_all, pcr_subset)
-  
+
   # plot distribution of simulated number of coinfecteds compared to true
-  p <- ggplot(data.frame(sims = sims), aes(x = sims)) + 
+  p <- ggplot(data.frame(sims = sims_output$sims), aes(x = sims)) + 
     geom_density(fill = 'salmon1') + 
     theme_bw() + 
     geom_vline(xintercept = true_coinfecteds, linetype = 2, lwd = 1) + 

@@ -14,8 +14,7 @@ plot_model_coefs_panel <- function(model_list){
                                            "Anseriformes", "Eulipotyphla", 
                                            "Rodentia", "male", "subadult",
                                            "juvenile", 
-                                           "# virus families tested",
-                                           "# tests performed",
+                                           "# virus targets tested",
                                            "# specimen types"),
                          show_x_label = FALSE)
   
@@ -24,8 +23,7 @@ plot_model_coefs_panel <- function(model_list){
                          pretty_labels = c("intercept", "SES Asia", "male", 
                                            "subadult",  "juvenile",
                                            "cave-roosting",
-                                           "# virus families tested",
-                                           "# tests performed",
+                                           "# virus targets tested",
                                            "# specimen types"),
                          show_x_label = FALSE)
   
@@ -33,8 +31,8 @@ plot_model_coefs_panel <- function(model_list){
                          model_type = "glm", 
                          pretty_labels = c("intercept", "male", 
                                            "subadult/juvenile",
-                                           "# virus families tested",
-                                           "# tests performed",
+                                           "wild in captivity",
+                                           "# virus targets tested",
                                            "# specimen types"),
                          show_x_label = TRUE)
 

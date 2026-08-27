@@ -8,8 +8,8 @@
 #' @export
 plot_map_pos_order <- function(map_data){
   
-  ymin <- min(map_data$latitude, na.rm = T)
-  ymax <- max(map_data$latitude, na.rm = T)
+  ymin <- min(map_data$latitude, na.rm = T)*1.25
+  ymax <- max(map_data$latitude, na.rm = T)*1.05
   xmin <- min(map_data$longitude, na.rm = T)
   xmax <- max(map_data$longitude, na.rm = T)
   
@@ -35,7 +35,7 @@ plot_map_pos_order <- function(map_data){
                       values = ltc::ltc("expevo", 6)[c(5,3,2,1,6)],
                       na.translate = F) +
     ggthemes::theme_map() + 
-    scale_size_continuous(name = "Number of animals",
+    scale_size_continuous(name = "Number of animals infected with ≥ 1 virus",
                           breaks = limits, labels = labels,
                           range = c(2, 8)) +
     theme(legend.position = "bottom",

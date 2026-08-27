@@ -21,7 +21,7 @@ plot_coinf_per_order <- function(pos_final, pal = c("#9e9ac8", "#54278f")){
   
   pos_pcr_co %>% 
     # only display orders with infections AND coinfections
-    # excludes 1 Carnivora, 1 Charadriiformes, 5 Galliformes
+    # excludes Carnivora, Charadriiformes, Galliformes, Passeriformes
     dplyr::filter(host_order %in% c("Anseriformes", "Chiroptera", 
                                     "Eulipotyphla", "Rodentia")) %>%
     arrange(-n) %>% 

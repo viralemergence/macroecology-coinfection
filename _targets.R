@@ -32,8 +32,8 @@ data_input_targets <- tar_plan(
   # https://www.mdpi.com/1424-2818/9/3/35 and IUCN Red List
   tar_file_read(roosting, "data/roosting_data.csv", read_csv(file = !!.x)),
   
-  # set a color palette for some figures
-  pal = RColorBrewer::brewer.pal(8, "Spectral"),
+  # set a color palette for virus families
+  vir_pal = RColorBrewer::brewer.pal(8, "Spectral"),
   
   AmyTheme = 
     theme_bw(base_size = 14) + 
@@ -46,28 +46,45 @@ data_input_targets <- tar_plan(
 ## Data processing--------------------------------------------------------------
 data_processing_targets <- tar_plan(
   
-  # remove humans, clean up scientific names
-  pcr_all = harmonize_pcr_animal_data(pcr_raw, animals_raw),
+  # remove humans, clean up animal scientific names
+  pcr_harmonized = harmonize_pcr_animal_data(pcr_raw, animals_raw),
   
-  # calculate info on number of tests run and samples collected, at animal level
-  test_summaries = calc_test_summaries(pcr_all),
+  # calculate summary info on tests run and specimens collected, at animal level
+  test_summaries = calc_test_summaries(pcr_harmonized),
   
-  # number of unique animals with testing data
-  n_unique_all = pcr_all$predict_sample_id %>% unique %>% length,
+  # identify the animals that were tested for AT LEAST the same 5 virus targets
+  # that were identified as of high importance to human health
+  # (needed for permutation analyses)
+  core_five_ids = test_summaries %>% 
+    dplyr::filter(stringr::str_detect(virus_targets, "Coronaviruses") &
+                    stringr::str_detect(virus_targets, "Filoviruses") &
+                    stringr::str_detect(virus_targets, "Flaviviruses") &
+                    stringr::str_detect(virus_targets, "Influenzas") & 
+                    stringr::str_detect(virus_targets, "Paramyxoviruses")) %>% 
+    pull(predict_sample_id),
   
-  n_unique_bats = pcr_all %>% 
-    dplyr::filter(host_order == "Chiroptera") %>% 
-    dplyr::pull(predict_sample_id) %>% 
-    unique %>% 
-    length,
+  # identify animals with an implausible number of specimens collected
+  # all other animals had 1-13 specimens collected; these had 50 or more
+  implausible_specimens_ids = test_summaries %>% 
+    dplyr::filter(n_specimens >= 50) %>% 
+    pull(predict_sample_id), #2
   
-  n_unique_rodents = pcr_all %>% 
-    dplyr::filter(host_order == "Rodentia") %>% 
-    dplyr::pull(predict_sample_id) %>% 
-    unique %>% 
-    length,
+  # identify animals that were tested only for influenza A viruses
+  # because coinfection would not be possible to detect in these animals
+  coinfection_impossible_ids = test_summaries %>% 
+    dplyr::filter(n_virus_targets_tested == 1,
+                  virus_targets %in% c("Influenzas")) %>% 
+    pull(predict_sample_id), #3266
   
-  # filter the joined testing/animal data to just the positives
+  # for our analysis of coinfection, we will remove PCR results for:
+  pcr_all = pcr_harmonized %>% 
+    dplyr::filter_out(
+      # the animals with an implausible number of samples
+      predict_sample_id %in% implausible_specimens_ids |
+      # the animals where coinfection isn't possible to detect based on testing
+      predict_sample_id %in% coinfection_impossible_ids),
+  
+  # filter to only the confirmed virus detections
   pcr_pos = pcr_all %>% 
     dplyr::filter(infection == 1),
   
@@ -82,38 +99,38 @@ data_processing_targets <- tar_plan(
   
   # number of positives by virus family
   total_pos = pos_final %>% 
-    group_by(viral_family) %>% 
+    group_by(virus_target_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
   total_pos_bats = pos_final %>% 
     dplyr::filter(host_order == "Chiroptera") %>% 
-    group_by(viral_family) %>% 
+    group_by(virus_target_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
   total_pos_rodents = pos_final %>% 
     dplyr::filter(host_order == "Rodentia") %>% 
-    group_by(viral_family) %>% 
+    group_by(virus_target_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
   # prep virus family coinfection matrix for network analyses
   M = prep_matrix_data(pos_final, 
-                       vir_level = "viral_family", 
+                       vir_level = "virus_target_tested", 
                        total_pos),
   M_bats = prep_matrix_data(pos_final %>% 
                               dplyr::filter(host_order == "Chiroptera"), 
-                            vir_level = "viral_family",
+                            vir_level = "virus_target_tested",
                             total_pos_bats),
   M_rodents = prep_matrix_data(pos_final %>% 
                                  dplyr::filter(host_order == "Rodentia"), 
-                               vir_level = "viral_family",
+                               vir_level = "virus_target_tested",
                                total_pos_rodents),
   
   # prep individual virus coinfection matrix
   MV = prep_matrix_data(pos_final, 
-                       vir_level = "virus"),
+                        vir_level = "virus"),
   
   # prep data for map plotting
   map_data_all = prep_map_data_all(pcr_all),
@@ -132,36 +149,39 @@ analysis_targets <- tar_plan(
   viral_fams_bats = total_pos_bats$viral_family,
   viral_fams_rodents = total_pos_rodents$viral_family,
   
-  sims_bats = simulate_coinf(pcr_all, "Chiroptera"),
-  sims_rodents = simulate_coinf(pcr_all, "Rodentia"),
-  sims_birds = simulate_coinf(pcr_all, "Anseriformes"),
+  sims_bats = simulate_coinf(pcr_all, "Chiroptera", subgroup = T,
+                             subgroup_ids = core_five_ids, restrict_vir = T),
+  sims_rodents = simulate_coinf(pcr_all, "Rodentia", subgroup = T,
+                                subgroup_ids = core_five_ids, restrict_vir = T),
 
-  # create graph object to visualize coinfection by viral family
-  g = prep_vir_fam_graph(M, total_pos, viral_fams, pal),
-  g_bats = prep_vir_fam_graph(M_bats, total_pos_bats, viral_fams_bats, pal),
-  g_rodents = prep_vir_fam_graph(M_rodents, total_pos_rodents, 
-                                 viral_fams_rodents, pal),
+  # create graph object to visualize coinfection by virus target
+  g = prep_vir_target_graph(M, total_pos, vir_pal),
+  g_bats = prep_vir_target_graph(M_bats, total_pos_bats, vir_pal),
+  g_rodents = prep_vir_target_graph(M_rodents, total_pos_rodents, vir_pal),
   
   # create graph object to visualize coinfection by individual viruses
-  g_vir = prep_vir_graph(MV, pos_final, pal, sparse = TRUE),
-  
-  binom_tests_vir_fam = run_binom_tests(pcr_pos, n_unique_all,
-                                        vir_level = "viral_family",
-                                        observed_mat = M),
-  
+  g_vir = prep_vir_graph(MV, pos_final, vir_pal, sparse = TRUE),
+
+  binom_tests_vir_fam = run_binom_tests(pcr_pos,
+                                        vir_level = "virus_target_tested",
+                                        observed_mat = M,
+                                        test_summaries),
+
   binom_tests_vir_fam_bats = run_binom_tests(
-    pcr_pos %>% 
-      dplyr::filter(host_order == "Chiroptera"), 
-    n_unique_bats,
-    vir_level = "viral_family",
-    observed_mat = M_bats),
-  
+    pcr_pos %>%
+      dplyr::filter(host_order == "Chiroptera"),
+    vir_level = "virus_target_tested",
+    observed_mat = M_bats,
+    test_summaries %>%
+      dplyr::filter(host_order == "Chiroptera")),
+
   binom_tests_vir_fam_rodents = run_binom_tests(
-    pcr_pos %>% 
-      dplyr::filter(host_order == "Rodentia"), 
-    n_unique_rodents,
-    vir_level = "viral_family",
-    observed_mat = M_rodents),
+    pcr_pos %>%
+      dplyr::filter(host_order == "Rodentia"),
+    vir_level = "virus_target_tested",
+    observed_mat = M_rodents,
+    test_summaries %>%
+      dplyr::filter(host_order == "Rodentia")),
 
   model_list = run_models(model_data_all, model_data_bats, model_data_rodents)
   
@@ -176,7 +196,7 @@ plot_targets <- tar_plan(
 
   # Figure 2 (2 panels)
   vir_fam_network_panel = plot_vir_fam_network_panel(g, g_bats, g_rodents,
-                                                     add_stars = T),
+                                                     add_stars = F),
   model_coefs_panel = plot_model_coefs_panel(model_list),
   fig_2 = plot_fig_2(vir_fam_network_panel, model_coefs_panel),
 
@@ -190,7 +210,7 @@ plot_targets <- tar_plan(
   fig_s2 = plot_map_pos(map_data_pos),
   
   # Figure S3
-  fig_s3 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents, sims_birds),
+  fig_s3 = plot_sim_coinf_panel(pcr_all, sims_bats, sims_rodents),
   
 )
 
@@ -209,7 +229,7 @@ outputs_targets <- tar_plan(
   
   fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 15, width = 18,
                       units = "cm", dpi = 600, compression = "lzw"),
-  fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 15, width = 18, 
+  fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 15, width = 18,
                      units = "cm", dpi = 600),
   
   fig_s1_tiff = ggsave("figures/fig_s1.tiff", fig_s1, height = 4, width = 7, 
@@ -222,9 +242,9 @@ outputs_targets <- tar_plan(
   fig_s2_png = ggsave("figures/fig_s2.png", fig_s2, height = 5, width = 7, 
                      units = "in", dpi = 600),
   
-  fig_s3_tiff = ggsave("figures/fig_s3.tiff", fig_s3, height = 3, width = 10,
+  fig_s3_tiff = ggsave("figures/fig_s3.tiff", fig_s3, height = 3, width = 6.5,
                        units = "in", dpi = 600, compression = "lzw"),
-  fig_s3_png = ggsave("figures/fig_s3.png", fig_s3, height = 3, width = 10,
+  fig_s3_png = ggsave("figures/fig_s3.png", fig_s3, height = 3, width = 6.5,
                       units = "in", dpi = 600),
   
 )
@@ -245,5 +265,5 @@ list(
   , analysis_targets
   , plot_targets
   , outputs_targets
-  # , report_targets
+  , report_targets
 )

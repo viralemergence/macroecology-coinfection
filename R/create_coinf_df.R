@@ -11,7 +11,7 @@
 #' 
 create_coinf_df <- function(pcr_pos, test_summaries){
 
-  # count unique viruses detected per sample_id (unique animals)
+  # count unique viruses detected per predict_sample_id (unique animals)
   virus_coinf <- pcr_pos %>% 
     dplyr::select(predict_sample_id, viral_family, virus) %>% 
     distinct() %>% 

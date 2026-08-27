@@ -1,20 +1,36 @@
-#' simulate coinfection based on observed virus prevalence in a taxa group
+#' simulate coinfection based on observed virus prevalence in a host order
 #'
 #' @title simulate_coinf
 #'
 #' @param pcr_all
 #' @param focal_order which host order to examine
+#' @param subgroup boolean: should test results be restricted to a subgroup of animals 
+#' @param subgroup_ids if subgroup = T, a vector of predict_sample_id numbers to restrict the analyses to
+#' @param restrict_vir boolean: should test results be restricted to core five virus targets
 #' @param nsim number of simulations to run
 #' @param seed random seed to ensure simulations are reproducible 
 #'
 #' @return 
 #' @export
-simulate_coinf <- function(pcr_all, focal_order, nsim = 1000, seed = 25624){
+simulate_coinf <- function(pcr_all, focal_order, subgroup, subgroup_ids = NULL, 
+                           restrict_vir, nsim = 1000, seed = 25624){
   
   set.seed(seed)
   
   pcr_subset <- pcr_all %>% 
     dplyr::filter(host_order == focal_order)
+  
+  if(subgroup){
+    pcr_subset <- pcr_subset %>% 
+      dplyr::filter(predict_sample_id %in% subgroup_ids)
+  }
+  
+  if(restrict_vir){
+    pcr_subset <- pcr_subset %>% 
+      dplyr::filter(virus_target_tested %in% c("Coronaviruses", "Filoviruses",
+                                               "Flaviviruses", "Influenzas",
+                                               "Paramyxoviruses"))
+  }
   
   # make a full grid for all animals and infection status for all viruses
   sq <- pcr_subset %>%
@@ -47,5 +63,5 @@ simulate_coinf <- function(pcr_all, focal_order, nsim = 1000, seed = 25624){
 
     })
   
-  return(sims)
+  return(sims_output = list(sq = sq, sims = sims))
 }

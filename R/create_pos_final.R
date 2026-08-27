@@ -10,33 +10,23 @@
 #' 
 create_pos_final <- function(pcr_pos){
   
-  # # check for duplicate viral families identified in each animal 
-  # double_detects <- pcr_pos %>% 
-  #   mutate(virus_animal = paste(predict_sample_id, viral_family)) %>% 
-  #   filter(duplicated(virus_animal)) %>% pull(virus_animal) 
-  # 
-  # check <- pcr_pos %>% 
-  #   mutate(virus_animal = paste(predict_sample_id, viral_family)) %>% 
-  #   filter(virus_animal %in% double_detects) %>% 
-  #   select(virus_animal, specimen_type, virus, infection) 
-  # 
-  # View(check) # a bunch where the same virus is detected multiple times per sample
-  
   coinfects <- pcr_pos %>% 
-    dplyr::filter(!is.na(virus)) %>% 
     # get unique animal-virus combos
     distinct(predict_sample_id, virus) %>% 
-    # which animals are duplicated?
+    # which animals show up more than once? these are the coinfected ones
     janitor::get_dupes(predict_sample_id) %>% 
     distinct(predict_sample_id) %>% 
-    pull(predict_sample_id) #223 unique animals coinfected (out of 3271)
+    pull(predict_sample_id)
   
   pos_final <- pcr_pos %>%
     mutate(virus_animal = paste(predict_sample_id, virus, sep = "-")) %>%
-    dplyr::filter(!duplicated(virus_animal)) %>% #3506 
+    dplyr::filter(!duplicated(virus_animal)) %>%
     mutate(coinfect_status = case_when(
       predict_sample_id %in% coinfects ~ "coinfection",
-      !predict_sample_id %in% coinfects ~ "single infection")) 
+      !predict_sample_id %in% coinfects ~ "single infection")) %>% 
+    # since this is now on the animal level, need to remove the test info
+    # since that's at a specimen rather than animal level
+    dplyr::select(-c(specimen_type, test_type, test_result:sequence))
   
   return(pos_final)
   

@@ -11,13 +11,23 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
   
   pcr_all = pcr_raw %>% 
     
+    rename(host_sci_name = scientific_name,
+           virus_target_tested = viral_family_tested) %>% 
+    
     # there are duplicates in predict_test_id (excel carryover?), 
     # but they represent genuinely distinct tests
     # so assign new test ids for later summary calculations
     dplyr::mutate(new_test_id = seq(1:nrow(pcr_raw)), .after = 1) %>% 
     
+    # limit our analyses to key virus groups
+    dplyr::filter(virus_target_tested %in% c("Adenoviruses", "Alphaviruses", 
+                                             "Arenaviruses", "Astroviruses", 
+                                             "Coronaviruses", "Filoviruses",
+                                             "Flaviviruses", "Hantaviruses", 
+                                             "Influenzas", "Orthobunyaviruses", 
+                                             "Paramyxoviruses", "Rhabdoviruses")) %>% 
+    
     # to be conservative, we require infection to be confirmed by sequencing
-    # (this excludes some PCR positives that were not sequenced)
     mutate(infection = case_when(
       test_result == "Product for Sequencing" & 
         confirmation_result == "Positive" & 
@@ -41,12 +51,12 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
                                 "Africa and West Asia", 
                                 "South, East, Southeast Asia")) %>% 
     
-    rename(host_sci_name = scientific_name) %>% 
-    
     mutate(across("host_sci_name", 
                   ~ str_trim(.x) %>%
                     str_replace_all(" ", "_"))) %>% 
     
+    # for later analyses, it will be helpful to have hosts grouped
+    # at a higher taxonomic level than species
     separate_wider_delim(host_sci_name, "_", names = c("host_genus", NA),
                          cols_remove = F,
                          too_few = "align_start",
@@ -81,13 +91,12 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
         taxa_group == "ungulates" ~ "Artiodactyla",
         taxa_group == "carnivores" ~ "Carnivora",
         taxa_group == "bats" ~ "Chiroptera",
-        host_genus == "Dendrohyrax" ~ "Hyracoidae",
+        host_genus == "Dendrohyrax" ~ "Hyracoidea",
         host_genus == "Lepus" ~ "Lagomorpha",
         host_genus == "Elephantulus" ~ "Macroscelidea",
         taxa_group == "pangolins" ~ "Pholidota",
         taxa_group == "non-human primates" ~ "Primates",
         
-        # rodents/shrews was previously one group--disaggregating here
         host_genus %in% c("Crocidura", "Echinosorex", "Hylomys", 
                           "Paracrocidura", "Suncus", "Sylvisorex") ~ "Eulipotyphla", 
         host_sci_name == "Soricidae" ~ "Eulipotyphla",
@@ -110,7 +119,6 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
         host_sci_name %in% c("Gliridae", "Sciuridae", "Rodentia") ~ "Rodentia",
         host_genus %in% c("Dendrogale", "Tupaia") ~ "Scandentia",
         
-        # birds also comprises many orders
         host_genus %in% c("Aegypius", "Aquila", "Gyps") ~ "Accipitriformes",
         host_genus %in% c("Anas", "Anser", "Cygnus", "Tadorna") ~ "Anseriformes",
         host_genus %in% c("Hydroprogne", "Larus", "Tringa") ~ "Charadriiformes",

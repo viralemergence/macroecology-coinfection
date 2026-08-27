@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2026-01-26" />
+<meta name="date" content="2026-08-27" />
 
 <title>Useful summary calculations</title>
 
@@ -574,7 +574,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">Useful summary calculations</h1>
-<h4 class="date">2026-01-26</h4>
+<h4 class="date">2026-08-27</h4>
 
 </div>
 
@@ -586,12 +586,12 @@ unique_specimens &lt;- pcr_all %&gt;%
   distinct(specimen_id, .keep_all = TRUE) 
 
 # unique animals
-unique_animals &lt;-  pcr_all %&gt;% 
+unique_animals &lt;- pcr_all %&gt;% 
   distinct(predict_sample_id, .keep_all = TRUE) </code></pre>
 <pre class="r"><code># number of unique specimens
 n_unique_specimens &lt;- nrow(unique_specimens)
 n_unique_specimens</code></pre>
-<pre><code>## [1] 126952</code></pre>
+<pre><code>## [1] 114335</code></pre>
 <pre class="r"><code># number of unique specimens by country
 spec_by_country &lt;- unique_specimens %&gt;% 
   group_by(country) %&gt;% 
@@ -599,206 +599,221 @@ spec_by_country &lt;- unique_specimens %&gt;%
   arrange(desc(n)) %&gt;% 
   mutate(perc = n/n_unique_specimens*100)
 spec_by_country</code></pre>
-<pre><code>## # A tibble: 28 × 3
+<pre><code>## # A tibble: 27 × 3
 ##    country          n  perc
 ##    &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt;
-##  1 Sierra Leone 20733 16.3 
-##  2 Guinea       13276 10.5 
-##  3 Bangladesh   10488  8.26
-##  4 Liberia       9552  7.52
-##  5 Cameroon      8089  6.37
-##  6 Thailand      6638  5.23
-##  7 Cambodia      5654  4.45
-##  8 Tanzania      5285  4.16
-##  9 Indonesia     5022  3.96
-## 10 Ghana         3971  3.13
-## # ℹ 18 more rows</code></pre>
-<pre class="r"><code># countries with 10k + specimens
-countries_10k &lt;- spec_by_country %&gt;% 
-  dplyr::filter(n &gt; 10000) %&gt;% 
+##  1 Sierra Leone 19803 17.3 
+##  2 Guinea       13080 11.4 
+##  3 Liberia       9439  8.26
+##  4 Bangladesh    8778  7.68
+##  5 Cameroon      8089  7.07
+##  6 Thailand      5831  5.10
+##  7 Indonesia     5022  4.39
+##  8 Tanzania      4913  4.30
+##  9 Cambodia      4015  3.51
+## 10 Ghana         3971  3.47
+## # ℹ 17 more rows</code></pre>
+<pre class="r"><code># countries with 5k + specimens
+countries_5k &lt;- spec_by_country %&gt;% 
+  dplyr::filter(n &gt; 5000) %&gt;% 
   select(country)
-
-# number of unique specimens by taxa group
-spec_by_taxa &lt;- unique_specimens %&gt;% 
-  group_by(taxa_group) %&gt;% 
+countries_5k</code></pre>
+<pre><code>## # A tibble: 7 × 1
+##   country     
+##   &lt;chr&gt;       
+## 1 Sierra Leone
+## 2 Guinea      
+## 3 Liberia     
+## 4 Bangladesh  
+## 5 Cameroon    
+## 6 Thailand    
+## 7 Indonesia</code></pre>
+<pre class="r"><code># number of unique specimens by host order
+spec_by_order &lt;- unique_specimens %&gt;% 
+  group_by(host_order) %&gt;% 
   dplyr::summarise(n = n()) %&gt;% 
   arrange(desc(n)) %&gt;% 
   mutate(perc = round(n/n_unique_specimens*100, 1))
-spec_by_taxa</code></pre>
+spec_by_order</code></pre>
 <pre><code>## # A tibble: 16 × 3
-##    taxa_group             n  perc
-##    &lt;chr&gt;              &lt;int&gt; &lt;dbl&gt;
-##  1 bats               77334  60.9
-##  2 rodents            25683  20.2
-##  3 non-human primates  8262   6.5
-##  4 birds               7162   5.6
-##  5 dogs                2116   1.7
-##  6 shrews              1973   1.6
-##  7 cattle/buffalo       931   0.7
-##  8 goats/sheep          773   0.6
-##  9 swine                756   0.6
-## 10 pangolins            610   0.5
-## 11 camels               602   0.5
-## 12 carnivores           510   0.4
-## 13 cats                 123   0.1
-## 14 ungulates             69   0.1
-## 15 other                 47   0  
-## 16 horses                 1   0</code></pre>
+##    host_order          n  perc
+##    &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt;
+##  1 Chiroptera      76529  66.9
+##  2 Rodentia        25677  22.5
+##  3 Primates         8262   7.2
+##  4 Eulipotyphla     1902   1.7
+##  5 Pholidota         610   0.5
+##  6 Carnivora         510   0.4
+##  7 Passeriformes     415   0.4
+##  8 Anseriformes      235   0.2
+##  9 Scandentia         74   0.1
+## 10 Artiodactyla       69   0.1
+## 11 Galliformes        23   0  
+## 12 Macroscelidea      14   0  
+## 13 Hyracoidea          6   0  
+## 14 Columbiformes       4   0  
+## 15 Accipitriformes     3   0  
+## 16 Lagomorpha          2   0</code></pre>
 <pre class="r"><code># number of PCR tests performed
 n_tests &lt;- nrow(pcr_all)
 n_tests</code></pre>
-<pre><code>## [1] 714954</code></pre>
-<pre class="r"><code># number of positive PCR tests
-n_pos_tests &lt;- nrow(pcr_pos)
-n_pos_tests</code></pre>
-<pre><code>## [1] 4711</code></pre>
-<pre class="r"><code># number of PCR tests by test type
-table(pcr_all$viral_family_tested)</code></pre>
+<pre><code>## [1] 516982</code></pre>
+<pre class="r"><code># number of PCR tests by virus tested for
+table(pcr_all$virus_target_tested)</code></pre>
 <pre><code>## 
-##                   Adenoviruses                   Alphaviruses 
-##                            176                           2228 
-##                   Arenaviruses                   Astroviruses 
-##                            648                            176 
-##             Bombali ebolavirus                  Coronaviruses 
-##                          27136                         151904 
-##               Ebolavirus Genus                    Filoviruses 
-##                          40379                         118037 
-##                   Flaviviruses                   Hantaviruses 
-##                          58485                           5416 
-##                    Influenza A                     Influenzas 
-##                           1094                         143627 
-##                  Nipah Viruses              Orthobunyaviruses 
-##                            918                           4681 
-##                Paramyxoviruses Partial Subtype-Influenza A/H5 
-##                          80640                           1880 
-## Partial Subtype-Influenza A/H7 Partial Subtype-Influenza A/H9 
-##                           1094                            822 
-##                  Rhabdoviruses               Zaire Ebolavirus 
-##                           4345                          71268</code></pre>
+##      Adenoviruses      Alphaviruses      Arenaviruses      Astroviruses 
+##               176              2078               498               176 
+##     Coronaviruses       Filoviruses      Flaviviruses      Hantaviruses 
+##            138630            110413             51921              5226 
+##        Influenzas Orthobunyaviruses   Paramyxoviruses     Rhabdoviruses 
+##            125712              4104             73859              4189</code></pre>
 <pre class="r"><code># number of unique animals
 n_unique_animals &lt;- nrow(unique_animals)
 n_unique_animals</code></pre>
-<pre><code>## [1] 65662</code></pre>
-<pre class="r"><code># number of unique animals by taxa group
-table(unique_animals$taxa_group)</code></pre>
+<pre><code>## [1] 57196</code></pre>
+<pre class="r"><code># number of unique animals by order
+table(unique_animals$host_order)</code></pre>
 <pre><code>## 
-##               bats              birds             camels         carnivores 
-##              36181               5617                356                406 
-##               cats     cattle/buffalo               dogs        goats/sheep 
-##                 62                517                961                441 
-##             horses non-human primates              other          pangolins 
-##                  1               6196                 23                332 
-##            rodents             shrews              swine          ungulates 
-##              12876               1050                611                 32</code></pre>
-<pre class="r"><code># number of infected animals
+## Accipitriformes    Anseriformes    Artiodactyla       Carnivora      Chiroptera 
+##               1             156              32             406           35840 
+##   Columbiformes    Eulipotyphla     Galliformes      Hyracoidea      Lagomorpha 
+##               2            1016              23               2               1 
+##   Macroscelidea   Passeriformes       Pholidota        Primates        Rodentia 
+##               7             273             332            6196           12873 
+##      Scandentia 
+##              36</code></pre>
+<pre class="r"><code># number of animals infected with one or more viruses
 n_inf_animals &lt;- nrow(coinf_df)
 n_inf_animals</code></pre>
-<pre><code>## [1] 3271</code></pre>
+<pre><code>## [1] 2802</code></pre>
 <pre class="r"><code># overall prevalence (number animals pos. for 1+ virus/number of unique animals)
 overall_prev &lt;- round(n_inf_animals/n_unique_animals*100, 2)
-
-# infected animals by country
+overall_prev</code></pre>
+<pre><code>## [1] 4.9</code></pre>
+<pre class="r"><code># infected animals by country
 coinf_df %&gt;% 
   group_by(country) %&gt;% 
   dplyr::summarise(n = n()) %&gt;% 
   arrange(desc(n)) </code></pre>
-<pre><code>## # A tibble: 27 × 2
+<pre><code>## # A tibble: 26 × 2
 ##    country        n
 ##    &lt;chr&gt;      &lt;int&gt;
-##  1 Cambodia     658
-##  2 Bangladesh   381
-##  3 Tanzania     303
-##  4 Vietnam      302
-##  5 Thailand     284
-##  6 Indonesia    219
-##  7 Egypt        181
+##  1 Cambodia     502
+##  2 Tanzania     297
+##  3 Thailand     278
+##  4 Bangladesh   266
+##  5 Indonesia    219
+##  6 Egypt        181
+##  7 Vietnam      175
 ##  8 Ghana        173
 ##  9 Jordan       133
 ## 10 Cameroon     127
-## # ℹ 17 more rows</code></pre>
+## # ℹ 16 more rows</code></pre>
 <pre class="r"><code># number of coinfected animals
 n_coinf_animals &lt;- coinf_df %&gt;% 
   dplyr::filter(n_virus &gt; 1) %&gt;% 
   nrow()
 n_coinf_animals</code></pre>
-<pre><code>## [1] 223</code></pre>
+<pre><code>## [1] 184</code></pre>
 <pre class="r"><code># frequency of single/double/triple infection
 coinf_freq &lt;- table(coinf_df$n_virus)
 
 # as percentages
 coinf_perc &lt;- round(coinf_freq/n_inf_animals*100,2)
 
-# within COINFECTED animals, what was the breakdown by taxonomic group?
-coinf_taxa_summary &lt;- coinf_df %&gt;% 
+# within COINFECTED animals, what was the breakdown by host order?
+coinf_order_summary &lt;- coinf_df %&gt;% 
   dplyr::filter(n_virus &gt; 1) %&gt;% 
-  group_by(taxa_group) %&gt;% 
+  group_by(host_order) %&gt;% 
   summarize(n = n()) %&gt;% 
   mutate(perc = round(n / sum(n)*100, 1))
-coinf_taxa_summary</code></pre>
-<pre><code>## # A tibble: 5 × 3
-##   taxa_group     n  perc
-##   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt;
-## 1 bats         128  57.4
-## 2 birds         39  17.5
-## 3 rodents       50  22.4
-## 4 shrews         1   0.4
-## 5 swine          5   2.2</code></pre>
-<pre class="r"><code># within ALL infected animals, how common is coinfection by taxa group?
-coinf_within_inf &lt;- xtabs(~coinf_df$taxa_group + coinf_df$virus_coinf) %&gt;% 
+coinf_order_summary</code></pre>
+<pre><code>## # A tibble: 4 × 3
+##   host_order       n  perc
+##   &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt;
+## 1 Anseriformes     6   3.3
+## 2 Chiroptera     127  69  
+## 3 Eulipotyphla     1   0.5
+## 4 Rodentia        50  27.2</code></pre>
+<pre class="r"><code># within ALL infected animals, how common is coinfection by host order?
+coinf_within_inf &lt;- xtabs(~coinf_df$host_order + coinf_df$virus_coinf) %&gt;% 
   as.data.frame.matrix() %&gt;% 
   rename(single_inf = &quot;0&quot;, coinf = &quot;1&quot;) %&gt;% 
   mutate(n_tot = single_inf + coinf,
          prev = round(coinf/n_tot*100, 2))
-
-# prevalence by taxa group (within unique animals) for taxa groups with at least one infected animal
-taxa_prev &lt;- table(coinf_df$taxa_group) %&gt;% 
+coinf_within_inf</code></pre>
+<pre><code>##               single_inf coinf n_tot  prev
+## Anseriformes          26     6    32 18.75
+## Carnivora              1     0     1  0.00
+## Chiroptera          1927   127  2054  6.18
+## Eulipotyphla          33     1    34  2.94
+## Galliformes            5     0     5  0.00
+## Passeriformes        127     0   127  0.00
+## Rodentia             499    50   549  9.11</code></pre>
+<pre class="r"><code># prevalence by host order (within unique animals) for orders with at least one infected animal
+order_prev &lt;- table(coinf_df$host_order) %&gt;% 
   data.frame() %&gt;% 
-  rename(taxa_group = Var1, n_inf = Freq) %&gt;% 
+  rename(host_order = Var1, n_inf = Freq) %&gt;% 
   left_join(
-    table(unique_animals$taxa_group) %&gt;% 
+    table(unique_animals$host_order) %&gt;% 
       data.frame() %&gt;% 
-      rename(taxa_group = Var1, n_tot = Freq)) %&gt;% 
+      rename(host_order = Var1, n_tot = Freq)) %&gt;% 
   mutate(prev = round(n_inf/n_tot*100, 2))</code></pre>
-<pre><code>## Joining with `by = join_by(taxa_group)`</code></pre>
-<pre class="r"><code># coinfection by taxa group within the model data (subset of animals with age and sex)
-model_coinf_within_inf &lt;- xtabs(~taxa_group + virus_coinf, model_data_all) %&gt;% 
+<pre><code>## Joining with `by = join_by(host_order)`</code></pre>
+<pre class="r"><code>order_prev</code></pre>
+<pre><code>##      host_order n_inf n_tot  prev
+## 1  Anseriformes    32   156 20.51
+## 2     Carnivora     1   406  0.25
+## 3    Chiroptera  2054 35840  5.73
+## 4  Eulipotyphla    34  1016  3.35
+## 5   Galliformes     5    23 21.74
+## 6 Passeriformes   127   273 46.52
+## 7      Rodentia   549 12873  4.26</code></pre>
+<pre class="r"><code># coinfection by host order within the model data (subset of animals with age and sex)
+model_coinf_within_inf &lt;- xtabs(~host_order + virus_coinf, model_data_all) %&gt;% 
   as.data.frame.matrix() %&gt;% 
   rename(single_inf = &quot;0&quot;, coinf = &quot;1&quot;) %&gt;% 
   mutate(n_tot = single_inf + coinf,
-         prev = round(coinf/n_tot*100, 2))</code></pre>
-<div id="methods-predict-2-data-overview" class="section level3">
-<h3>Methods (PREDICT-2 data overview)</h3>
-<p>Data from the PREDICT-2 project (2015-2019; the second half of the
-decade-long initiative) were openly shared on the USAID Development Data
-Library prior to the takedown of the USAID website. Specimen collection
-(n = 126952 unique specimens from 65662 unique animals) was concentrated
-in countries in West and Central Africa as well as South and Southeast
-Asia, with &gt; 10,000 specimens collected in Sierra Leone, Guinea, and
-Bangladesh each (Fig. S1). Most specimens were collected from bats (n =
-77334, 60.9%) and rodents (n = 25683, 20.2%). The dataset included some
-farm and companion animals, including poultry, dogs, and swine. Virus
-screening was conducted using consensus polymerase chain reaction (PCR)
-assays (714954) total tests), mostly targeting viral families of
-significance to human health (e.g., coronaviruses, filoviruses, and
-paramyxoviruses), but in some cases testing for specific viruses of
-interest (e.g., influenza viruses and ebolaviruses). Further details on
-PREDICT can be found in the PREDICT Legacy Book (<a href="https://ohi.vetmed.ucdavis.edu/programs-projects/predict-project/reports" class="uri">https://ohi.vetmed.ucdavis.edu/programs-projects/predict-project/reports</a>).</p>
+         prev = round(coinf/n_tot*100, 2))
+model_coinf_within_inf</code></pre>
+<pre><code>##              single_inf coinf n_tot  prev
+## Chiroptera         1516   112  1628  6.88
+## Anseriformes         22     6    28 21.43
+## Eulipotyphla         30     1    31  3.23
+## Rodentia            442    46   488  9.43</code></pre>
+<div id="methods-overview-of-cleaned-data" class="section level3">
+<h3>Methods (Overview of cleaned data)</h3>
+<ul>
+<li>Specimen collection (n = 114335 unique specimens from 57196 unique
+animals) was concentrated in countries in West and Central Africa as
+well as South and Southeast Asia, with &gt; 5,000 specimens collected in
+Sierra Leone, Guinea, Liberia, Bangladesh, Cameroon, Thailand, and
+Indonesia each (Fig. S1).</li>
+<li>Most specimens were collected from bats (order Chiroptera; n =
+76529, 66.9%) and rodents (order Rodentia; n = 25677, 22.5%).</li>
+<li>There were 516982 total PCR tests.</li>
+</ul>
 </div>
 <div id="results-overview" class="section level3">
 <h3>Results (overview)</h3>
-<p>We found that both infection and coinfection were rare overall. Out
-of 65662 unique animals, 3271 (4.98%) were infected with one or more
-viruses (Fig. 1A); viral prevalence in birds (487/5617; 8.67%) and bats
-(2059/36181; 5.69%) was somewhat higher than average, while prevalence
-in rodents (549/12876; 4.26%) was slightly lower than average (Table
-S1).</p>
-<p>A single virus was detected in most infected animals (n = 3048,
-93.18%); coinfections of two (n = 211, 6.45%) or three (n = 12, 0.37%)
-viruses in the same animal were infrequent. Of the 223 animals in which
-virus coinfection was detected, over half were bats (n = 128, 57.4%)
-with the remainder being 50 rodents, 39 birds, 5 swine, and 1 shrew.
-Within infected animals, virus coinfection rates were highest in rodents
-(50/549, 9.11%), birds (39/487, 8.01%), and bats (128/2059, 6.22%).</p>
+<ul>
+<li>Out of 57196 unique animals, 2802 (4.9%) were infected with one or
+more viruses (Fig. 1A).</li>
+<li>Viral prevalence was ≥ 20% in Passeriformes (127/273; 46.52%),
+Anseriformes (32/156; 20.51%), and Galliformes (5/23; 21.74%).</li>
+<li>Prevalence in Chiroptera (2054/35840; 5.73%) was somewhat higher
+than average, while prevalence in Rodentia (549/12873; 4.26%) and
+Eulipotyphla (34/1016; 3.35%) was slightly lower than average (Table
+S1).</li>
+<li>A single virus was detected in most infected animals (n = 2618,
+93.43%); coinfections of two (n = 179, 6.39%) or three (n = 5, 0.18%)
+viruses in the same animal were infrequent. Of the 184 animals in which
+virus coinfection was detected, over two-thirds were Chiroptera (n =
+127, 69%) with the remainder being 50 Rodentia, 6 Anseriformes, and 1
+Eulipotyphla. Within infected animals, virus coinfection rates were
+highest in Anseriformes (6/32, 18.75%), Rodentia (50/549, 9.11%), and
+Chiroptera (127/2054, 6.18%).</li>
+</ul>
 </div>
 <div id="triple-infected-animals" class="section level3">
 <h3>Triple infected animals</h3>
@@ -810,9 +825,6 @@ predict_sample_id
 </th>
 <th style="text-align:left;">
 country
-</th>
-<th style="text-align:left;">
-taxa_group
 </th>
 <th style="text-align:left;">
 scientific_name_to_lowest_known_rank
@@ -834,9 +846,6 @@ virus
 Egypt
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Rousettus aegyptiacus
 </td>
 <td style="text-align:left;">
@@ -854,9 +863,6 @@ Bat coronavirus HKU9
 Egypt
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Rousettus aegyptiacus
 </td>
 <td style="text-align:left;">
@@ -872,9 +878,6 @@ Influenza A
 </td>
 <td style="text-align:left;">
 Egypt
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Rousettus aegyptiacus
@@ -894,9 +897,6 @@ PREDICT_PMV-116
 Thailand
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Pteropus lylei
 </td>
 <td style="text-align:left;">
@@ -912,9 +912,6 @@ PREDICT_CoV-17
 </td>
 <td style="text-align:left;">
 Thailand
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Pteropus lylei
@@ -934,9 +931,6 @@ PREDICT_PMV-128
 Thailand
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Pteropus lylei
 </td>
 <td style="text-align:left;">
@@ -952,9 +946,6 @@ PREDICT_PMV-6
 </td>
 <td style="text-align:left;">
 Thailand
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Pteropus giganteus
@@ -974,9 +965,6 @@ PREDICT_CoV-16
 Thailand
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Pteropus giganteus
 </td>
 <td style="text-align:left;">
@@ -992,9 +980,6 @@ PREDICT_CoV-68
 </td>
 <td style="text-align:left;">
 Thailand
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Pteropus giganteus
@@ -1014,9 +999,6 @@ PREDICT_PMV-125
 Cameroon
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Rhinolophus cf. alcyone
 </td>
 <td style="text-align:left;">
@@ -1032,9 +1014,6 @@ Kenya bat coronavirus/BtKY83/59/58
 </td>
 <td style="text-align:left;">
 Cameroon
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Rhinolophus cf. alcyone
@@ -1054,9 +1033,6 @@ PREDICT_CoV-109
 Cameroon
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Rhinolophus cf. alcyone
 </td>
 <td style="text-align:left;">
@@ -1072,9 +1048,6 @@ PREDICT_CoV-70
 </td>
 <td style="text-align:left;">
 Cambodia
-</td>
-<td style="text-align:left;">
-bats
 </td>
 <td style="text-align:left;">
 Scotophilus kuhlii
@@ -1094,9 +1067,6 @@ Bat coronavirus 512/2005
 Cambodia
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Scotophilus kuhlii
 </td>
 <td style="text-align:left;">
@@ -1114,9 +1084,6 @@ PREDICT_PMV-66
 Cambodia
 </td>
 <td style="text-align:left;">
-bats
-</td>
-<td style="text-align:left;">
 Scotophilus kuhlii
 </td>
 <td style="text-align:left;">
@@ -1126,426 +1093,6 @@ Rhabdoviridae
 PREDICT_RbdV-21
 </td>
 </tr>
-<tr>
-<td style="text-align:right;">
-54944
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-54944
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-54944
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Newcastle Disease Virus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-108865
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-108865
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-108865
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Newcastle Disease Virus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126366
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Cairina moschata
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126366
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Cairina moschata
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Infectious bronchitis virus (IBV)
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126366
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Cairina moschata
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126464
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126464
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126464
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Newcastle Disease Virus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126519
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126519
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126519
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Avian Paramyxovirus 6
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126536
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anser cygnoides domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126536
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anser cygnoides domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126536
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anser cygnoides domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Avian Paramyxovirus 6
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126561
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Coronaviridae
-</td>
-<td style="text-align:left;">
-Duck Coronavirus
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126561
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-Influenza A
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-126561
-</td>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:left;">
-birds
-</td>
-<td style="text-align:left;">
-Anas platyrhynchos domesticus
-</td>
-<td style="text-align:left;">
-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-Avian Paramyxovirus 6
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1553,43 +1100,30 @@ Avian Paramyxovirus 6
 <h3>GLM results-all</h3>
 <pre><code>## 
 ## Call:
-## glm(formula = virus_coinf ~ geo_region + taxa_group + sex + age_class + 
-##     captivity_status + n_viral_families_tested, family = binomial(), 
+## glm(formula = virus_coinf ~ geo_region + host_order + sex + age_class + 
+##     n_virus_targets_tested + n_specimen_types, family = binomial(), 
 ##     data = model_data_all)
 ## 
 ## Coefficients:
-##                                            Estimate Std. Error z value Pr(&gt;|z|)
-## (Intercept)                                -3.51239    0.31360 -11.200  &lt; 2e-16
-## geo_regionSouth, East, Southeast Asia       0.88230    0.20285   4.350 1.36e-05
-## taxa_groupbirds                            -1.42123    0.44656  -3.183  0.00146
-## taxa_grouprodents                          -0.59695    0.25273  -2.362  0.01818
-## taxa_groupshrews                           -0.89764    1.02642  -0.875  0.38183
-## sexmale                                    -0.06317    0.16197  -0.390  0.69651
-## age_classsubadult                           0.11833    0.20443   0.579  0.56271
-## age_classjuvenile                          -1.13860    0.52597  -2.165  0.03041
-## captivity_statusowned domesticated species  0.26733    0.60321   0.443  0.65764
-## captivity_statuswild animal in captivity    0.75125    0.30288   2.480  0.01313
-## n_viral_families_tested                     0.10799    0.05302   2.037  0.04169
-##                                               
-## (Intercept)                                ***
-## geo_regionSouth, East, Southeast Asia      ***
-## taxa_groupbirds                            ** 
-## taxa_grouprodents                          *  
-## taxa_groupshrews                              
-## sexmale                                       
-## age_classsubadult                             
-## age_classjuvenile                          *  
-## captivity_statusowned domesticated species    
-## captivity_statuswild animal in captivity   *  
-## n_viral_families_tested                    *  
+##                                       Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                           -3.18081    0.62561  -5.084 3.69e-07 ***
+## geo_regionSouth, East, Southeast Asia  0.78797    0.20897   3.771 0.000163 ***
+## host_orderAnseriformes                 1.00419    0.49204   2.041 0.041264 *  
+## host_orderEulipotyphla                -0.96288    1.02838  -0.936 0.349115    
+## host_orderRodentia                    -0.41990    0.22363  -1.878 0.060427 .  
+## sexmale                               -0.01625    0.16465  -0.099 0.921386    
+## age_classsubadult                      0.07716    0.21121   0.365 0.714862    
+## age_classjuvenile                     -1.08977    0.52755  -2.066 0.038855 *  
+## n_virus_targets_tested                 0.16282    0.05766   2.824 0.004748 ** 
+## n_specimen_types                      -0.27778    0.29337  -0.947 0.343703    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
-##     Null deviance: 1242.0  on 2461  degrees of freedom
-## Residual deviance: 1193.2  on 2451  degrees of freedom
-## AIC: 1215.2
+##     Null deviance: 1168.2  on 2174  degrees of freedom
+## Residual deviance: 1122.7  on 2165  degrees of freedom
+## AIC: 1142.7
 ## 
 ## Number of Fisher Scoring iterations: 6</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -1620,10 +1154,10 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03
+0.04
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 0.05
+0.01 – 0.14
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -1634,10 +1168,10 @@ p
 geo region [South, East,<br>Southeast Asia]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.42
+2.20
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.63 – 3.61
+1.46 – 3.32
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -1645,44 +1179,44 @@ geo region [South, East,<br>Southeast Asia]
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [birds]
+host order [Anseriformes]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.24
+2.73
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.09 – 0.54
+0.96 – 6.79
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.001</strong>
+<strong>0.041</strong>
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [rodents]
+host order [Eulipotyphla]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.55
+0.38
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.33 – 0.89
+0.02 – 1.84
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.018</strong>
+0.349
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-taxa group [shrews]
+host order [Rodentia]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.41
+0.66
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02 – 1.96
+0.42 – 1.01
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.382
+0.060
 </td>
 </tr>
 <tr>
@@ -1690,13 +1224,13 @@ taxa group [shrews]
 sex [male]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.94
+0.98
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.68 – 1.29
+0.71 – 1.36
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.697
+0.921
 </td>
 </tr>
 <tr>
@@ -1704,13 +1238,13 @@ sex [male]
 age class [subadult]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.13
+1.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.74 – 1.66
+0.70 – 1.62
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.563
+0.715
 </td>
 </tr>
 <tr>
@@ -1718,55 +1252,41 @@ age class [subadult]
 age class [juvenile]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.32
+0.34
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.10 – 0.80
+0.10 – 0.84
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.030</strong>
+<strong>0.039</strong>
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-captivity status [owned<br>domesticated species]
+n virus targets tested
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.31
+1.18
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.39 – 4.38
+1.05 – 1.32
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.658
+<strong>0.005</strong>
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-captivity status [wild<br>animal in captivity]
+n specimen types
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.12
+0.76
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.16 – 3.82
+0.42 – 1.33
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.013</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n viral families tested
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.11
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.00 – 1.24
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.042</strong>
+0.344
 </td>
 </tr>
 <tr>
@@ -1774,7 +1294,7 @@ n viral families tested
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-2462
+2175
 </td>
 </tr>
 <tr>
@@ -1782,7 +1302,7 @@ Observations
 R<sup>2</sup> Tjur
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.020
+0.023
 </td>
 </tr>
 </table>
@@ -1791,28 +1311,29 @@ R<sup>2</sup> Tjur
 <h3>GLM results-bats</h3>
 <pre><code>##  Family: binomial  ( logit )
 ## Formula:          virus_coinf ~ geo_region + sex + age_class + cave_roosting +  
-##     n_viral_families_tested + (1 | host_family)
+##     n_virus_targets_tested + n_specimen_types + (1 | host_family)
 ## Data: model_data_bats
 ## 
 ##       AIC       BIC    logLik -2*log(L)  df.resid 
-##     747.2     789.8    -365.6     731.2      1511 
+##     747.0     794.9    -364.5     729.0      1510 
 ## 
 ## Random effects:
 ## 
 ## Conditional model:
 ##  Groups      Name        Variance Std.Dev.
-##  host_family (Intercept) 0.1402   0.3744  
+##  host_family (Intercept) 0.1835   0.4284  
 ## Number of obs: 1519, groups:  host_family, 10
 ## 
 ## Conditional model:
 ##                                       Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                           -2.96980    0.64477  -4.606 4.11e-06 ***
-## geo_regionSouth, East, Southeast Asia  1.02693    0.23106   4.444 8.82e-06 ***
-## sexmale                               -0.08322    0.20618  -0.404  0.68649    
-## age_classsubadult                     -0.52551    0.32092  -1.638  0.10152    
-## age_classjuvenile                     -2.02531    0.73192  -2.767  0.00566 ** 
-## cave_roostingyes                      -0.07388    0.28555  -0.259  0.79584    
-## n_viral_families_tested               -0.02972    0.08983  -0.331  0.74080    
+## (Intercept)                           -2.34106    0.81369  -2.877  0.00401 ** 
+## geo_regionSouth, East, Southeast Asia  0.98882    0.23538   4.201 2.66e-05 ***
+## sexmale                               -0.09072    0.20655  -0.439  0.66051    
+## age_classsubadult                     -0.55751    0.32161  -1.734  0.08301 .  
+## age_classjuvenile                     -1.99206    0.73290  -2.718  0.00657 ** 
+## cave_roostingyes                      -0.02491    0.28401  -0.088  0.93010    
+## n_virus_targets_tested                 0.03318    0.09705   0.342  0.73247    
+## n_specimen_types                      -0.49259    0.33389  -1.475  0.14012    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -1843,13 +1364,13 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.05
+0.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.01 – 0.18
+0.02 – 0.47
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001</strong>
+<strong>0.004</strong>
 </td>
 </tr>
 <tr>
@@ -1857,10 +1378,10 @@ p
 geo region [South, East,<br>Southeast Asia]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.79
+2.69
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.78 – 4.39
+1.69 – 4.26
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -1871,13 +1392,13 @@ geo region [South, East,<br>Southeast Asia]
 sex [male]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.92
+0.91
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.61 – 1.38
+0.61 – 1.37
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.686
+0.661
 </td>
 </tr>
 <tr>
@@ -1885,13 +1406,13 @@ sex [male]
 age class [subadult]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.59
+0.57
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.32 – 1.11
+0.30 – 1.08
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.102
+0.083
 </td>
 </tr>
 <tr>
@@ -1899,13 +1420,13 @@ age class [subadult]
 age class [juvenile]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.13
+0.14
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.03 – 0.55
+0.03 – 0.57
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.006</strong>
+<strong>0.007</strong>
 </td>
 </tr>
 <tr>
@@ -1913,27 +1434,41 @@ age class [juvenile]
 cave roosting [yes]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.93
+0.98
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.53 – 1.63
+0.56 – 1.70
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.796
+0.930
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n viral families tested
+n virus targets tested
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.97
+1.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.81 – 1.16
+0.85 – 1.25
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.741
+0.732
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n specimen types
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.61
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.32 – 1.18
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.140
 </td>
 </tr>
 <tr>
@@ -1954,14 +1489,14 @@ Random Effects
 τ<sub>00</sub> <sub>host_family</sub>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.14
+0.18
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
 ICC
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.04
+0.05
 </td>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
@@ -1983,7 +1518,7 @@ Observations
 Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.104 / 0.141
+0.112 / 0.159
 </td>
 </tr>
 </table>
@@ -1992,23 +1527,33 @@ Marginal R<sup>2</sup> / Conditional R<sup>2</sup>
 <h3>GLM results-rodents</h3>
 <pre><code>## 
 ## Call:
-## glm(formula = virus_coinf ~ sex + age_class + n_viral_families_tested, 
-##     family = binomial(), data = model_data_rodents)
+## glm(formula = virus_coinf ~ sex + age_class + captivity_status + 
+##     n_virus_targets_tested + n_specimen_types, family = binomial(), 
+##     data = model_data_rodents)
 ## 
 ## Coefficients:
-##                               Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)                    -5.7876     0.8568  -6.755 1.43e-11 ***
-## sexmale                         0.1348     0.3223   0.418    0.676    
-## age_classsubadult or juvenile   0.6109     0.3322   1.839    0.066 .  
-## n_viral_families_tested         0.4486     0.1028   4.364 1.28e-05 ***
+##                                          Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)                               -6.2072     1.7531  -3.541 0.000399
+## sexmale                                    0.1227     0.3244   0.378 0.705225
+## age_classsubadult or juvenile              0.6528     0.3393   1.924 0.054383
+## captivity_statuswild animal in captivity   0.1285     0.3503   0.367 0.713726
+## n_virus_targets_tested                     0.4373     0.1041   4.200 2.67e-05
+## n_specimen_types                           0.2311     0.7409   0.312 0.755157
+##                                             
+## (Intercept)                              ***
+## sexmale                                     
+## age_classsubadult or juvenile            .  
+## captivity_statuswild animal in captivity    
+## n_virus_targets_tested                   ***
+## n_specimen_types                            
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 304.79  on 487  degrees of freedom
-## Residual deviance: 276.13  on 484  degrees of freedom
-## AIC: 284.13
+## Residual deviance: 275.51  on 482  degrees of freedom
+## AIC: 287.51
 ## 
 ## Number of Fisher Scoring iterations: 6</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -2042,7 +1587,7 @@ p
 0.00
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.00 – 0.01
+0.00 – 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
@@ -2053,13 +1598,13 @@ p
 sex [male]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.14
+1.13
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.61 – 2.17
+0.60 – 2.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.676
+0.705
 </td>
 </tr>
 <tr>
@@ -2067,27 +1612,55 @@ sex [male]
 age class [subadult or<br>juvenile]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.84
+1.92
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.95 – 3.51
+0.97 – 3.71
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.066
+0.054
 </td>
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-n viral families tested
+captivity status [wild<br>animal in captivity]
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.57
+1.14
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.29 – 1.94
+0.56 – 2.23
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.714
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n virus targets tested
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.55
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.28 – 1.93
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+n specimen types
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.26
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.29 – 4.86
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.755
 </td>
 </tr>
 <tr>
@@ -2103,7 +1676,7 @@ Observations
 R<sup>2</sup> Tjur
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.059
+0.058
 </td>
 </tr>
 </table>
@@ -2136,29 +1709,10 @@ signif
 <tbody>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Arenaviridae
+Arenaviruses-Arenaviruses
 </td>
 <td style="text-align:left;">
-5.80e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Coronaviridae
-</td>
-<td style="text-align:left;">
-2.76e-06
+5.21e-04
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2174,29 +1728,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Filoviridae
+Arenaviruses-Coronaviruses
 </td>
 <td style="text-align:left;">
-1.39e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-5.80e-09
+1.13e-03
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2212,29 +1747,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Hantaviridae
+Arenaviruses-Filoviruses
 </td>
 <td style="text-align:left;">
-4.64e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-5.49e-07
+5.03e-06
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2250,29 +1766,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Paramyxoviridae
+Arenaviruses-Flaviviruses
 </td>
 <td style="text-align:left;">
-5.42e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-5.68e-08
+8.06e-07
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2288,29 +1785,105 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Coronaviridae
+Arenaviruses-Hantaviruses
 </td>
 <td style="text-align:left;">
-1.31e-03
+2.87e-05
 </td>
 <td style="text-align:left;">
-1.64e-03
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arenaviruses-Influenzas
+</td>
+<td style="text-align:left;">
+1.86e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arenaviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+2.40e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arenaviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+4.22e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Coronaviruses
+</td>
+<td style="text-align:left;">
+2.46e-03
+</td>
+<td style="text-align:left;">
+2.53e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-8.41e-01
+1.00e+00
 </td>
 <td style="text-align:left;">
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Filoviridae
+Coronaviruses-Filoviruses
 </td>
 <td style="text-align:left;">
-6.62e-06
+1.09e-05
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2326,29 +1899,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Flaviviridae
+Coronaviruses-Flaviviruses
 </td>
 <td style="text-align:left;">
-2.76e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coronaviridae-Hantaviridae
-</td>
-<td style="text-align:left;">
-2.21e-06
+1.75e-06
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2364,19 +1918,57 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Orthomyxoviridae
+Coronaviruses-Hantaviruses
 </td>
 <td style="text-align:left;">
-2.61e-04
+6.24e-05
 </td>
 <td style="text-align:left;">
-6.85e-04
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Influenzas
+</td>
+<td style="text-align:left;">
+4.03e-04
+</td>
+<td style="text-align:left;">
+6.19e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-5.76e-07
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+5.21e-04
+</td>
+<td style="text-align:left;">
+1.28e-03
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+7.74e-07
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2384,19 +1976,399 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Paramyxoviridae
+Coronaviruses-Rhabdoviruses
 </td>
 <td style="text-align:left;">
-2.58e-04
+9.16e-04
 </td>
 <td style="text-align:left;">
-1.05e-03
+1.13e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-7.00e-20
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Filoviruses
+</td>
+<td style="text-align:left;">
+4.86e-08
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Flaviviruses
+</td>
+<td style="text-align:left;">
+7.78e-09
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Hantaviruses
+</td>
+<td style="text-align:left;">
+2.78e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Influenzas
+</td>
+<td style="text-align:left;">
+1.79e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+2.32e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+4.07e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Flaviviruses
+</td>
+<td style="text-align:left;">
+1.25e-09
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Hantaviruses
+</td>
+<td style="text-align:left;">
+4.44e-08
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Influenzas
+</td>
+<td style="text-align:left;">
+2.87e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+3.71e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+6.52e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hantaviruses-Hantaviruses
+</td>
+<td style="text-align:left;">
+1.59e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hantaviruses-Influenzas
+</td>
+<td style="text-align:left;">
+1.02e-05
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hantaviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+1.32e-05
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hantaviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+2.33e-05
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Influenzas
+</td>
+<td style="text-align:left;">
+6.62e-05
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+8.55e-05
+</td>
+<td style="text-align:left;">
+5.17e-05
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+1.50e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paramyxoviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+1.11e-04
+</td>
+<td style="text-align:left;">
+1.02e-04
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paramyxoviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+1.94e-04
+</td>
+<td style="text-align:left;">
+2.26e-03
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+6.00e-04
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2404,410 +2376,10 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Rhabdoviridae
+Rhabdoviruses-Rhabdoviruses
 </td>
 <td style="text-align:left;">
-2.70e-05
-</td>
-<td style="text-align:left;">
-4.57e-05
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Filoviridae
-</td>
-<td style="text-align:left;">
-3.34e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-1.39e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Hantaviridae
-</td>
-<td style="text-align:left;">
-1.11e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-1.32e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-1.30e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-1.36e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-5.80e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Hantaviridae
-</td>
-<td style="text-align:left;">
-4.64e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-5.49e-07
-</td>
-<td style="text-align:left;">
-1.52e-05
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-5.42e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-5.68e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hantaviridae-Hantaviridae
-</td>
-<td style="text-align:left;">
-3.71e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hantaviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-4.39e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hantaviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-4.33e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hantaviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-4.55e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-5.19e-05
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-5.12e-05
-</td>
-<td style="text-align:left;">
-1.52e-04
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-9.05e-02
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-5.38e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Paramyxoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-5.06e-05
-</td>
-<td style="text-align:left;">
-7.61e-05
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Paramyxoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-5.31e-06
-</td>
-<td style="text-align:left;">
-9.14e-05
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-6.65e-05
-</td>
-<td style="text-align:left;">
-<ul>
-<li></td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Rhabdoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-5.57e-07
+3.41e-04
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -2823,7 +2395,6 @@ No
 </tr>
 </tbody>
 </table></li>
-</ul></li>
 </ul></li>
 </ul>
 </div>
@@ -2855,76 +2426,19 @@ signif
 <tbody>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Coronaviridae
+Coronaviruses-Coronaviruses
 </td>
 <td style="text-align:left;">
-1.80e-03
+5.08e-03
 </td>
 <td style="text-align:left;">
-1.58e-03
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coronaviridae-Filoviridae
-</td>
-<td style="text-align:left;">
-1.41e-05
-</td>
-<td style="text-align:left;">
-0.00e+00
+2.64e-03
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coronaviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-1.17e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coronaviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-2.37e-04
-</td>
-<td style="text-align:left;">
-6.36e-04
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-6.93e-04
+8.91e-07
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2932,10 +2446,48 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Paramyxoviridae
+Coronaviruses-Filoviruses
 </td>
 <td style="text-align:left;">
-3.89e-04
+2.57e-05
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Flaviviruses
+</td>
+<td style="text-align:left;">
+4.70e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Influenzas
+</td>
+<td style="text-align:left;">
+7.61e-04
 </td>
 <td style="text-align:left;">
 1.22e-03
@@ -2944,7 +2496,26 @@ Coronaviridae-Paramyxoviridae
 Yes
 </td>
 <td style="text-align:left;">
-2.88e-09
+6.92e-01
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+1.21e-03
+</td>
+<td style="text-align:left;">
+2.30e-03
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+2.00e-03
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2952,285 +2523,285 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Rhabdoviridae
+Coronaviruses-Rhabdoviruses
 </td>
 <td style="text-align:left;">
-5.75e-05
+1.89e-03
 </td>
 <td style="text-align:left;">
-8.29e-05
+1.63e-03
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Filoviruses
+</td>
+<td style="text-align:left;">
+1.30e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Flaviviruses
+</td>
+<td style="text-align:left;">
+2.38e-08
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Influenzas
+</td>
+<td style="text-align:left;">
+3.86e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+6.12e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Filoviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+9.60e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Flaviviruses
+</td>
+<td style="text-align:left;">
+4.34e-09
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Influenzas
+</td>
+<td style="text-align:left;">
+7.04e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+1.12e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Flaviviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+1.75e-06
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Influenzas
+</td>
+<td style="text-align:left;">
+1.14e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+1.81e-04
+</td>
+<td style="text-align:left;">
+5.30e-05
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+2.84e-04
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paramyxoviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+2.87e-04
+</td>
+<td style="text-align:left;">
+1.56e-04
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paramyxoviruses-Rhabdoviruses
+</td>
+<td style="text-align:left;">
+4.50e-04
+</td>
+<td style="text-align:left;">
+3.25e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Filoviridae
-</td>
-<td style="text-align:left;">
-1.10e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-9.17e-09
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-1.85e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-3.03e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Filoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-4.49e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Flaviviridae
-</td>
-<td style="text-align:left;">
-7.64e-10
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-1.54e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-2.53e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Flaviviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-3.74e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-3.12e-05
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-5.11e-05
-</td>
-<td style="text-align:left;">
-2.76e-05
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-7.56e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Paramyxoviridae-Paramyxoviridae
-</td>
-<td style="text-align:left;">
-8.37e-05
-</td>
-<td style="text-align:left;">
-1.11e-04
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Paramyxoviridae-Rhabdoviridae
-</td>
-<td style="text-align:left;">
-1.24e-05
-</td>
-<td style="text-align:left;">
-1.66e-04
-</td>
-<td style="text-align:left;">
-Yes
-</td>
-<td style="text-align:left;">
-1.61e-04
+4.68e-03
 </td>
 <td style="text-align:left;">
 <ul>
@@ -3238,10 +2809,10 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Rhabdoviridae-Rhabdoviridae
+Rhabdoviruses-Rhabdoviruses
 </td>
 <td style="text-align:left;">
-1.83e-06
+7.06e-04
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3289,29 +2860,10 @@ signif
 <tbody>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Arenaviridae
+Arenaviruses-Arenaviruses
 </td>
 <td style="text-align:left;">
-1.51e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Coronaviridae
-</td>
-<td style="text-align:left;">
-1.47e-05
+2.60e-03
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3327,76 +2879,99 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Hantaviridae
+Arenaviruses-Coronaviruses
 </td>
 <td style="text-align:left;">
-6.03e-08
+2.15e-03
 </td>
 <td style="text-align:left;">
-0.00e+00
+NA
 </td>
 <td style="text-align:left;">
-No
+NA
 </td>
 <td style="text-align:left;">
-1.00e+00
+NA
 </td>
 <td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Arenaviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-6.03e-08
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
+NA
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Arenaviridae-Paramyxoviridae
+Arenaviruses-Hantaviruses
 </td>
 <td style="text-align:left;">
-1.60e-06
+8.58e-05
 </td>
 <td style="text-align:left;">
-0.00e+00
+NA
 </td>
 <td style="text-align:left;">
-No
+NA
 </td>
 <td style="text-align:left;">
-1.00e+00
+NA
 </td>
 <td style="text-align:left;">
+NA
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Coronaviridae
+Arenaviruses-Influenzas
 </td>
 <td style="text-align:left;">
-1.44e-03
+8.81e-06
 </td>
 <td style="text-align:left;">
-3.73e-03
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Arenaviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+2.33e-04
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coronaviruses-Coronaviruses
+</td>
+<td style="text-align:left;">
+1.78e-03
+</td>
+<td style="text-align:left;">
+4.14e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-1.29e-07
+2.26e-06
 </td>
 <td style="text-align:left;">
 <ul>
@@ -3404,29 +2979,10 @@ Yes
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Hantaviridae
+Coronaviruses-Hantaviruses
 </td>
 <td style="text-align:left;">
-5.90e-06
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coronaviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-5.90e-06
+7.10e-05
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3442,29 +2998,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Coronaviridae-Paramyxoviridae
+Coronaviruses-Influenzas
 </td>
 <td style="text-align:left;">
-1.56e-04
-</td>
-<td style="text-align:left;">
-1.55e-04
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Hantaviridae-Hantaviridae
-</td>
-<td style="text-align:left;">
-2.41e-08
+7.28e-06
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3480,10 +3017,29 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Hantaviridae-Orthomyxoviridae
+Coronaviruses-Paramyxoviruses
 </td>
 <td style="text-align:left;">
-2.41e-08
+1.93e-04
+</td>
+<td style="text-align:left;">
+1.73e-04
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hantaviruses-Hantaviruses
+</td>
+<td style="text-align:left;">
+2.83e-06
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3499,29 +3055,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Hantaviridae-Paramyxoviridae
+Hantaviruses-Influenzas
 </td>
 <td style="text-align:left;">
-6.39e-07
-</td>
-<td style="text-align:left;">
-0.00e+00
-</td>
-<td style="text-align:left;">
-No
-</td>
-<td style="text-align:left;">
-1.00e+00
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Orthomyxoviridae-Orthomyxoviridae
-</td>
-<td style="text-align:left;">
-2.41e-08
+2.90e-07
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3537,10 +3074,10 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Orthomyxoviridae-Paramyxoviridae
+Hantaviruses-Paramyxoviruses
 </td>
 <td style="text-align:left;">
-6.39e-07
+7.69e-06
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3556,10 +3093,48 @@ No
 </tr>
 <tr>
 <td style="text-align:left;">
-Paramyxoviridae-Paramyxoviridae
+Influenzas-Influenzas
 </td>
 <td style="text-align:left;">
-1.69e-05
+2.98e-08
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Influenzas-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+7.89e-07
+</td>
+<td style="text-align:left;">
+0.00e+00
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+1.00e+00
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paramyxoviruses-Paramyxoviruses
+</td>
+<td style="text-align:left;">
+2.09e-05
 </td>
 <td style="text-align:left;">
 0.00e+00
@@ -3585,8 +3160,8 @@ model_data_all %&gt;%
   group_by(host_genus, geo_region, virus_coinf, .drop = F) %&gt;% 
   count() %&gt;% 
   arrange(desc(virus_coinf), desc(n)) </code></pre>
-<pre><code>## # A tibble: 90 × 4
-## # Groups:   host_genus, geo_region, virus_coinf [90]
+<pre><code>## # A tibble: 88 × 4
+## # Groups:   host_genus, geo_region, virus_coinf [88]
 ##    host_genus   geo_region                  virus_coinf     n
 ##    &lt;chr&gt;        &lt;chr&gt;                             &lt;dbl&gt; &lt;int&gt;
 ##  1 Rattus       South, East, Southeast Asia           1    44
@@ -3597,9 +3172,9 @@ model_data_all %&gt;%
 ##  6 Mops         Africa and West Asia                  1     7
 ##  7 Anas         South, East, Southeast Asia           1     6
 ##  8 Cynopterus   South, East, Southeast Asia           1     6
-##  9 Gallus       South, East, Southeast Asia           1     6
-## 10 Hipposideros Africa and West Asia                  1     6
-## # ℹ 80 more rows</code></pre>
+##  9 Hipposideros Africa and West Asia                  1     6
+## 10 Rhinolophus  Africa and West Asia                  1     5
+## # ℹ 78 more rows</code></pre>
 <pre class="r"><code># what was the geographic distribution of pteropus and rattus overall?
 pcr_all %&gt;% 
   dplyr::filter(host_genus %in% c(&quot;Pteropus&quot;, &quot;Rattus&quot;)) %&gt;%   
@@ -3610,7 +3185,7 @@ pcr_all %&gt;%
 ## # Groups:   host_genus, geo_region [3]
 ##   host_genus geo_region                      n
 ##   &lt;chr&gt;      &lt;chr&gt;                       &lt;int&gt;
-## 1 Pteropus   South, East, Southeast Asia  3084
+## 1 Pteropus   South, East, Southeast Asia  2859
 ## 2 Rattus     Africa and West Asia         1373
 ## 3 Rattus     South, East, Southeast Asia  3736</code></pre>
 <pre class="r"><code># look at coinfection rates for pteropus and rattus by region

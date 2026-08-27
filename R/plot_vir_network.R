@@ -22,15 +22,15 @@ plot_vir_network <- function(g){
     g_tbl %>%
     tidygraph::activate(nodes) %>%
     data.frame() %>% 
-    arrange(viral_family) %>% 
-    distinct(viral_family, .keep_all = T) %>% 
+    arrange(virus_target_tested) %>% 
+    distinct(virus_target_tested, .keep_all = T) %>% 
     pull(color)
   
   net_out <- ggraph(g_tbl, layout = "kk") +
     geom_edge_link(aes(width = edge_list$weight), color = "gray70") +
     scale_edge_width(name = "Number of \ncoinfections", range = c(0.5, 3)) + 
     geom_node_point(aes(size = size_trans,
-                        fill = factor(viral_family)), 
+                        fill = factor(virus_target_tested)), 
                     pch = 21) +
     geom_node_label(aes(label = label),  
                     repel = TRUE, max.overlaps = 20, show.legend = FALSE, 
@@ -40,7 +40,7 @@ plot_vir_network <- function(g){
                range = c(2, 12), 
                breaks = c(5, 10, 15, 20),
                labels = c(5^2, 10^2, 15^2, 20^2)) +
-    scale_fill_manual(name = "Viral family", values = pal) +
+    scale_fill_manual(name = "Virus target\ntested", values = pal) +
     scale_y_continuous(expand = expansion(mult = 0.1)) +
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +
