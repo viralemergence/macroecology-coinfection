@@ -10,20 +10,20 @@ plot_model_coefs_panel <- function(model_list){
   
   p1 <- plot_model_coefs(model_output = model_list$all, 
                          model_type = "glm", 
-                         pretty_labels = c("intercept", "SES Asia", 
+                         pretty_labels = c("intercept", "Southeast Asia", 
                                            "Anseriformes", "Eulipotyphla", 
                                            "Rodentia", "male", "subadult",
                                            "juvenile", 
-                                           "# virus targets tested",
+                                           "# virus groups tested",
                                            "# specimen types"),
                          show_x_label = FALSE)
   
   p2 <- plot_model_coefs(model_output = model_list$bats, 
                          model_type = "glmm", 
-                         pretty_labels = c("intercept", "SES Asia", "male", 
+                         pretty_labels = c("intercept", "Southeast Asia", "male", 
                                            "subadult",  "juvenile",
                                            "cave-roosting",
-                                           "# virus targets tested",
+                                           "# virus groups tested",
                                            "# specimen types"),
                          show_x_label = FALSE)
   
@@ -32,7 +32,7 @@ plot_model_coefs_panel <- function(model_list){
                          pretty_labels = c("intercept", "male", 
                                            "subadult/juvenile",
                                            "wild in captivity",
-                                           "# virus targets tested",
+                                           "# virus groups tested",
                                            "# specimen types"),
                          show_x_label = TRUE)
 

@@ -20,13 +20,13 @@ plot_coinf_per_order <- function(pos_final, pal = c("#9e9ac8", "#54278f")){
   rm(pos_final)
   
   pos_pcr_co %>% 
-    # only display orders with infections AND coinfections
-    # excludes Carnivora, Charadriiformes, Galliformes, Passeriformes
+    # excludes Carnivora and Galliformes (low sample size)
     dplyr::filter(host_order %in% c("Anseriformes", "Chiroptera", 
-                                    "Eulipotyphla", "Rodentia")) %>%
+                                    "Eulipotyphla", "Passeriformes",
+                                    "Rodentia")) %>%
     arrange(-n) %>% 
     ggplot(aes(x = reorder(host_order, -n), y = n, fill = coinfect_status)) + 
-    geom_bar(stat = "identity", position = position_dodge()) + 
+    geom_bar(stat = "identity", position = position_dodge(preserve = "single")) + 
     theme_bw(base_size = 16) + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "inside",

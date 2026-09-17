@@ -14,9 +14,9 @@ tar_load(pos_final)
 tar_load(model_data_all)
 tar_load(model_list)
 
-tar_load(binom_tests_vir_fam)
-tar_load(binom_tests_vir_fam_bats)
-tar_load(binom_tests_vir_fam_rodents)
+tar_load(binom_tests_vir_group)
+tar_load(binom_tests_vir_group_bats)
+tar_load(binom_tests_vir_group_rodents)
 
 library(tidyverse)
 library(knitr)
@@ -67,8 +67,8 @@ spec_by_order
 n_tests <- nrow(pcr_all)
 n_tests
 
-# number of PCR tests by virus tested for
-table(pcr_all$virus_target_tested)
+# number of PCR tests by virus group tested for
+table(pcr_all$virus_group_tested)
   
 # number of unique animals
 n_unique_animals <- nrow(unique_animals)
@@ -82,7 +82,7 @@ n_inf_animals <- nrow(coinf_df)
 n_inf_animals
 
 # overall prevalence (number animals pos. for 1+ virus/number of unique animals)
-overall_prev <- round(n_inf_animals/n_unique_animals*100, 2)
+overall_prev <- round(n_inf_animals/n_unique_animals*100, 1)
 overall_prev
 
 # infected animals by country
@@ -101,7 +101,7 @@ n_coinf_animals
 coinf_freq <- table(coinf_df$n_virus)
 
 # as percentages
-coinf_perc <- round(coinf_freq/n_inf_animals*100,2)
+coinf_perc <- round(coinf_freq/n_inf_animals*100, 1)
 
 # within COINFECTED animals, what was the breakdown by host order?
 coinf_order_summary <- coinf_df %>% 
@@ -116,7 +116,7 @@ coinf_within_inf <- xtabs(~coinf_df$host_order + coinf_df$virus_coinf) %>%
   as.data.frame.matrix() %>% 
   rename(single_inf = "0", coinf = "1") %>% 
   mutate(n_tot = single_inf + coinf,
-         prev = round(coinf/n_tot*100, 2))
+         prev = round(coinf/n_tot*100, 1))
 coinf_within_inf
 
 # prevalence by host order (within unique animals) for orders with at least one infected animal
@@ -127,16 +127,8 @@ order_prev <- table(coinf_df$host_order) %>%
     table(unique_animals$host_order) %>% 
       data.frame() %>% 
       rename(host_order = Var1, n_tot = Freq)) %>% 
-  mutate(prev = round(n_inf/n_tot*100, 2))
+  mutate(prev = round(n_inf/n_tot*100, 1))
 order_prev
-
-# coinfection by host order within the model data (subset of animals with age and sex)
-model_coinf_within_inf <- xtabs(~host_order + virus_coinf, model_data_all) %>% 
-  as.data.frame.matrix() %>% 
-  rename(single_inf = "0", coinf = "1") %>% 
-  mutate(n_tot = single_inf + coinf,
-         prev = round(coinf/n_tot*100, 2))
-model_coinf_within_inf
 
 ```
 
@@ -168,26 +160,26 @@ pos_final %>%
 ```{r model results all}
 summary(model_list[[1]])
 
-sjPlot::tab_model(model_list[[1]])
+sjPlot::tab_model(model_list[[1]], show.p = F)
 ```
 
 ### GLM results-bats
 ```{r model results bats}
 summary(model_list[[2]])
 
-sjPlot::tab_model(model_list[[2]])
+sjPlot::tab_model(model_list[[2]], show.p = F)
 ```
 
 ### GLM results-rodents
 ```{r model results rodents}
 summary(model_list[[3]])
 
-sjPlot::tab_model(model_list[[3]])
+sjPlot::tab_model(model_list[[3]], show.p = F)
 ```
 
 ### Binomial tests-all
 ```{r binomial tests-all}
-binom_tests_vir_fam %>% 
+binom_tests_vir_group %>% 
   dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
                 p_adj, signif) %>% 
   mutate(across(c(exp_prev, obs_prev, p_adj), 
@@ -199,7 +191,7 @@ binom_tests_vir_fam %>%
 
 ### Binomial tests-bats
 ```{r binomial tests-bats}
-binom_tests_vir_fam_bats %>% 
+binom_tests_vir_group_bats %>% 
   dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
                 p_adj, signif) %>% 
   mutate(across(c(exp_prev, obs_prev, p_adj), 
@@ -211,7 +203,7 @@ binom_tests_vir_fam_bats %>%
 
 ### Binomial tests-rodents
 ```{r binomial tests-rodents}
-binom_tests_vir_fam_rodents %>% 
+binom_tests_vir_group_rodents %>% 
   dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
                 p_adj, signif) %>% 
   mutate(across(c(exp_prev, obs_prev, p_adj), 
@@ -223,7 +215,7 @@ binom_tests_vir_fam_rodents %>%
 ### Pteropus and Rattus
 ```{r pteropus and rattus, echo = T}
 # within the model data, look at coinfection by host genus and geographic region
-# most of the genera with high numbers of coinfected animals are in SES Asia
+# most of the genera with high numbers of coinfected animals are in SE Asia
 model_data_all %>% 
   group_by(host_genus, geo_region, virus_coinf, .drop = F) %>% 
   count() %>% 

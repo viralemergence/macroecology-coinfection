@@ -12,7 +12,7 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
   pcr_all = pcr_raw %>% 
     
     rename(host_sci_name = scientific_name,
-           virus_target_tested = viral_family_tested) %>% 
+           virus_group_tested = viral_family_tested) %>% 
     
     # there are duplicates in predict_test_id (excel carryover?), 
     # but they represent genuinely distinct tests
@@ -20,7 +20,7 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
     dplyr::mutate(new_test_id = seq(1:nrow(pcr_raw)), .after = 1) %>% 
     
     # limit our analyses to key virus groups
-    dplyr::filter(virus_target_tested %in% c("Adenoviruses", "Alphaviruses", 
+    dplyr::filter(virus_group_tested %in% c("Adenoviruses", "Alphaviruses", 
                                              "Arenaviruses", "Astroviruses", 
                                              "Coronaviruses", "Filoviruses",
                                              "Flaviviruses", "Hantaviruses", 
@@ -49,7 +49,7 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
     # assign broad geographic regions
     mutate(geo_region = if_else(longitude < 60, 
                                 "Africa and West Asia", 
-                                "South, East, Southeast Asia")) %>% 
+                                "Southeast Asia")) %>% 
     
     mutate(across("host_sci_name", 
                   ~ str_trim(.x) %>%

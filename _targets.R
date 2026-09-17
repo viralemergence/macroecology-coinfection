@@ -32,7 +32,7 @@ data_input_targets <- tar_plan(
   # https://www.mdpi.com/1424-2818/9/3/35 and IUCN Red List
   tar_file_read(roosting, "data/roosting_data.csv", read_csv(file = !!.x)),
   
-  # set a color palette for virus families
+  # set a color palette for virus groups
   vir_pal = RColorBrewer::brewer.pal(8, "Spectral"),
   
   AmyTheme = 
@@ -52,15 +52,15 @@ data_processing_targets <- tar_plan(
   # calculate summary info on tests run and specimens collected, at animal level
   test_summaries = calc_test_summaries(pcr_harmonized),
   
-  # identify the animals that were tested for AT LEAST the same 5 virus targets
+  # identify the animals that were tested for AT LEAST the same 5 virus groups
   # that were identified as of high importance to human health
   # (needed for permutation analyses)
   core_five_ids = test_summaries %>% 
-    dplyr::filter(stringr::str_detect(virus_targets, "Coronaviruses") &
-                    stringr::str_detect(virus_targets, "Filoviruses") &
-                    stringr::str_detect(virus_targets, "Flaviviruses") &
-                    stringr::str_detect(virus_targets, "Influenzas") & 
-                    stringr::str_detect(virus_targets, "Paramyxoviruses")) %>% 
+    dplyr::filter(stringr::str_detect(virus_groups, "Coronaviruses") &
+                    stringr::str_detect(virus_groups, "Filoviruses") &
+                    stringr::str_detect(virus_groups, "Flaviviruses") &
+                    stringr::str_detect(virus_groups, "Influenzas") & 
+                    stringr::str_detect(virus_groups, "Paramyxoviruses")) %>% 
     pull(predict_sample_id),
   
   # identify animals with an implausible number of specimens collected
@@ -72,8 +72,8 @@ data_processing_targets <- tar_plan(
   # identify animals that were tested only for influenza A viruses
   # because coinfection would not be possible to detect in these animals
   coinfection_impossible_ids = test_summaries %>% 
-    dplyr::filter(n_virus_targets_tested == 1,
-                  virus_targets %in% c("Influenzas")) %>% 
+    dplyr::filter(n_virus_groups_tested == 1,
+                  virus_groups %in% c("Influenzas")) %>% 
     pull(predict_sample_id), #3266
   
   # for our analysis of coinfection, we will remove PCR results for:
@@ -97,35 +97,35 @@ data_processing_targets <- tar_plan(
   # unique virus-animal combos and coinfection status
   pos_final = create_pos_final(pcr_pos),
   
-  # number of positives by virus family
+  # number of positives by virus group
   total_pos = pos_final %>% 
-    group_by(virus_target_tested) %>% 
+    group_by(virus_group_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
   total_pos_bats = pos_final %>% 
     dplyr::filter(host_order == "Chiroptera") %>% 
-    group_by(virus_target_tested) %>% 
+    group_by(virus_group_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
   total_pos_rodents = pos_final %>% 
     dplyr::filter(host_order == "Rodentia") %>% 
-    group_by(virus_target_tested) %>% 
+    group_by(virus_group_tested) %>% 
     count %>% 
     mutate(number = "Positive"),
   
-  # prep virus family coinfection matrix for network analyses
+  # prep virus group coinfection matrix for network analyses
   M = prep_matrix_data(pos_final, 
-                       vir_level = "virus_target_tested", 
+                       vir_level = "virus_group_tested", 
                        total_pos),
   M_bats = prep_matrix_data(pos_final %>% 
                               dplyr::filter(host_order == "Chiroptera"), 
-                            vir_level = "virus_target_tested",
+                            vir_level = "virus_group_tested",
                             total_pos_bats),
   M_rodents = prep_matrix_data(pos_final %>% 
                                  dplyr::filter(host_order == "Rodentia"), 
-                               vir_level = "virus_target_tested",
+                               vir_level = "virus_group_tested",
                                total_pos_rodents),
   
   # prep individual virus coinfection matrix
@@ -145,40 +145,42 @@ data_processing_targets <- tar_plan(
 ## Analysis---------------------------------------------------------------------
 analysis_targets <- tar_plan(
   
-  viral_fams = total_pos$viral_family,
-  viral_fams_bats = total_pos_bats$viral_family,
-  viral_fams_rodents = total_pos_rodents$viral_family,
-  
   sims_bats = simulate_coinf(pcr_all, "Chiroptera", subgroup = T,
                              subgroup_ids = core_five_ids, restrict_vir = T),
+  
   sims_rodents = simulate_coinf(pcr_all, "Rodentia", subgroup = T,
                                 subgroup_ids = core_five_ids, restrict_vir = T),
+  
+  # does observed coinfection exceed simulated coinfection?
+  sim_comp_bats = compare_obs_sim_coinf(sims_bats),
+  
+  sim_comp_rodents = compare_obs_sim_coinf(sims_rodents),
 
-  # create graph object to visualize coinfection by virus target
-  g = prep_vir_target_graph(M, total_pos, vir_pal),
-  g_bats = prep_vir_target_graph(M_bats, total_pos_bats, vir_pal),
-  g_rodents = prep_vir_target_graph(M_rodents, total_pos_rodents, vir_pal),
+  # create graph object to visualize coinfection by virus group
+  g = prep_vir_group_graph(M, total_pos, vir_pal),
+  g_bats = prep_vir_group_graph(M_bats, total_pos_bats, vir_pal),
+  g_rodents = prep_vir_group_graph(M_rodents, total_pos_rodents, vir_pal),
   
   # create graph object to visualize coinfection by individual viruses
   g_vir = prep_vir_graph(MV, pos_final, vir_pal, sparse = TRUE),
 
-  binom_tests_vir_fam = run_binom_tests(pcr_pos,
-                                        vir_level = "virus_target_tested",
+  binom_tests_vir_group = run_binom_tests(pcr_pos,
+                                        vir_level = "virus_group_tested",
                                         observed_mat = M,
                                         test_summaries),
 
-  binom_tests_vir_fam_bats = run_binom_tests(
+  binom_tests_vir_group_bats = run_binom_tests(
     pcr_pos %>%
       dplyr::filter(host_order == "Chiroptera"),
-    vir_level = "virus_target_tested",
+    vir_level = "virus_group_tested",
     observed_mat = M_bats,
     test_summaries %>%
       dplyr::filter(host_order == "Chiroptera")),
 
-  binom_tests_vir_fam_rodents = run_binom_tests(
+  binom_tests_vir_group_rodents = run_binom_tests(
     pcr_pos %>%
       dplyr::filter(host_order == "Rodentia"),
-    vir_level = "virus_target_tested",
+    vir_level = "virus_group_tested",
     observed_mat = M_rodents,
     test_summaries %>%
       dplyr::filter(host_order == "Rodentia")),
@@ -195,10 +197,10 @@ plot_targets <- tar_plan(
   fig_1 = plot_fig_1(fig_coinf_per_order, fig_map_pos_order),
 
   # Figure 2 (2 panels)
-  vir_fam_network_panel = plot_vir_fam_network_panel(g, g_bats, g_rodents,
+  vir_group_network_panel = plot_vir_group_network_panel(g, g_bats, g_rodents,
                                                      add_stars = F),
   model_coefs_panel = plot_model_coefs_panel(model_list),
-  fig_2 = plot_fig_2(vir_fam_network_panel, model_coefs_panel),
+  fig_2 = plot_fig_2(vir_group_network_panel, model_coefs_panel),
 
   # Figure 3
   fig_3 = plot_vir_network(g_vir),
@@ -217,16 +219,16 @@ plot_targets <- tar_plan(
 ## Save figure files------------------------------------------------------------
 outputs_targets <- tar_plan(
   
-  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 22, width = 18, 
+  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 22, width = 18,
                       units = "cm", dpi = 600, bg = "white", compression = "lzw"),
-  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 22, width = 18, 
+  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 22, width = 18,
                      units = "cm", bg = "white", dpi = 600),
-  
+
   fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 21, width = 18,
                       units = "cm", dpi = 600, compression = "lzw"),
   fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 21, width = 18,
                      units = "cm", dpi = 600),
-  
+
   fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 15, width = 18,
                       units = "cm", dpi = 600, compression = "lzw"),
   fig_3_png = ggsave("figures/fig_3.png", fig_3, height = 15, width = 18,
@@ -237,9 +239,9 @@ outputs_targets <- tar_plan(
   fig_s1_png = ggsave("figures/fig_s1.png", fig_s1, height = 4, width = 7, 
                        units = "in", dpi = 600),
   
-  fig_s2_tiff = ggsave("figures/fig_s2.tiff", fig_s2, height = 5, width = 7, 
+  fig_s2_tiff = ggsave("figures/fig_s2.tiff", fig_s2, height = 2.25, width = 6.5, 
                       units = "in", dpi = 600, compression = "lzw"),
-  fig_s2_png = ggsave("figures/fig_s2.png", fig_s2, height = 5, width = 7, 
+  fig_s2_png = ggsave("figures/fig_s2.png", fig_s2, height = 2.25, width = 6.5, 
                      units = "in", dpi = 600),
   
   fig_s3_tiff = ggsave("figures/fig_s3.tiff", fig_s3, height = 3, width = 6.5,

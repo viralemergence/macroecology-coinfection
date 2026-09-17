@@ -1,6 +1,6 @@
 #' make 3 row panel plot of networks
 #'
-#' @title plot_vir_fam_network_panel
+#' @title plot_vir_group_network_panel
 #'
 #' @param g igraph object
 #' @param g_bats
@@ -10,7 +10,7 @@
 #'
 #' @return
 #' @export
-plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
+plot_vir_group_network_panel <- function(g, g_bats, g_rodents, add_stars){
   
   # ensures consistency of edge widths across the network plots
   edge_weights <- c(E(g)$weight, E(g_bats)$weight, E(g_rodents)$weight)
@@ -20,14 +20,14 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
   node_sizes <- c(V(g)$size_trans, V(g_bats)$size_trans, V(g_rodents)$size_trans)
   node_size_lims <- c(floor(min(node_sizes)), ceiling(max(node_sizes)))
   
-  p1 <- plot_vir_fam_network(
+  p1 <- plot_vir_group_network(
     g,
     edge_width_lims = edge_width_lims,
     node_size_range = c(2, 9),
     node_size_lims = node_size_lims,
     show_fill_legend = TRUE)
   
-  p2 <- plot_vir_fam_network(
+  p2 <- plot_vir_group_network(
     g_bats,
     edge_width_lims = edge_width_lims,
     node_size_range = c(2, 9),
@@ -35,7 +35,7 @@ plot_vir_fam_network_panel <- function(g, g_bats, g_rodents, add_stars){
     show_fill_legend = FALSE) +
     labs(tag = "C")
   
-  p3 <- plot_vir_fam_network(
+  p3 <- plot_vir_group_network(
     g_rodents,
     edge_width_lims = edge_width_lims,
     node_size_range = c(2, 9),

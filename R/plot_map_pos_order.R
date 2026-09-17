@@ -16,23 +16,22 @@ plot_map_pos_order <- function(map_data){
   limits <- c(1, 5, 10, sqrt(250))
   labels <- as.character(limits^2) 
   
-  map_data %>% 
+  map_data %>%
     dplyr::mutate(
       host_order = case_when(
-        host_order %in% c("Carnivora", "Charadriiformes", "Galliformes", 
-                          "Passeriformes") ~ "Other",
+        host_order %in% c("Carnivora", "Galliformes") ~ "Other",
         TRUE ~ host_order),
-      host_order = fct_relevel(host_order, "Other", after = Inf)) %>% 
+      host_order = fct_relevel(host_order, "Other", after = Inf)) %>%
     # plot the smallest points last for ease of viewing
     arrange(-size) %>%
-    ggplot() + 
-     geom_sf(fill = "gray80", color = "white") + 
+    ggplot() +
+     geom_sf(fill = "gray80", color = "white") +
     coord_sf(xlim = c(xmin, xmax), ylim = c(ymin, ymax)) +
     geom_point(aes(y = latitude, x = longitude, fill = host_order, size = size), 
                alpha = 0.8, pch = 21, color = "black", 
                position = position_jitter(width = 1, height = 1, seed = 42)) +
     scale_fill_manual(name = "Host order",
-                      values = ltc::ltc("expevo", 6)[c(5,3,2,1,6)],
+                      values = ltc::ltc("minou", 6)[c(5,3,2,1,4,6)],
                       na.translate = F) +
     ggthemes::theme_map() + 
     scale_size_continuous(name = "Number of animals infected with ≥ 1 virus",
@@ -46,8 +45,7 @@ plot_map_pos_order <- function(map_data){
           legend.key = element_blank(),
           panel.background = element_rect(fill = "white"),
           panel.border = element_rect(color = "black", fill = NA)) +
-    guides(fill = guide_legend(override.aes = list(size = 5),
-                                nrow = 1),
+    guides(fill = guide_legend(override.aes = list(size = 5), nrow = 2),
            size = guide_legend(nrow = 1))
   
 }

@@ -1,6 +1,6 @@
-#' visualize a virus family coinfection network using ggraph package
+#' visualize a virus group coinfection network using ggraph package
 #'
-#' @title plot_vir_fam_network
+#' @title plot_vir_group_network
 #'
 #' @param g igraph object
 #' @param edge_width_lims vector of length 2 with min and max width of edges
@@ -11,7 +11,7 @@
 #'
 #' @return
 #' @export
-plot_vir_fam_network <- function(g, 
+plot_vir_group_network <- function(g, 
                                  edge_width_lims = NULL,
                                  node_size_range = c(1, 6), 
                                  node_size_lims = NULL,
@@ -35,14 +35,18 @@ plot_vir_fam_network <- function(g,
                      limits = edge_width_lims,
                      breaks = c(10, 50, 100),
                      labels = c(10, 50, 100)) + 
-    geom_node_point(aes(size = size_trans, fill = factor(virus_target_tested)), 
+    geom_node_point(aes(size = size_trans, fill = factor(virus_group_tested)), 
                     pch = 21) +
     scale_size(name = "Number of\ninfections", 
                range = node_size_range, 
                limits = node_size_lims, 
-               breaks = c(10, 30, 50),
-               labels = c(10^2, 30^2, 50^2)) +
-    scale_fill_manual(name = "Virus target", values = V(g)$color) +
+               breaks = c(10, 20, 30),
+               labels = c(10^2, 20^2, 30^2)) +
+    scale_fill_manual(name = "Virus group", values = V(g)$color,
+                      labels = c("Arenaviruses", "Coronaviruses", "Filoviruses",
+                                 "Flaviviruses", "Hantaviruses", 
+                                 "Influenza A viruses", 
+                                 "Paramyxoviruses", "Rhabdoviruses")) +
     scale_y_continuous(expand = expansion(mult = 0.1)) +
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +

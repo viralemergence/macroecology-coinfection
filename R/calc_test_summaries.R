@@ -9,18 +9,18 @@
 #' 
 calc_test_summaries <- function(pcr_harmonized){
   
-  # number of virus targets tested for
-  target_testing = pcr_harmonized %>% 
-    distinct(predict_sample_id, virus_target_tested) %>% 
+  # number of virus groups tested for
+  group_testing = pcr_harmonized %>% 
+    distinct(predict_sample_id, virus_group_tested) %>% 
     group_by(predict_sample_id) %>% 
-    dplyr::summarise(n_virus_targets_tested = n())
+    dplyr::summarise(n_virus_groups_tested = n())
   
-  # distinct virus targets tested for
-  unique_virus_targets <- pcr_harmonized %>% 
-    distinct(predict_sample_id, virus_target_tested) %>% 
-    arrange(predict_sample_id, virus_target_tested) %>% 
+  # distinct virus groups tested for
+  unique_virus_groups <- pcr_harmonized %>% 
+    distinct(predict_sample_id, virus_group_tested) %>% 
+    arrange(predict_sample_id, virus_group_tested) %>% 
     group_by(predict_sample_id) %>%
-    dplyr::summarise(virus_targets = paste(virus_target_tested, collapse = ", "))
+    dplyr::summarise(virus_groups = paste(virus_group_tested, collapse = ", "))
   
   # number of unique PCR tests performed
   unique_testing = pcr_harmonized %>% 
@@ -51,8 +51,8 @@ calc_test_summaries <- function(pcr_harmonized){
     dplyr::summarise(n_specimens = n())
   
   # join everything together
-  test_summaries <- target_testing %>% 
-    left_join(unique_virus_targets) %>%
+  test_summaries <- group_testing %>% 
+    left_join(unique_virus_groups) %>%
     left_join(unique_testing) %>% 
     left_join(num_specimen_types) %>% 
     left_join(unique_specimen_types) %>% 

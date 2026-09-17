@@ -6,7 +6,7 @@
 #' @param focal_order which host order to examine
 #' @param subgroup boolean: should test results be restricted to a subgroup of animals 
 #' @param subgroup_ids if subgroup = T, a vector of predict_sample_id numbers to restrict the analyses to
-#' @param restrict_vir boolean: should test results be restricted to core five virus targets
+#' @param restrict_vir boolean: should test results be restricted to core five virus groups
 #' @param nsim number of simulations to run
 #' @param seed random seed to ensure simulations are reproducible 
 #'
@@ -27,7 +27,7 @@ simulate_coinf <- function(pcr_all, focal_order, subgroup, subgroup_ids = NULL,
   
   if(restrict_vir){
     pcr_subset <- pcr_subset %>% 
-      dplyr::filter(virus_target_tested %in% c("Coronaviruses", "Filoviruses",
+      dplyr::filter(virus_group_tested %in% c("Coronaviruses", "Filoviruses",
                                                "Flaviviruses", "Influenzas",
                                                "Paramyxoviruses"))
   }

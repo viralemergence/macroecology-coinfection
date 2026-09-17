@@ -3,7 +3,7 @@
 #' @title run_binom_tests
 #'
 #' @param pcr_pos 
-#' @param vir_level either "viral_family" or "virus"
+#' @param vir_level either "virus_group_tested" or "virus"
 #' @param observed_mat observed coinfection matrix
 #' @param test_summaries individual level testing data
 #'
@@ -12,10 +12,10 @@
 
 run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
   
-  # unique virus targets that were detected at least once
+  # unique viruses/virus groups that were detected at least once
   viruses <- pcr_pos[[vir_level]] %>% unique() %>% sort()
   
-  # all possible combinations of the detected virus targets
+  # all possible combinations of the detected viruses
   virus_pairs <- gtools::combinations(n = length(viruses), 
                                       r = 2, 
                                       v = as.vector(viruses),
@@ -24,14 +24,14 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
   virus_pairs <- t(virus_pairs)
   
   # set up data frame to hold testing effort
-  test_numbers <- data.frame(virus_target_tested = viruses, 
+  test_numbers <- data.frame(virus_group_tested = viruses, 
                              n_animals_tested = NA)
   
-  # calculate how many animals were tested for each virus target
+  # calculate how many animals were tested for each virus
   for(i in viruses){
     
     n_tested <- test_summaries %>% 
-      dplyr::filter(stringr::str_detect(virus_targets, i)) %>% 
+      dplyr::filter(stringr::str_detect(virus_groups, i)) %>% 
       pull(predict_sample_id) %>% 
       length
     
@@ -40,7 +40,7 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
     test_numbers[row_index,2] <- n_tested
   }
   
-  # calculate observed viral prevalence for each virus target
+  # calculate observed viral prevalence for each virus
   # number infected divided by number tested
   prev_observed <- pcr_pos %>%
     select(predict_sample_id, {{vir_level}}, infection) %>%
@@ -55,7 +55,7 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
                        dim = c(length(viruses), length(viruses)),
                        dimnames = list(viruses, viruses))
   
-  # calculate expected prevalence of coinfection of two virus targets
+  # calculate expected prevalence of coinfection of two viruses
   for (vir1 in viruses) {
     for (vir2 in viruses) {
       
@@ -100,15 +100,15 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
   binom_df <- expected_df %>%
     left_join(observed_df[, c("virus_pair", "obs_freq")])
   
-  # calculate number of animals tested for each virus target combination
+  # calculate number of animals tested for each virus combination
   for(i in 1:nrow(binom_df)){
     
     vir1 <- binom_df[i, 1]
     vir2 <- binom_df[i, 2]
     
     n_tested <- test_summaries %>% 
-      dplyr::filter(stringr::str_detect(virus_targets, vir1) &
-                      stringr::str_detect(virus_targets, vir2)) %>% 
+      dplyr::filter(stringr::str_detect(virus_groups, vir1) &
+                      stringr::str_detect(virus_groups, vir2)) %>% 
       pull(predict_sample_id) %>% 
       length
     
