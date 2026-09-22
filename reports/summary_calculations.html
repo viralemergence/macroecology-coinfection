@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2026-09-17" />
+<meta name="date" content="2026-09-18" />
 
 <title>Useful summary calculations</title>
 
@@ -574,7 +574,7 @@ display: none;
 
 
 <h1 class="title toc-ignore">Useful summary calculations</h1>
-<h4 class="date">2026-09-17</h4>
+<h4 class="date">2026-09-18</h4>
 
 </div>
 
@@ -690,7 +690,10 @@ n_inf_animals</code></pre>
 overall_prev &lt;- round(n_inf_animals/n_unique_animals*100, 1)
 overall_prev</code></pre>
 <pre><code>## [1] 4.9</code></pre>
-<pre class="r"><code># infected animals by country
+<pre class="r"><code>overall_var &lt;- round((n_inf_animals/n_unique_animals)*
+                       (1-(n_inf_animals/n_unique_animals)), 3)
+
+# infected animals by country
 coinf_df %&gt;% 
   group_by(country) %&gt;% 
   dplyr::summarise(n = n()) %&gt;% 
@@ -758,17 +761,19 @@ order_prev &lt;- table(coinf_df$host_order) %&gt;%
     table(unique_animals$host_order) %&gt;% 
       data.frame() %&gt;% 
       rename(host_order = Var1, n_tot = Freq)) %&gt;% 
-  mutate(prev = round(n_inf/n_tot*100, 1))</code></pre>
+  mutate(perc = n_inf/n_tot,
+         prev = round(n_inf/n_tot*100, 1),
+         var = round(perc*(1-perc), 3))</code></pre>
 <pre><code>## Joining with `by = join_by(host_order)`</code></pre>
 <pre class="r"><code>order_prev</code></pre>
-<pre><code>##      host_order n_inf n_tot prev
-## 1  Anseriformes    32   156 20.5
-## 2     Carnivora     1   406  0.2
-## 3    Chiroptera  2054 35840  5.7
-## 4  Eulipotyphla    34  1016  3.3
-## 5   Galliformes     5    23 21.7
-## 6 Passeriformes   127   273 46.5
-## 7      Rodentia   549 12873  4.3</code></pre>
+<pre><code>##      host_order n_inf n_tot        perc prev   var
+## 1  Anseriformes    32   156 0.205128205 20.5 0.163
+## 2     Carnivora     1   406 0.002463054  0.2 0.002
+## 3    Chiroptera  2054 35840 0.057310268  5.7 0.054
+## 4  Eulipotyphla    34  1016 0.033464567  3.3 0.032
+## 5   Galliformes     5    23 0.217391304 21.7 0.170
+## 6 Passeriformes   127   273 0.465201465 46.5 0.249
+## 7      Rodentia   549 12873 0.042647402  4.3 0.041</code></pre>
 <div id="methods-overview-of-cleaned-data" class="section level3">
 <h3>Methods (Overview of cleaned data)</h3>
 <ul>
@@ -787,11 +792,13 @@ Indonesia each (Fig. S1).</li>
 <ul>
 <li>Out of 57196 unique animals, 2802 (4.9%) were infected with one or
 more viruses (Fig. 1A).</li>
-<li>Viral prevalence was ≥ 20% in Passeriformes (127/273; 46.5%),
-Anseriformes (32/156; 20.5%), and Galliformes (5/23; 21.7%).</li>
-<li>Prevalence in Chiroptera (2054/35840; 5.7%) was somewhat higher than
-average, while prevalence in Rodentia (549/12873; 4.3%) and Eulipotyphla
-(34/1016; 3.3%) was slightly lower than average (Table S1).</li>
+<li>Viral prevalence was ≥ 20% in Passeriformes (127/273; 0.4652015%),
+Anseriformes (32/156; 0.2051282%), and Galliformes (5/23;
+0.2173913%).</li>
+<li>Prevalence in Chiroptera (2054/35840; 0.0573103%) was somewhat
+higher than average, while prevalence in Rodentia (549/12873;
+0.0426474%) and Eulipotyphla (34/1016; 0.0334646%) was slightly lower
+than average (Table S1).</li>
 <li>A single virus was detected in most infected animals (n = 2618,
 93.4%); coinfections of two (n = 179, 6.4%) or three (n = 5, 0.2%)
 viruses in the same animal were infrequent. Of the 184 animals in which
@@ -1595,11 +1602,17 @@ R<sup>2</sup> Tjur
 <th style="text-align:left;">
 virus_pair
 </th>
-<th style="text-align:left;">
-exp_prev
+<th style="text-align:right;">
+obs_freq
+</th>
+<th style="text-align:right;">
+n_tested
 </th>
 <th style="text-align:left;">
 obs_prev
+</th>
+<th style="text-align:left;">
+exp_prev
 </th>
 <th style="text-align:left;">
 greater_than_random
@@ -1617,17 +1630,23 @@ signif
 <td style="text-align:left;">
 Arenaviruses-Arenaviruses
 </td>
-<td style="text-align:left;">
-5.21e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+219
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+5.2e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1636,17 +1655,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Coronaviruses
 </td>
-<td style="text-align:left;">
-1.13e-03
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.1e-03
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1655,17 +1680,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Filoviruses
 </td>
-<td style="text-align:left;">
-5.03e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+219
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+5.0e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1674,17 +1705,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-8.06e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+114
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+8.1e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1693,17 +1730,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-2.87e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.9e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1712,17 +1755,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-1.86e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.9e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1731,17 +1780,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-2.40e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+120
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.4e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1750,17 +1805,23 @@ No
 <td style="text-align:left;">
 Arenaviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-4.22e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+112
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.2e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1769,17 +1830,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Coronaviruses
 </td>
-<td style="text-align:left;">
-2.46e-03
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:right;">
+41504
 </td>
 <td style="text-align:left;">
-2.53e-03
+2.5e-03
+</td>
+<td style="text-align:left;">
+2.5e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1788,17 +1855,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Filoviruses
 </td>
-<td style="text-align:left;">
-1.09e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+38889
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.1e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1807,17 +1880,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-1.75e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+28202
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.7e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1826,17 +1905,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-6.24e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3165
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+6.2e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1845,17 +1930,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-4.03e-04
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+38766
 </td>
 <td style="text-align:left;">
-6.19e-04
+6.2e-04
+</td>
+<td style="text-align:left;">
+4.0e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1864,17 +1955,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-5.21e-04
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+38976
 </td>
 <td style="text-align:left;">
-1.28e-03
+1.3e-03
+</td>
+<td style="text-align:left;">
+5.2e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-7.74e-07
+7.7e-07
 </td>
 <td style="text-align:left;">
 <ul>
@@ -1884,17 +1981,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-9.16e-04
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-1.13e-03
+1.1e-03
+</td>
+<td style="text-align:left;">
+9.2e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1903,17 +2006,23 @@ Yes
 <td style="text-align:left;">
 Filoviruses-Filoviruses
 </td>
-<td style="text-align:left;">
-4.86e-08
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+54437
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.9e-08
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1922,17 +2031,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-7.78e-09
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+28047
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.8e-09
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1941,17 +2056,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-2.78e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3164
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.8e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1960,17 +2081,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Influenzas
 </td>
-<td style="text-align:left;">
-1.79e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+38614
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.8e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1979,17 +2106,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-2.32e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+38881
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.3e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -1998,17 +2131,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-4.07e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.1e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2017,17 +2156,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-1.25e-09
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+28340
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.2e-09
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2036,17 +2181,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-4.44e-08
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3141
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.4e-08
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2055,17 +2206,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Influenzas
 </td>
-<td style="text-align:left;">
-2.87e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+28203
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.9e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2074,17 +2231,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-3.71e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+28231
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+3.7e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2093,17 +2256,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-6.52e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+6.5e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2112,17 +2281,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-1.59e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3177
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.6e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2131,17 +2306,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-1.02e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3162
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.0e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2150,17 +2331,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.32e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3164
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.3e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2169,17 +2356,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-2.33e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2651
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.3e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2188,17 +2381,23 @@ No
 <td style="text-align:left;">
 Influenzas-Influenzas
 </td>
-<td style="text-align:left;">
-6.62e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+42172
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+6.6e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2207,17 +2406,23 @@ No
 <td style="text-align:left;">
 Influenzas-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-8.55e-05
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+38672
 </td>
 <td style="text-align:left;">
-5.17e-05
+5.2e-05
+</td>
+<td style="text-align:left;">
+8.6e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2226,17 +2431,23 @@ No
 <td style="text-align:left;">
 Influenzas-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-1.50e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.5e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2245,17 +2456,23 @@ No
 <td style="text-align:left;">
 Paramyxoviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.11e-04
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+39089
 </td>
 <td style="text-align:left;">
-1.02e-04
+1.0e-04
+</td>
+<td style="text-align:left;">
+1.1e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2264,17 +2481,23 @@ No
 <td style="text-align:left;">
 Paramyxoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-1.94e-04
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-2.26e-03
+2.3e-03
+</td>
+<td style="text-align:left;">
+1.9e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-6.00e-04
+6.0e-04
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2284,17 +2507,23 @@ Yes
 <td style="text-align:left;">
 Rhabdoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-3.41e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2652
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+3.4e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2312,11 +2541,17 @@ No
 <th style="text-align:left;">
 virus_pair
 </th>
-<th style="text-align:left;">
-exp_prev
+<th style="text-align:right;">
+obs_freq
+</th>
+<th style="text-align:right;">
+n_tested
 </th>
 <th style="text-align:left;">
 obs_prev
+</th>
+<th style="text-align:left;">
+exp_prev
 </th>
 <th style="text-align:left;">
 greater_than_random
@@ -2334,17 +2569,23 @@ signif
 <td style="text-align:left;">
 Coronaviruses-Coronaviruses
 </td>
-<td style="text-align:left;">
-5.08e-03
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+21571
 </td>
 <td style="text-align:left;">
-2.64e-03
+2.6e-03
+</td>
+<td style="text-align:left;">
+5.1e-03
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-8.91e-07
+8.9e-07
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2354,17 +2595,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Filoviruses
 </td>
-<td style="text-align:left;">
-2.57e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+18976
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.6e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2373,17 +2620,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-4.70e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15152
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.7e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2392,17 +2645,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-7.61e-04
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+18872
 </td>
 <td style="text-align:left;">
-1.22e-03
+1.2e-03
+</td>
+<td style="text-align:left;">
+7.6e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-6.92e-01
+6.9e-01
 </td>
 <td style="text-align:left;">
 </td>
@@ -2411,17 +2670,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.21e-03
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+19139
 </td>
 <td style="text-align:left;">
-2.30e-03
+2.3e-03
+</td>
+<td style="text-align:left;">
+1.2e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-2.00e-03
+2.0e-03
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2431,17 +2696,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-1.89e-03
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-1.63e-03
+1.6e-03
+</td>
+<td style="text-align:left;">
+1.9e-03
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2450,17 +2721,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Filoviruses
 </td>
-<td style="text-align:left;">
-1.30e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+33222
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.3e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2469,17 +2746,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-2.38e-08
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+14987
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.4e-08
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2488,17 +2771,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Influenzas
 </td>
-<td style="text-align:left;">
-3.86e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+18710
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+3.9e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2507,17 +2796,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-6.12e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+19051
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+6.1e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2526,17 +2821,23 @@ No
 <td style="text-align:left;">
 Filoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-9.60e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+9.6e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2545,17 +2846,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Flaviviruses
 </td>
-<td style="text-align:left;">
-4.34e-09
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15171
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+4.3e-09
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2564,17 +2871,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Influenzas
 </td>
-<td style="text-align:left;">
-7.04e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15083
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.0e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2583,17 +2896,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.12e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15171
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.1e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2602,17 +2921,23 @@ No
 <td style="text-align:left;">
 Flaviviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-1.75e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.8e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2621,17 +2946,23 @@ No
 <td style="text-align:left;">
 Influenzas-Influenzas
 </td>
-<td style="text-align:left;">
-1.14e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+18906
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+1.1e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2640,17 +2971,23 @@ No
 <td style="text-align:left;">
 Influenzas-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.81e-04
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18873
 </td>
 <td style="text-align:left;">
-5.30e-05
+5.3e-05
+</td>
+<td style="text-align:left;">
+1.8e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2659,17 +2996,23 @@ No
 <td style="text-align:left;">
 Influenzas-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-2.84e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.8e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2678,17 +3021,23 @@ No
 <td style="text-align:left;">
 Paramyxoviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-2.87e-04
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+19242
 </td>
 <td style="text-align:left;">
-1.56e-04
+1.6e-04
+</td>
+<td style="text-align:left;">
+2.9e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2697,17 +3046,23 @@ No
 <td style="text-align:left;">
 Paramyxoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-4.50e-04
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-3.25e-03
+3.3e-03
+</td>
+<td style="text-align:left;">
+4.5e-04
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-4.68e-03
+4.7e-03
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2717,17 +3072,23 @@ Yes
 <td style="text-align:left;">
 Rhabdoviruses-Rhabdoviruses
 </td>
-<td style="text-align:left;">
-7.06e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1844
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.1e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2746,11 +3107,17 @@ No
 <th style="text-align:left;">
 virus_pair
 </th>
-<th style="text-align:left;">
-exp_prev
+<th style="text-align:right;">
+obs_freq
+</th>
+<th style="text-align:right;">
+n_tested
 </th>
 <th style="text-align:left;">
 obs_prev
+</th>
+<th style="text-align:left;">
+exp_prev
 </th>
 <th style="text-align:left;">
 greater_than_random
@@ -2768,17 +3135,23 @@ signif
 <td style="text-align:left;">
 Arenaviruses-Arenaviruses
 </td>
-<td style="text-align:left;">
-2.60e-03
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+98
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.6e-03
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2787,11 +3160,17 @@ No
 <td style="text-align:left;">
 Arenaviruses-Coronaviruses
 </td>
-<td style="text-align:left;">
-2.15e-03
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:left;">
 NA
+</td>
+<td style="text-align:left;">
+2.2e-03
 </td>
 <td style="text-align:left;">
 NA
@@ -2807,11 +3186,17 @@ NA
 <td style="text-align:left;">
 Arenaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-8.58e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:left;">
 NA
+</td>
+<td style="text-align:left;">
+8.6e-05
 </td>
 <td style="text-align:left;">
 NA
@@ -2827,11 +3212,17 @@ NA
 <td style="text-align:left;">
 Arenaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-8.81e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:left;">
 NA
+</td>
+<td style="text-align:left;">
+8.8e-06
 </td>
 <td style="text-align:left;">
 NA
@@ -2847,11 +3238,17 @@ NA
 <td style="text-align:left;">
 Arenaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-2.33e-04
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
 </td>
 <td style="text-align:left;">
 NA
+</td>
+<td style="text-align:left;">
+2.3e-04
 </td>
 <td style="text-align:left;">
 NA
@@ -2867,17 +3264,23 @@ NA
 <td style="text-align:left;">
 Coronaviruses-Coronaviruses
 </td>
-<td style="text-align:left;">
-1.78e-03
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:right;">
+11592
 </td>
 <td style="text-align:left;">
-4.14e-03
+4.1e-03
+</td>
+<td style="text-align:left;">
+1.8e-03
 </td>
 <td style="text-align:left;">
 Yes
 </td>
 <td style="text-align:left;">
-2.26e-06
+2.3e-06
 </td>
 <td style="text-align:left;">
 <ul>
@@ -2887,17 +3290,23 @@ Yes
 <td style="text-align:left;">
 Coronaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-7.10e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1177
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.1e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2906,17 +3315,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-7.28e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11555
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.3e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2925,17 +3340,23 @@ No
 <td style="text-align:left;">
 Coronaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-1.93e-04
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+11591
 </td>
 <td style="text-align:left;">
-1.73e-04
+1.7e-04
+</td>
+<td style="text-align:left;">
+1.9e-04
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2944,17 +3365,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Hantaviruses
 </td>
-<td style="text-align:left;">
-2.83e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1189
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.8e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2963,17 +3390,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Influenzas
 </td>
-<td style="text-align:left;">
-2.90e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1176
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.9e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -2982,17 +3415,23 @@ No
 <td style="text-align:left;">
 Hantaviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-7.69e-06
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1176
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.7e-06
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -3001,17 +3440,23 @@ No
 <td style="text-align:left;">
 Influenzas-Influenzas
 </td>
-<td style="text-align:left;">
-2.98e-08
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11583
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+3.0e-08
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -3020,17 +3465,23 @@ No
 <td style="text-align:left;">
 Influenzas-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-7.89e-07
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11555
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+7.9e-07
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -3039,17 +3490,23 @@ No
 <td style="text-align:left;">
 Paramyxoviruses-Paramyxoviruses
 </td>
-<td style="text-align:left;">
-2.09e-05
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11592
 </td>
 <td style="text-align:left;">
-0.00e+00
+0.0e+00
+</td>
+<td style="text-align:left;">
+2.1e-05
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
-1.00e+00
+1.0e+00
 </td>
 <td style="text-align:left;">
 </td>
@@ -3108,26 +3565,6 @@ model_data_all %&gt;%
 ## 3 Rattus     Africa and West Asia           0     2
 ## 4 Rattus     Southeast Asia                 0   359
 ## 5 Rattus     Southeast Asia                 1    44</code></pre>
-</div>
-<div id="wild-animals-in-captivity" class="section level3">
-<h3>Wild animals in captivity</h3>
-<pre class="r"><code>model_data_all %&gt;% 
-  dplyr::filter(captivity_status == &quot;wild animal in captivity&quot;) %&gt;% 
-  group_by(host_sci_name) %&gt;% 
-  count()</code></pre>
-<pre><code>## # A tibble: 9 × 2
-## # Groups:   host_sci_name [9]
-##   host_sci_name            n
-##   &lt;chr&gt;                &lt;int&gt;
-## 1 Anas_platyrhynchos      28
-## 2 Bandicota_indica         2
-## 3 Hylopetes_cf_phayrei     1
-## 4 Mus_caroli               1
-## 5 Rattus_argentiventer   113
-## 6 Rattus_exulans           3
-## 7 Rattus_losea            11
-## 8 Rattus_rattus            1
-## 9 Rattus_sp                3</code></pre>
 </div>
 </div>
 

@@ -85,6 +85,9 @@ n_inf_animals
 overall_prev <- round(n_inf_animals/n_unique_animals*100, 1)
 overall_prev
 
+overall_var <- round((n_inf_animals/n_unique_animals)*
+                       (1-(n_inf_animals/n_unique_animals)), 3)
+
 # infected animals by country
 coinf_df %>% 
   group_by(country) %>% 
@@ -127,7 +130,9 @@ order_prev <- table(coinf_df$host_order) %>%
     table(unique_animals$host_order) %>% 
       data.frame() %>% 
       rename(host_order = Var1, n_tot = Freq)) %>% 
-  mutate(prev = round(n_inf/n_tot*100, 1))
+  mutate(perc = n_inf/n_tot,
+         prev = round(n_inf/n_tot*100, 1),
+         var = round(perc*(1-perc), 3))
 order_prev
 
 ```
@@ -180,10 +185,10 @@ sjPlot::tab_model(model_list[[3]], show.p = F)
 ### Binomial tests-all
 ```{r binomial tests-all}
 binom_tests_vir_group %>% 
-  dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
-                p_adj, signif) %>% 
-  mutate(across(c(exp_prev, obs_prev, p_adj), 
-                ~formatC(.x, format = "e", digits = 2))) %>% 
+  dplyr::select(virus_pair, obs_freq, n_tested, obs_prev, exp_prev,
+                greater_than_random, p_adj, signif) %>% 
+  mutate(across(c(obs_prev, exp_prev, p_adj), 
+                ~formatC(.x, format = "e", digits = 1))) %>% 
   kableExtra::kable() %>% 
   kableExtra::kable_material()
 ```
@@ -192,10 +197,10 @@ binom_tests_vir_group %>%
 ### Binomial tests-bats
 ```{r binomial tests-bats}
 binom_tests_vir_group_bats %>% 
-  dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
-                p_adj, signif) %>% 
-  mutate(across(c(exp_prev, obs_prev, p_adj), 
-                ~formatC(.x, format = "e", digits = 2))) %>% 
+  dplyr::select(virus_pair, obs_freq, n_tested, obs_prev, exp_prev,
+                greater_than_random, p_adj, signif) %>% 
+  mutate(across(c(obs_prev, exp_prev, p_adj), 
+                ~formatC(.x, format = "e", digits = 1))) %>% 
   kableExtra::kable() %>% 
   kableExtra::kable_material()
 ```
@@ -204,10 +209,10 @@ binom_tests_vir_group_bats %>%
 ### Binomial tests-rodents
 ```{r binomial tests-rodents}
 binom_tests_vir_group_rodents %>% 
-  dplyr::select(virus_pair, exp_prev, obs_prev, greater_than_random, 
-                p_adj, signif) %>% 
-  mutate(across(c(exp_prev, obs_prev, p_adj), 
-                ~formatC(.x, format = "e", digits = 2))) %>% 
+  dplyr::select(virus_pair, obs_freq, n_tested, obs_prev, exp_prev,
+                greater_than_random, p_adj, signif) %>% 
+  mutate(across(c(obs_prev, exp_prev, p_adj), 
+                ~formatC(.x, format = "e", digits = 1))) %>% 
   kableExtra::kable() %>% 
   kableExtra::kable_material()
 ```
@@ -232,13 +237,5 @@ pcr_all %>%
 model_data_all %>% 
   dplyr::filter(host_genus %in% c("Pteropus", "Rattus")) %>% 
   group_by(host_genus, geo_region, virus_coinf) %>% 
-  count()
-```
-
-### Wild animals in captivity
-```{r wild captive, echo = T}
-model_data_all %>% 
-  dplyr::filter(captivity_status == "wild animal in captivity") %>% 
-  group_by(host_sci_name) %>% 
   count()
 ```

@@ -15,7 +15,7 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
   # unique viruses/virus groups that were detected at least once
   viruses <- pcr_pos[[vir_level]] %>% unique() %>% sort()
   
-  # all possible combinations of the detected viruses
+  # all possible combinations of the detected viruses/virus groups
   virus_pairs <- gtools::combinations(n = length(viruses), 
                                       r = 2, 
                                       v = as.vector(viruses),
@@ -27,7 +27,7 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
   test_numbers <- data.frame(virus_group_tested = viruses, 
                              n_animals_tested = NA)
   
-  # calculate how many animals were tested for each virus
+  # calculate how many animals were tested for each virus/virus group
   for(i in viruses){
     
     n_tested <- test_summaries %>% 
@@ -35,9 +35,9 @@ run_binom_tests <- function(pcr_pos, vir_level, observed_mat, test_summaries){
       pull(predict_sample_id) %>% 
       length
     
-    row_index <- which(test_numbers[,1] == i)
+    row_index <- which(test_numbers[, 1] == i)
     
-    test_numbers[row_index,2] <- n_tested
+    test_numbers[row_index, 2] <- n_tested
   }
   
   # calculate observed viral prevalence for each virus
