@@ -138,7 +138,10 @@ data_processing_targets <- tar_plan(
   # bizarrely, have to re-run every time or it throws an error
   tar_target(map_data_pos_order, 
              prep_map_data_pos_order(pos_final),
-             cue = tar_cue(mode = "always"))
+             cue = tar_cue(mode = "always")),
+  
+  # prep data for heatmaps of test effort
+  heatmap_data = prep_heatmap_data(pcr_all, test_summaries)
   
 )
 
@@ -165,9 +168,9 @@ analysis_targets <- tar_plan(
   g_vir = prep_vir_graph(MV, pos_final, vir_pal, sparse = TRUE),
 
   binom_tests_vir_group = run_binom_tests(pcr_pos,
-                                        vir_level = "virus_group_tested",
-                                        observed_mat = M,
-                                        test_summaries),
+                                          vir_level = "virus_group_tested",
+                                          observed_mat = M,
+                                          test_summaries),
 
   binom_tests_vir_group_bats = run_binom_tests(
     pcr_pos %>%
@@ -190,6 +193,13 @@ analysis_targets <- tar_plan(
 )
 ## Make plots-------------------------------------------------------------------
 plot_targets <- tar_plan(
+  
+  # Figure X (new Fig 1?)
+  fig_heatmaps = plot_heatmaps(heatmap_data),
+  
+  # TO FIX
+  # Maps should include longitude and latitude, an indication of compass 
+  # direction, a distance scale, and a thin outer line as a border.
   
   # Figure 1 (2 panels)
   fig_coinf_per_order = plot_coinf_per_order(pos_final),
@@ -218,6 +228,18 @@ plot_targets <- tar_plan(
 
 ## Save figure files------------------------------------------------------------
 outputs_targets <- tar_plan(
+  
+  tar_target(fig_x_tiff, 
+             {fig_heatmaps = plot_heatmaps(heatmap_data)
+             ggsave("figures/fig_x.tiff", fig_heatmaps, height = 8, width = 18,
+                    units = "cm", bg = "white", dpi = 600, compression = "lzw")},
+             format = "file"),
+  
+  tar_target(fig_x_png, 
+             {fig_heatmaps = plot_heatmaps(heatmap_data)
+             ggsave("figures/fig_x.png", fig_heatmaps, height = 8, width = 18,
+                    units = "cm", bg = "white", dpi = 600)},
+             format = "file"),
   
   fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 22, width = 18,
                       units = "cm", dpi = 600, bg = "white", compression = "lzw"),
