@@ -28,7 +28,8 @@ plot_heatmaps <- function(heatmap_data){
                        na.value = "white",
                        limits = c(0, tested_max)) +
     xlab("") + ylab("") +
-    coord_transform(y = "reverse") +
+    scale_y_discrete(limits = rev) +
+    coord_fixed(ratio = 1) +
     theme_cowplot(font_size = 8) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "none")
@@ -46,15 +47,14 @@ plot_heatmaps <- function(heatmap_data){
                        breaks = c(100, 2500, 10000, 25000, 50000),
                        na.value = "white",
                        limits = c(0, tested_max)) +
-    
     xlab("") + ylab("") + 
-    coord_transform(y = "reverse") +
+    scale_y_discrete(limits = rev) +
+    coord_fixed(ratio = 1) +
     theme_cowplot(font_size = 8) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
   
   # combine the plots with patchwork
   p1 + p2 +
-    plot_layout(widths = c(1.15, 1)) +
     plot_annotation(tag_levels = "A") +
     theme(legend.position = "inside",
           legend.position.inside = c(0.65, 0.75))
