@@ -53,8 +53,9 @@ prep_vir_graph <- function(MV, pos_final, pal, sparse = TRUE){
   
   # so that each virus family will have a consistent color across panels
   node_colors <- data.frame(
-    groups = c("Arenaviruses", "Coronaviruses", "Filoviruses", "Flaviviruses", 
-                "Hantaviruses", "Influenzas", "Paramyxoviruses", "Rhabdoviruses"),
+    groups = c("Alphainfluenzaviruses", "Arenaviruses", "Coronaviruses", 
+               "Filoviruses", "Flaviviruses", "Hantaviruses", "Paramyxoviruses", 
+               "Rhabdoviruses"),
     colors = pal)
   V(g)$color = V(g)$virus_group_tested
   for (i in 1:length(V(g))){

@@ -40,8 +40,8 @@ plot_map_pos_order <- function(map_data){
     theme(legend.position = "bottom",
           legend.background = element_blank(),
           legend.box = "vertical",
-          legend.title = element_text(color = "black", size = 14),
-          legend.text = element_text(color = "black", size = 12),
+          legend.title = element_text(color = "black", size = 10),
+          legend.text = element_text(color = "black", size = 8),
           legend.key = element_blank(),
           panel.background = element_rect(fill = "white"),
           panel.border = element_rect(color = "black", fill = NA)) +

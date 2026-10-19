@@ -30,8 +30,9 @@ plot_heatmaps <- function(heatmap_data){
     xlab("") + ylab("") +
     scale_y_discrete(limits = rev) +
     coord_fixed(ratio = 1) +
-    theme_cowplot(font_size = 8) +
+    theme_cowplot(font_size = 9) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          #plot.margin = margin(t = 7, r = 5, b = 7, l = 5),
           legend.position = "none")
   
   # make the heatmap
@@ -50,13 +51,15 @@ plot_heatmaps <- function(heatmap_data){
     xlab("") + ylab("") + 
     scale_y_discrete(limits = rev) +
     coord_fixed(ratio = 1) +
-    theme_cowplot(font_size = 8) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    theme_cowplot(font_size = 9) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          #plot.margin = margin(t = 7, r = 5, b = 7, l = 5),
+          legend.title = element_text(color = "black", size = 8),
+          legend.text = element_text(color = "black", size = 8))
   
   # combine the plots with patchwork
   p1 + p2 +
-    plot_annotation(tag_levels = "A") +
     theme(legend.position = "inside",
-          legend.position.inside = c(0.65, 0.75))
+          legend.position.inside = c(0.7, 0.75))
     
 }

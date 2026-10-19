@@ -56,10 +56,10 @@ data_processing_targets <- tar_plan(
   # that were identified as of high importance to human health
   # (needed for permutation analyses)
   core_five_ids = test_summaries %>% 
-    dplyr::filter(stringr::str_detect(virus_groups, "Coronaviruses") &
+    dplyr::filter(stringr::str_detect(virus_groups, "Alphainfluenzaviruses") & 
+                    stringr::str_detect(virus_groups, "Coronaviruses") &
                     stringr::str_detect(virus_groups, "Filoviruses") &
                     stringr::str_detect(virus_groups, "Flaviviruses") &
-                    stringr::str_detect(virus_groups, "Influenzas") & 
                     stringr::str_detect(virus_groups, "Paramyxoviruses")) %>% 
     pull(predict_sample_id),
   
@@ -69,11 +69,11 @@ data_processing_targets <- tar_plan(
     dplyr::filter(n_specimens >= 50) %>% 
     pull(predict_sample_id), #2
   
-  # identify animals that were tested only for influenza A viruses
+  # identify animals that were tested only for alphainfluenzaviruses (ie. influenza A)
   # because coinfection would not be possible to detect in these animals
   coinfection_impossible_ids = test_summaries %>% 
     dplyr::filter(n_virus_groups_tested == 1,
-                  virus_groups %in% c("Influenzas")) %>% 
+                  virus_groups %in% c("Alphainfluenzaviruses")) %>% 
     pull(predict_sample_id), #3266
   
   # for our analysis of coinfection, we will remove PCR results for:
@@ -194,17 +194,15 @@ analysis_targets <- tar_plan(
 ## Make plots-------------------------------------------------------------------
 plot_targets <- tar_plan(
   
-  # Figure X (new Fig 1?)
-  fig_heatmaps = plot_heatmaps(heatmap_data),
-  
   # TO FIX
   # Maps should include longitude and latitude, an indication of compass 
   # direction, a distance scale, and a thin outer line as a border.
   
-  # Figure 1 (2 panels)
+  # Figure 1 (3 panels)
+  fig_heatmaps = plot_heatmaps(heatmap_data),
   fig_coinf_per_order = plot_coinf_per_order(pos_final),
   fig_map_pos_order = plot_map_pos_order(map_data_pos_order),
-  fig_1 = plot_fig_1(fig_coinf_per_order, fig_map_pos_order),
+  fig_1 = plot_fig_1(fig_heatmaps, fig_coinf_per_order, fig_map_pos_order),
 
   # Figure 2 (2 panels)
   vir_group_network_panel = plot_vir_group_network_panel(g, g_bats, g_rodents,
@@ -229,26 +227,15 @@ plot_targets <- tar_plan(
 ## Save figure files------------------------------------------------------------
 outputs_targets <- tar_plan(
   
-  tar_target(fig_x_tiff, 
-             {fig_heatmaps = plot_heatmaps(heatmap_data)
-             ggsave("figures/fig_x.tiff", fig_heatmaps, height = 8, width = 18,
-                    units = "cm", bg = "white", dpi = 600, compression = "lzw")},
-             format = "file"),
-  
-  tar_target(fig_x_png, 
-             {fig_heatmaps = plot_heatmaps(heatmap_data)
-             ggsave("figures/fig_x.png", fig_heatmaps, height = 8, width = 18,
-                    units = "cm", bg = "white", dpi = 600)},
-             format = "file"),
-  
-  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 22, width = 18,
-                      units = "cm", dpi = 600, bg = "white", compression = "lzw"),
-  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 22, width = 18,
+  fig_1_tiff = ggsave("figures/fig_1.tiff", fig_1, height = 20, width = 18,
+                      units = "cm", dpi = 600, bg = "white", 
+                      compression = "lzw"),
+  fig_1_png = ggsave("figures/fig_1.png", fig_1, height = 20, width = 18,
                      units = "cm", bg = "white", dpi = 600),
 
-  fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 21, width = 18,
+  fig_2_tiff = ggsave("figures/fig_2.tiff", fig_2, height = 20, width = 18,
                       units = "cm", dpi = 600, compression = "lzw"),
-  fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 21, width = 18,
+  fig_2_png = ggsave("figures/fig_2.png", fig_2, height = 20, width = 18,
                      units = "cm", dpi = 600),
 
   fig_3_tiff = ggsave("figures/fig_3.tiff", fig_3, height = 15, width = 18,

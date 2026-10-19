@@ -40,7 +40,7 @@ plot_vir_network <- function(g){
                range = c(2, 12), 
                breaks = c(5, 10, 15, 20),
                labels = c(5^2, 10^2, 15^2, 20^2)) +
-    scale_fill_manual(name = "Virus group\ntested", values = pal) +
+    scale_fill_manual(name = "Virus group", values = pal) +
     scale_y_continuous(expand = expansion(mult = 0.1)) +
     scale_x_continuous(expand = expansion(mult = 0.1)) +
     theme_void() +

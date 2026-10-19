@@ -14,18 +14,24 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
     rename(host_sci_name = scientific_name,
            virus_group_tested = viral_family_tested) %>% 
     
+    # PCR protocols tested for influenza A virus, 
+    # only member of the alphainfluenzavirus genus
+    mutate(virus_group_tested = gsub(virus_group_tested, pattern = "Influenzas", 
+                                     replacement = "Alphainfluenzaviruses")) %>% 
+    
     # there are duplicates in predict_test_id (excel carryover?), 
     # but they represent genuinely distinct tests
     # so assign new test ids for later summary calculations
     dplyr::mutate(new_test_id = seq(1:nrow(pcr_raw)), .after = 1) %>% 
     
     # limit our analyses to key virus groups
-    dplyr::filter(virus_group_tested %in% c("Adenoviruses", "Alphaviruses", 
-                                             "Arenaviruses", "Astroviruses", 
-                                             "Coronaviruses", "Filoviruses",
-                                             "Flaviviruses", "Hantaviruses", 
-                                             "Influenzas", "Orthobunyaviruses", 
-                                             "Paramyxoviruses", "Rhabdoviruses")) %>% 
+    dplyr::filter(virus_group_tested %in% c("Adenoviruses", 
+                                            "Alphainfluenzaviruses", 
+                                            "Alphaviruses", "Arenaviruses", 
+                                            "Astroviruses", "Coronaviruses", 
+                                            "Filoviruses", "Flaviviruses", 
+                                            "Hantaviruses", "Orthobunyaviruses", 
+                                            "Paramyxoviruses", "Rhabdoviruses")) %>% 
     
     # to be conservative, we require infection to be confirmed by sequencing
     mutate(infection = case_when(

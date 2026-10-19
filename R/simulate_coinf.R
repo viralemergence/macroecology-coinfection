@@ -27,9 +27,10 @@ simulate_coinf <- function(pcr_all, focal_order, subgroup, subgroup_ids = NULL,
   
   if(restrict_vir){
     pcr_subset <- pcr_subset %>% 
-      dplyr::filter(virus_group_tested %in% c("Coronaviruses", "Filoviruses",
-                                               "Flaviviruses", "Influenzas",
-                                               "Paramyxoviruses"))
+      dplyr::filter(virus_group_tested %in% c("Alphainfluenzaviruses", 
+                                              "Coronaviruses", "Filoviruses",
+                                              "Flaviviruses", 
+                                              "Paramyxoviruses"))
   }
   
   # make a full grid for all animals and infection status for all viruses

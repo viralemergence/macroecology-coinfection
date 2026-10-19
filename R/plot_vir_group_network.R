@@ -43,9 +43,9 @@ plot_vir_group_network <- function(g,
                breaks = c(10, 20, 30),
                labels = c(10^2, 20^2, 30^2)) +
     scale_fill_manual(name = "Virus group", values = V(g)$color,
-                      labels = c("Arenaviruses", "Coronaviruses", "Filoviruses",
+                      labels = c("Alphainfluenzaviruses", "Arenaviruses", 
+                                 "Coronaviruses", "Filoviruses",
                                  "Flaviviruses", "Hantaviruses", 
-                                 "Influenza A viruses", 
                                  "Paramyxoviruses", "Rhabdoviruses")) +
     scale_y_continuous(expand = expansion(mult = 0.1)) +
     scale_x_continuous(expand = expansion(mult = 0.1)) +

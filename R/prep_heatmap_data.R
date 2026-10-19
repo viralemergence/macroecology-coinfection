@@ -15,10 +15,6 @@ prep_heatmap_data <- function(pcr_all, test_summaries){
     group_by(host_order, virus_group_tested) |> 
     summarize(n_tested = n())
   
-  order_test_effort <- order_test_effort |> 
-    mutate(virus_group_tested = gsub(virus_group_tested, pattern = "Influenzas", 
-                                     replacement = "Influenza A viruses"))
-  
   ## data for heatmap of number of animals tested for virus group combinations
   # unique virus groups
   viruses <- sort(unique(unlist(strsplit(test_summaries$virus_groups, ", "))))
@@ -45,11 +41,6 @@ prep_heatmap_data <- function(pcr_all, test_summaries){
     
     virus_pairs[i, "n_tested"] <- n_tested
   }
-  
-  virus_pairs <- virus_pairs |> 
-    mutate(across(V1:V2, 
-                  ~gsub(., pattern = "Influenzas", 
-                        replacement = "Influenza A viruses")))
   
   return(list(order_effort = order_test_effort, 
               group_combos_effort = virus_pairs))
