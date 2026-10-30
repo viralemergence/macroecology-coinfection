@@ -69,7 +69,8 @@ data_processing_targets <- tar_plan(
     dplyr::filter(n_specimens >= 50) %>% 
     pull(predict_sample_id), #2
   
-  # identify animals that were tested only for alphainfluenzaviruses (ie. influenza A)
+  # identify animals that were tested only for alphainfluenzaviruses 
+  # (ie. influenza A, the only virus in this genus)
   # because coinfection would not be possible to detect in these animals
   coinfection_impossible_ids = test_summaries %>% 
     dplyr::filter(n_virus_groups_tested == 1,
@@ -84,15 +85,25 @@ data_processing_targets <- tar_plan(
       # the animals where coinfection isn't possible to detect based on testing
       predict_sample_id %in% coinfection_impossible_ids),
   
-  # filter to only the confirmed virus detections
+  # get animals with confirmed virus detections, for later calculations
   pcr_pos = pcr_all %>% 
     dplyr::filter(infection == 1),
   
+  # df of all unique animals
+  unique_animals = prep_unique_animals(pcr_all, test_summaries),
+  
+  # create a dataframe of animals with single infections or coinfections
+  coinf_df = unique_animals |> 
+    mutate(virus_coinf = case_when(n_virus > 1 ~ 1,
+                                   n_virus == 1 ~ 0)),
+  
   # prep data for later GLMMs
-  coinf_df = create_coinf_df(pcr_pos, test_summaries),
-  model_data_all = prep_model_data_all(coinf_df),
-  model_data_bats = prep_model_data_bats(model_data_all, roosting),
-  model_data_rodents = prep_model_data_rodents(model_data_all),
+  multinom_data_all = prep_multinom_data_all(unique_animals),
+  multinom_data_bats = prep_multinom_data_bats(multinom_data_all, roosting),
+  multinom_data_rodents = prep_multinom_data_rodents(multinom_data_all),
+  # model_data_all = prep_model_data_all(coinf_df),
+  # model_data_bats = prep_model_data_bats(model_data_all, roosting),
+  # model_data_rodents = prep_model_data_rodents(model_data_all),
   
   # unique virus-animal combos and coinfection status
   pos_final = create_pos_final(pcr_pos),
@@ -188,7 +199,9 @@ analysis_targets <- tar_plan(
     test_summaries %>%
       dplyr::filter(host_order == "Rodentia")),
 
-  model_list = run_models(model_data_all, model_data_bats, model_data_rodents)
+  #model_list = run_models(model_data_all, model_data_bats, model_data_rodents)
+  model_list = run_multinom_models(multinom_data_all, multinom_data_bats, 
+                                   multinom_data_rodents)
   
 )
 ## Make plots-------------------------------------------------------------------
@@ -274,7 +287,7 @@ list(
   data_input_targets
   , data_processing_targets
   , analysis_targets
-  , plot_targets
-  , outputs_targets
-  , report_targets
+  # , plot_targets
+  # , outputs_targets
+  # , report_targets
 )

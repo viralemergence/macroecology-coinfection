@@ -133,8 +133,130 @@ harmonize_pcr_animal_data <- function(pcr_raw, animals_raw) {
         host_genus == "Grus" ~ "Gruiformes",
         host_genus %in% c("Acridotheres", "Corvus", "Gracupica", 
                           "Pycnonotus", "Rhipidura") ~ "Passeriformes",
-        host_genus == "Phalacrocorax" ~ "Suliformes")) %>% 
+        host_genus == "Phalacrocorax" ~ "Suliformes")) %>%
     
+    # add family for later analyses
+    mutate(host_family = case_when(
+      
+      # Accipitriformes
+      host_genus %in% c("Aegypius", "Aquila", "Gyps") ~ "Accipitridae",
+      
+      # Anseriformes
+      host_genus %in% c("Anas", "Anser", "Cygnus", "Tadorna") ~ "Anatidae",
+      
+      # Artiodactyla
+      host_genus %in% c("Cephalophus", "Philantomba") ~ "Bovidae",
+      host_genus == "Muntiacus" ~ "Cervidae",
+      host_genus %in% c("Potamochoerus", "Sus") ~ "Suidae",
+      host_genus == "Tragulus" ~ "Tragulidae",
+      
+      # Carnivora
+      host_genus == "Prionailurus" ~ "Felidae",
+      host_genus == "Herpestes" ~ "Herpestidae",
+      host_genus == "Mydaus" ~ "Mephitidae",
+      host_genus == "Nandinia" ~ "Nandiniidae",
+      host_genus == "Helarctos" ~ "Ursidae",
+      host_genus %in% c("Chrotogale", "Civettictis", "Paguma", "Paradoxurus",
+                        "Viverra") ~ "Viverridae",
+      
+      # Charadriiformes 
+      host_genus %in% c("Hydroprogne", "Larus") ~ "Laridae",
+      host_genus == "Tringa" ~ "Scolopacidae",
+      
+      # Chiroptera
+      host_genus == "Craseonycteris" ~ "Craseonycteridae",
+      host_genus %in% c("Coleura", "Emballonura", "Saccolaimus", "Taphozous") ~ 
+        "Emballonuridae",
+      host_genus == "Hipposideros" ~ "Hipposideridae",
+      host_genus == "Megaderma" ~ "Megadermatidae",
+      host_genus == "Miniopterus" ~ "Miniopteridae",
+      host_genus %in% c("Chaerephon", "Cheiromeles", "Otomops", "Mops",
+                        "Tadarida") ~ "Molossidae",
+      host_genus == "Nycteris" ~ "Nycteridae",
+      host_genus %in% c("Acerodon", "Balionycteris", "Casinycteris", "Chironax",
+                        "Cynopterus", "Dobsonia", "Dyacopterus", "Eidolon", 
+                        "Eonycteris", "Epomophorus", "Epomops", "Hypsignathus",
+                        "Lissonycteris", "Macroglossus", "Megaerops",
+                        "Megaloglossus", "Micropteropus", "Myonycteris", 
+                        "Nanonycteris", "Neopteryx", "Nyctimene", "Penthetor",
+                        "Plerotes", "Pteropus", "Rousettus", "Scotonycteris",
+                        "Styloctenium", "Thoopterus") ~ "Pteropodidae",
+      host_genus == "Rhinolophus" ~ "Rhinolophidae",
+      host_genus == "Rhinopoma" ~ "Rhinopomatidae",
+      host_genus %in% c("Glauconycteris", "Glischropus", "Hypsugo", "Kerivoula",
+                        "Murina", "Myotis", "Neoromicia", "Phoniscus",
+                        "Pipistrellus", "Scotoecus", "Scotophilus", 
+                        "Tylonycteris") ~ "Vespertilionidae",
+      
+      # Columbiformes
+      host_genus == "Spilopelia" ~ "Columbidae",
+      
+      # Eulipotyphla
+      host_genus %in% c("Echinosorex", "Hylomys") ~ "Erinaceidae",
+      host_genus %in% c("Crocidura", "Paracrocidura", "Suncus", "Sylvisorex") ~ 
+        "Soricidae",
+      
+      # Galliformes
+      host_genus == "Coturnix" ~ "Phasianidae",
+      
+      # Gruiformes
+      host_genus == "Grus" ~ "Gruidae",
+      
+      # Lagomorpha
+      host_genus == "Lepus" ~ "Leporidae",
+      
+      # Passeriformes
+      host_genus == "Corvus" ~ "Corvidae",
+      host_genus == "Pycnonotus" ~ "Pycnonotidae",
+      host_genus == "Rhipidura" ~ "Rhipiduridae",
+      host_genus %in% c("Acridotheres", "Gracupica") ~ "Sturnidae",
+      
+      # Pholidota
+      host_genus %in% c("Manis", "Phataginus") ~ "Manidae",
+      
+      # Primates
+      host_genus %in% c("Allenopithecus", "Cercocebus", "Cercopithecus",
+                        "Chlorocebus", "Colobus", "Erythrocebus", "Lophocebus",
+                        "Macaca", "Miopithecus", "Papio", "Procolobus",
+                        "Pygathrix", "Trachypithecus") ~ "Cercopithecidae",
+      host_genus %in% c("Gorilla", "Pan", "Pongo") ~ "Hominidae",
+      host_genus %in% c("Hylobates", "Nomascus") ~ "Hylobatidae",
+      host_genus == "Nycticebus" ~ "Lorisidae",
+      host_genus == "Tarsius" ~ "Tarsiidae",
+      
+      # Rodentia
+      host_genus == "Graphiurus" ~ "Gliridae",
+      host_genus %in% c("Atherurus", "Hystrix", "Trichys") ~ "Hystricidae",
+      host_genus == "Elephantulus" ~ "Macroscelididae",
+      host_genus %in% c("Acomys", "Aethomys", "Apodemus", "Arvicanthis", 
+                        "Bandicota", "Berylmys", "Bunomys", "Chiropodomys", 
+                        "Dasymys", "Dephomys", "Echiothrix", "Gerbilliscus",
+                        "Grammomys", "Heimyscus", "Hybomys", "Hylomyscus",
+                        "Lemniscomys", "Lenomys", "Leopoldamys", "Lophuromys",
+                        "Malacomys", "Mastomys", "Maxomys", "Mus", "Myomyscus",
+                        "Niviventer", "Oenomys", "Paruromys", "Pelomys",
+                        "Praomys", "Rattus", "Stochomys", "Sundamys", "Taeromys",
+                        "Taterillus", "Uranomys", "Vandeleuria") ~ "Muridae",
+      host_genus %in% c("Cricetomys", "Delanymys", "Prionomys", "Saccostomus", 
+                        "Steatomys") ~ "Nesomyidae",
+      host_genus == "Dendrohyrax" ~ "Procaviidae",
+      host_genus %in% c("Belomys", "Callosciurus", "Dremomys", "Hylopetes", 
+                        "Menetes", "Petaurillus", "Petaurista", "Protoxerus",
+                        "Ratufa", "Rhinosciurus", "Sundasciurus", "Tamiops") ~ 
+        "Sciuridae",
+      host_genus == "Rhizomys" ~ "Spalacidae",
+      host_genus == "Thryonomys" ~ "Thryonomyidae",
+      
+      # Scandentia
+      host_genus %in% c("Dendrogale", "Tupaia") ~ "Tupaiidae",
+      
+      # Suliformes
+      host_genus == "Phalacrocorax" ~ "Phalacrocoridae",
+      
+      TRUE ~ host_family)) |> 
+    
+    dplyr::relocate(c(host_family, host_order), .after = host_genus) |> 
+  
     # lightly format host name--a very disparate column
     # some animals were only identified to order, family, or genus, 
     # while others were identified to species
